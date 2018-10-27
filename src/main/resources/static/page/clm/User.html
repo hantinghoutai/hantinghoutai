@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>托管设置</title>
+		<link rel="stylesheet" href="../../css/bootstrap.css" />
+		<link rel="stylesheet" href="../../layui/css/layui.css" />
+		<style type="text/css">
+			.tables tr th{
+				text-align: center;
+			}	
+		</style>
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			管理员管理
+		</blockquote>
+		<table class="table table-bordered" style="text-align: center;" id="tables">
+			<tr><th style="text-align: center;">序号</th><th style="text-align: center;">登录用户名</th><th style="text-align: center;">管理员类型</th><th style="text-align: center;">最后登录时间</th><th style="text-align: center;">最后登录IP</th><th style="text-align: center;">操作</th></tr>
+			<tr v-for="(temp,index) in user"><td v-text="index+1">10034</td><td v-text="temp.name">0</td><td v-text="temp.roleid==1?'超级管理员':'普通管理员'">社区右侧广告位</td><td v-text="temp.creationtime"></td><td v-text="temp.creationip">帖子详细页面右侧图片</td><td><a href="javascript:void(0)" v-if="temp.admintype==2" @click="deletes(temp.adminid)">删除</a>&nbsp;&nbsp;<a href="javascript:void(0)" @click="update(temp.adminid)">修改</a></td></tr>
+			<tr><td colspan="6"><input type="button" class="layui-btn btn-danger" value="新建管理员" @click="add()"/>&nbsp;&nbsp;<input type="button" class="layui-btn btn-danger" value="更新" @click="loads()"/></td></tr>
+		</table>
+		
+	</body>
+	<script src="../../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../../js/vue.js" ></script>
+	<script src="../../layui/layui.js"></script>
+	<script>
+			var vm=new Vue({
+				el:"#tables",
+				data:{
+					user:{}
+				},
+				methods:{
+					Load:function(){
+						$.getJSON("/clm/api/selectUserInfo",function(data){
+							console.info(data);
+							vm.user=data;
+						})
+					},
+					add:function(){
+						location.href="addUser.html";
+					},
+					loads:function(){
+						vm.Load();
+					},
+					deletes:function(id){
+						$.ajax("/clm/api/deleteAdmin/"+id,{
+							type:"delete",
+							dataType:"json",
+							success:function(data){
+								if(data.code=="200"){
+									layer.msg('删除成功!', {icon: 1});
+									vm.Load();
+								}else{
+									layer.msg('删除失败!', {icon: 5});
+								}
+							}
+						})
+					},
+					update:function(id){
+						window.sessionStorage.setItem("AdminsUpdateId",id);
+						location.href="updateUser.html";
+					}
+				},
+				created:function(){
+					var vm=this;
+					vm.Load();
+				}
+			})
+		
+		
+			layui.use('table', function() {
+				var table = layui.table;
+				//第一个实例
+				table.render({
+					elem: '#demo',
+					height: 312,
+					width:1400,
+					url: '', //数据接口
+					page: true, //开启分页
+					cols: [
+						[ //表头
+							{
+								field: 'id',
+								title: '序号',
+								width: 300,
+								fixed: 'left'
+							}, {
+								field: 'username',
+								title: '登录用户名',
+								width: 300
+							}, {
+								field: 'sex',
+								title: '管理员类型',
+								width: 300
+							}, {
+								field: 'city',
+								title: '最后登录时间',
+								width: 300
+							}, {
+								field: 'sign',
+								title: '最后登录IP',
+								width: 300
+							}
+						]
+					]
+				});
+			});
+	</script>
+</html>

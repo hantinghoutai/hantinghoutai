@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>托管设置</title>
+		<link rel="stylesheet" href="../../ss/bootstrap.css" />
+		<link rel="stylesheet" href="../../layui/css/layui.css" />
+		<style type="text/css">
+			.tables tr th{
+				text-align: center;
+			}	
+		</style>
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			银行管理
+		</blockquote>
+		<table class="table table-bordered" style="text-align: center;" id="bodys">
+				<tr><th style="text-align: center;">序号</th><th style="text-align: center;">银行名称</th><th style="text-align: center;">是否显示</th><th style="text-align: center;">排序</th><th style="text-align: center;">操作</th></tr>
+				<tr v-for="(temp,index) in Bank"><td v-text="index+1"></td><td v-text="temp.bankname"></td><td v-text="temp.show==true?'显示':'不显示'"></td><td v-text="temp.sort"></td><td><a href="javascript:void(0)" @click="deleteBank(temp.bankid)">删除</a>&nbsp;&nbsp;<a href="javascript:void(0)" @click="update(temp.bankid)">修改</a></td></tr>
+				<tr><td colspan="5"><input type="button" class="btn btn-danger" value="添加银行" @click="add()">&nbsp;&nbsp;<input type="button" class="btn btn-danger" value="更新" @click="loads()"></td></tr>
+		</table>
+	</body>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="../../js/vue.js" ></script>
+	<script src="../../layui/layui.js"></script>
+	<script>
+		var vm=new Vue({
+			el:"#bodys",
+			data:{
+				Bank:{}
+			},
+			methods:{
+				BankLoad:function(){
+					$.getJSON("/clm/api/selectBankInfo",function(data){
+						console.info(data);
+						vm.Bank=data;
+					})
+				},
+				add:function(){
+					location.href="page/clm/NewBank.html";
+				},
+				loads:function(){
+					vm.BankLoad();
+				},
+				deleteBank:function(id){
+					$.ajax("/clm/api/deleteBank/"+id,{
+						type:"delete",
+						dataType:"json",
+						success:function(data){
+							if(data.code=="200"){
+								layer.msg('删除成功!!', {icon: 1});
+								vm.BankLoad();
+							}else{
+								layer.msg('删除失败!!', {icon: 5});
+							}
+						}
+					})
+				},
+				update:function(id){
+					window.sessionStorage.setItem("BankId",id);
+					location.href="NewBankUpdate.html";
+				}
+				
+			},
+			created:function(){
+				var vm=this;
+				vm.BankLoad();
+			}
+		})
+		
+		layui.use('table', function() {
+			var table = layui.table;
+			//第一个实例
+			table.render({
+				elem: '#demo',
+				height: 312,
+				width:1400,
+				url: '', //数据接口
+				page: true, //开启分页
+				cols: [
+					[ //表头
+						{
+							field: 'id',
+							title: '序号',
+							width: 300,
+							sort: true,
+							fixed: 'left'
+						}, {
+							field: 'username',
+							title: '费用名称',
+							width: 300
+						}, {
+							field: 'sex',
+							title: '分类',
+							width: 300
+						}, {
+							field: 'city',
+							title: '操作',
+							width: 300
+						}
+					]
+				]
+			});
+		});
+	</script>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Strict//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+<title>商家入驻</title>
+</head>
+<style>
+body { 
+font: normal 11px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+background: #E6EAE9; 
+} 
+ 
+a { 
+color: #c75f3e; 
+text-decoration: none;
+} 
+
+.ys {
+    display: inline-block;
+    padding: .3em .5em;
+    background-image: linear-gradient(#ddd, #bbb);
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3em;
+    box-shadow: 0 1px white inset;
+    text-align: center;
+    text-shadow: 0 1px 1px black;
+    color:white;
+    font-weight: bold;
+}
+.ys:active{
+    box-shadow: .05em .1em .2em rgba(0,0,0,.6) inset;
+    border-color: rgba(0,0,0,.3);
+    background: #bbb;
+}
+--------------------- 
+作者：An丶 
+来源：CSDN 
+原文：https://blog.csdn.net/AnPHPer/article/details/79480097?utm_source=copy 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+ 
+#mytable { 
+text-align:center;
+padding: 0; 
+margin: 0; 
+} 
+ 
+caption { 
+padding: 0 0 5px 0; 
+width: 700px; 
+font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+text-align: right; 
+} 
+ 
+th { 
+font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+border-top: 1px solid #C1DAD7; 
+letter-spacing: 2px; 
+text-transform: uppercase; 
+text-align: left; 
+padding: 6px 6px 6px 12px; 
+background: #CAE8EA  no-repeat; 
+text-align: center;
+} 
+/*power by www.winshell.cn*/ 
+th.nobg { 
+border-top: 0; 
+border-left: 0; 
+border-right: 1px solid #C1DAD7; 
+background: none; 
+} 
+ 
+td { 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+background: #fff; 
+font-size:11px; 
+padding: 6px 6px 6px 12px; 
+color: #4f6b72; 
+} 
+/*power by www.winshell.cn*/ 
+ 
+td.alt { 
+background: #F5FAFA; 
+color: #797268; 
+} 
+ 
+th.spec { 
+border-left: 1px solid #C1DAD7; 
+border-top: 0; 
+background: #fff no-repeat; 
+font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+} 
+ 
+th.specalt { 
+border-left: 1px solid #C1DAD7; 
+border-top: 0; 
+background: #f5fafa no-repeat; 
+font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #797268; 
+} 
+/*---------for IE 5.x bug*/ 
+html>body td{ font-size:11px;} 
+body,td,th { 
+font-family: 宋体, Arial; 
+font-size: 12px; 
+
+--------------------- 
+作者：Clear_Love 
+来源：CSDN 
+原文：https://blog.csdn.net/sminhrosunny/article/details/6625790?utm_source=copy 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+
+/* table {
+	border-collapse: collapse;
+	margin: 0 auto;
+	text-align: center;
+}
+
+table td, table th {
+	border: 1px solid #cad9ea;
+	color: #666;
+	height: 30px;
+}
+
+table thead th {
+	background-color: #CCE8EB;
+	width: 100px;
+}
+
+table tr:nth-child(odd) {
+	background: #fff;
+}
+
+table tr:nth-child(even) {
+	background: #F5FAFA;
+}
+---------------------
+作者：RoyanWang
+来源：CSDN
+原文：https
+:
+/
+/
+blog.csdn.net
+/
+hello_mr_anan
+/
+article
+/
+details
+/
+70257627
+?
+utm_source
+=
+copy
+版权声明：本文为博主原创文章，转载请附上博文链接！ */
+
+
+
+</style>
+<body class="oneColLiqCtrHdr">
+
+<div id=container>
+  <div id="header">
+    <H3>商家入驻</H3>
+  </DIV>
+  <DIV id="mainContent"><BR>
+    <form action="/lt/updateShopUser" method="POST" name="form1" id="form10">
+      <TABLE class="table" bdata=0 cellSpacing=1 cellPadding=6 width="100%">
+        <TBODY>
+          <TR>
+            <TD width="13%" align=right noWrap>会员:</TD>
+            <TD colspan="3" >
+              <input name="userid" type="text" id="userid" th:value="${data.userid}" size="10" maxlength="10" style="display:none;" />
+              [[${data.username}]]
+          </TD>
+          </TR>
+          <TR>
+            <TD noWrap align=right width="13%">商家类别:</TD>
+            <TD  width="300"><span
+								th:if="${data.merchanttype==1}">大陆商家用户</span>
+								<span
+								th:if="${data.merchanttype==2}">海外商家用户</span></TD>
+            <TD align="right" width="130">服务类别:</TD>
+            <TD ><span th:if="${data.firstserviceid==1}">韩语翻译,</span>
+            <span th:if="${data.firstserviceid==2}">自驾游,</span>
+            <span th:if="${data.firstserviceid==3}">学习资料,</span>
+            <span th:if="${data.firstserviceid==4}">微整形,</span>
+            <span th:if="${data.firstserviceid==5}">留学中介,</span>
+            
+            <span th:if="${data.secondserviceid==1}">韩语翻译</span>
+            <span th:if="${data.secondserviceid==2}">自驾游</span>
+            <span th:if="${data.secondserviceid==3}">学习资料</span>
+            <span th:if="${data.secondserviceid==4}">微整形</span>
+            <span th:if="${data.secondserviceid==5}">留学中介</span></TD>
+          </TR>
+          <TR>
+            <TD width="13%" align="right">店铺名称:</TD>
+            <TD th:text="${data.shopname}">棒子狗</TD>
+            <TD noWrap align=right>真实姓名:</TD>
+            <TD th:text="${data.userrealname}">阿三</TD>
+          </TR>			
+          <TR>
+            <TD align="right">签名:</TD>
+            <TD colspan="3" th:text="${data.signature}">111  </TD>
+          </tr>
+                      <TR>
+              <TD align="right">身份证/护照号码:</TD>
+              <TD colspan="3" th:text="${data.identitynumder}">435678909897867655n</TD>
+            </tr>
+            <TR>
+            <TD align="right"><span class="mopa">商家店铺图片</span>:</TD>
+            <TD colspan="3"><a href="http://yphting.zglxkj.com/Uploads/image/2018-10/20181009025034-20011.png" target="_blank"><img src="http://yphting.zglxkj.com/Uploads/image/2018-10/20181009025034-20011.png" width="120" height="80" /></a>
+            </TD>
+          </tr>
+          <TR>
+            <TD align="right"><span class="mopa">身份证正面</span>:</TD>
+            <TD colspan="3"><a href="/Uploads/image/2018-10/20181009025045-77662.png" target="_blank"><img src="/Uploads/image/2018-10/20181009025045-77662.png" width="120" height="80" /></a>
+            </TD>
+          </tr>
+          <TR>
+            <TD align="right"><span class="mopa">身份证背面</span>:</TD>
+            <TD colspan="3" ><a href="/Uploads/image/2018-10/20181009025049-19220.jpg" target="_blank"><img src="/Uploads/image/2018-10/20181009025049-19220.jpg" width="120" height="80" /></a>
+            </TD>
+          </tr>
+          <TR>
+            <TD align="right"><span class="mopa">身份证手持</span>:</TD>
+            <TD colspan="3" ><a href="/Uploads/image/2018-10/20181009025053-48585.png" target="_blank"><img src="/Uploads/image/2018-10/20181009025053-48585.png" width="120" height="80" /></a>
+            </TD>
+          </tr>
+          <TR>
+            <TD align="right">服务语言:</TD>
+            <TD colspan="3" th:text="${data.languagenametext}">
+                       </TD>
+          </tr>
+          <TR>
+            <TD align="right">擅长专业:</TD>
+            <TD colspan="3" th:text="${data.majornametext}">
+            					工科,            </TD>
+          </tr>
+          <TR>
+            <TD align="right">邮箱地址:</TD>
+            <TD colspan="3" th:text="${data.merchantemail}">2496673582@qq.com            </TD>
+          </tr>
+          <TR>
+            <TD align="right">联系电话:</TD>
+            <TD colspan="3" th:text="${data.merchantphone}">17673245619            </TD>
+          </tr>
+          <TR>
+            <TD align="right">QQ:</TD>
+            <TD colspan="3" th:text="${data.qq}">574003068            </TD>
+          </tr>
+          <TR>
+            <TD align="right">微信:</TD>
+            <TD colspan="3"  th:text="${data.wechat}">a574003068            </TD>
+          </tr>
+          <TR>
+            <TD align="right">职业:</TD>
+            <TD colspan="3"   th:text="${data.profession}">java            </TD>
+          </tr>
+          <TR>
+            <TD align="right">身高:</TD>
+            <TD colspan="3" th:text="${data.height}">172CM
+            </TD>
+          </tr>
+          <TR>
+            <TD align="right">星座:</TD>
+            <TD colspan="3" th:text="${data.constellation}">金牛座 </TD>
+          </tr>
+          <TR>
+            <TD align="right">年龄:</TD>
+            <TD colspan="3"  th:text="${data.age}">23 </TD>
+          </tr>
+          <TR>
+            <TD align="right">自我介绍:</TD>
+            <TD colspan="3" th:text="${data.selfintroduction}">fdfg</TD>
+          </tr>
+          <TR>
+            <TD align="right">店铺免费体验:</TD>
+            <!--<td ><INPUT  type="radio" name="SHOP_FREE_STATUS" class="input-heigt" value="1"  >是-->
+              <!--&nbsp;&nbsp;&nbsp;<INPUT type="radio" name="SHOP_FREE_STATUS" class="input-heigt" value="0" checked >否-->
+            <!--</td>-->
+            <td >否            </td>
+            <td align="right" noWrap>店铺免费体验月数：</td>
+            <td  >
+              <select id="free_time"  type="text" name="free_time" class="input-heigt"style="width: 120px;height:20px;outline:none; border-radius:5px;">
+                <option value="1"> 1</option>
+                <option value="2"> 2</option>
+                <option value="3"> 3</option>
+                <option value="4"> 4</option>
+                <option value="5"> 5</option>
+                <option value="6"> 6</option>
+                <option value="7"> 7</option>
+                <option value="8"> 8</option>
+                <option value="9"> 9</option>
+                <option value="10"> 10</option>
+                <option value="11"> 11</option>
+                <option value="12"> 12</option>
+              </select>
+            </td>
+          </tr>
+		<TR>
+            <TD align="right">操作:</TD>
+            <TD colspan="3" >
+			<label><input type="radio" name="auditstatus" value="1" id="dai"/>待审核　</label>
+			<label><input type="radio" name="auditstatus" value="2"  id="guo"/>审核通过　</label>
+			<label><input type="radio" name="auditstatus" value="3"  id="nguo"/>拒绝　</label>
+			</TD>
+          </tr>
+          <TR>
+            <TD align="right">管理员处理:</TD>
+            <TD colspan="3" ><textarea name="reason" cols="70" rows="5" id="admin_reason">[[${data.reason}]]</textarea>
+            </TD>
+          </tr>          <TR>
+            <TD>
+            <input name="shop_check_time" type="hidden" id="shop_check_time" value="0">
+			
+            </TD>
+            <TD colspan="3" >
+            <INPUT class="ys" id="notebt" value=" 保存 " type="submit" name="notebt">
+            <INPUT class="ys" id="add" value=" 返回 " type=button name="add" onClick="history.back(-1)">
+              </TD>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <DIV id=footer>&nbsp;<br /><!-- end #footer --></DIV>
+</div>
+<script src="../js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+  		if([[${data.auditstatus}]]==1){
+  			$("#dai").attr("checked","checked");
+  		}else if([[${data.auditstatus}]]==2){
+  			$("#guo").attr("checked","checked");
+  		}else{
+  			$("#bguo").attr("checked","checked");
+  		}
+</script>
+</body>
+</html>

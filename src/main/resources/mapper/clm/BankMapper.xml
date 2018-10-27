@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.clm.IBank">
+	<select id="selectBankInfo" resultType="com.accp.pojo.Banktype">
+		select * from banktype where `show`=1
+	</select>
+	<select id="selectBank" resultType="com.accp.pojo.Banktype">
+		select * from banktype  where bankID=#{bankId}
+	</select>
+	<delete id="deleteBank">
+		delete from banktype where bankID=#{bankId};
+	</delete>
+	<insert id="addBank">
+		insert banktype(bankName,`show`,sort)
+		values(#{bank.bankname},#{bank.show},#{bank.sort});
+	</insert>
+	
+	<update id="updateBank">
+		update banktype
+		set bankName=#{bank.bankname},`show`=#{bank.show},sort=#{bank.sort}
+		where bankID=#{bank.bankid};
+	</update>
+
+
+</mapper>

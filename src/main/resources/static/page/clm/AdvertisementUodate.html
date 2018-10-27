@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="layui/css/layui.css" />
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			广告
+		</blockquote>
+		<form  action="/clm/c/updateAdvertisementtype" method="post" enctype="multipart/form-data">
+		<table class="table table-bordered" style="" id="addAdvertisement">
+			<input type="hidden" v-model="Advertisement.aid" name="aid">
+			<tr>
+				<td style="text-align: right;">标题:</td>
+				<td><input type="text" width="100px" value="中国银行" name="atitle" v-model="Advertisement.atitle"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">排序:</td>
+				<td><input type="text" width="100px" value="4" name="aorder" v-model="Advertisement.aorder">0~32767(降序)</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">原图片:</td>
+				<td><img :src="Advertisement.aimgpath" width="150px" height="40px"></td>
+			</tr>	
+			<tr>
+				<td style="text-align: right;">图片:</td>
+				<td><input type="file" value="上传" name="img"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">分类:</td>
+				<td>
+					<select name="atid" v-model="Advertisement.atid">
+						<option v-for="(temp,index) in Advertisementtype" :value="temp.atid"  v-text="temp.atname" ></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">PC端网址:</td>
+				<td><input type="text" width="100px" name="apcurl" v-model="Advertisement.apcurl"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">手机端网址:</td>
+				<td><input type="text" width="100px" name="aappurl" v-model="Advertisement.aappurl"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">描述:</td>
+				<td><textarea style="width: 300px; height: 100px;" name="adescribe" v-model="Advertisement.adescribe"></textarea></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;"></td>
+				<td>
+					<input type="submit" value="保存" class="btn btn-danger"/>
+					<input type="button" value="返回"  class="btn btn-danger" @click="fanhui()"/>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="js/vue.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.js" ></script>
+	<script src="layui/layui.js"></script>
+	<script type="text/javascript">
+
+	var vm=new Vue({
+		el:"#addAdvertisement",
+		data:{
+			Advertisementtype:{},
+			Advertisement:{}
+		},
+		methods:{
+			AdvertisementtypeLoad:function(){
+				$.getJSON("/clm/api/selectAdvertisementtypeInfo",function(data){
+					vm.Advertisementtype=data;
+				})
+			},
+			AddAdvertisement:function(){
+/* 				var json={};
+				json["atitle"]=$("[name=title]").val();
+				json["aorder"]=$("[name=paixu]").val();
+				json["aimgpath"]="";
+				json["atid"]=$("[name=types]").attr("selected","selected").val();
+				json["apcurl"]=$("[name=Paddrest]").val();
+				json["aappurl"]=$("[name=Saddrest]").val();
+				json["adescribe"]=$("[name=MiaoShu]").val(); */
+				$.ajax("/clm/api/updateAdvertisementtype",{
+					type:"put",
+					contentType:"application/json",
+					data:JSON.stringify(vm.Advertisement),
+					dataType:"json",
+					success:function(data){
+						if(data.code=="200"){
+							layer.msg('修改成功!', {icon: 1});
+						}
+					}
+				})
+			},
+			LoadAdvertisement:function(id){
+				$.getJSON("/clm/api/selectAdvertisementInfos/"+id,function(data){
+					console.info(data);
+					vm.Advertisement=data;
+				})
+			},
+			fanhui:function(){
+				window.history.go(-1);
+			}
+		},
+		created:function(){
+			var vm=this;
+			var id=window.sessionStorage.getItem("id");
+			vm.AdvertisementtypeLoad();
+			vm.LoadAdvertisement(id);
+		}
+	});
+	
+
+	layui.use('table', function() {
+		var table = layui.table;
+		//第一个实例
+		table.render({
+			elem: '#demo',
+			height: 312,
+			width:1400,
+			url: '', //数据接口
+			page: true, //开启分页
+			cols: [
+				[ //表头
+					{
+						field: 'id',
+						title: '序号',
+						width: 300,
+						sort: true,
+						fixed: 'left'
+					}, {
+						field: 'username',
+						title: '费用名称',
+						width: 300
+					}, {
+						field: 'sex',
+						title: '分类',
+						width: 300
+					}, {
+						field: 'city',
+						title: '操作',
+						width: 300
+					}
+				]
+			]
+		});
+	});
+	</script>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>广告位</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../../css/bootstrap.css" />
+		<style type="text/css">
+			.tables tr th{
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<br/>
+		<blockquote class="layui-elem-quote">
+			
+		<div class="layui-row"   id="selectAdvertisementtypeInfo">
+		
+			<form class="layui-form">
+				<span style="font-size:20px ;">广告管理</span>
+				<div class="layui-col-md11">
+					<div class="layui-col-md3">
+						<div class="layui-form-item">
+							<label class="layui-form-label">分类:</label>
+							<div class="layui-input-block">
+								<select name="city" lay-verify="">
+									<option value="0">全部</option>
+									<option v-for="(temp,index) in Advertisementtype" :value="temp.atid"  v-text="temp.atname"></option>
+								</select>
+								
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md3" style="margin-left: 20px;">
+				<div class="layui-btn-group">
+					<input type="button" class="layui-btn layui-btn-normal" @click="selectInfo($event)" value="搜索"/>
+				</div>
+			</div>
+				</div>
+			</form>
+		</div>
+		</blockquote>
+		<div class="tables" id="selectAdvertisingVoInfo">
+			<table class="table table-bordered" style="text-align: center;">
+				<tr><th>全选</th><th>序号</th><th>排序</th><th>标题</th><th>图片</th><th>分类</th><th>操作</th></tr>
+				<tr v-for="(temp,index) in AdvertisingVo"><td><input type="checkbox" class="check" :value="temp.aid"></td><td v-text="index+1">10034</td><td v-text="temp.aorder">0</td><td v-text="temp.atitle">社区右侧广告位</td><td><img :src="temp.aimgpath" width="50px" height="40px"/></td><td v-text="temp.atname">帖子详细页面右侧图片</td><td><a href="javascript:void(0)" @click="updateAd(temp.aid)">修改</a></td></tr>
+			</table>
+			<input type="button" class="layui-btn btn-danger" value="刷新" @click="load()"/>&nbsp;&nbsp;
+			<input type="button" class="layui-btn btn-danger" value="增加广告" @click="addAdver()"/>&nbsp;&nbsp;
+			<input type="button" class="layui-btn btn-danger" value="刪除广告" @click="deleteAdver()"/>
+		</div>
+		<script type="text/javascript" src="/js/jquery-1.12.4.js" ></script>
+		<script type="text/javascript" src="/js/vue.js" ></script>
+		<script src="/layui/layui.js"></script>
+		<script>
+	
+		var vm=new Vue({
+			el:"#selectAdvertisementtypeInfo",
+			data:{
+				Advertisementtype:{}
+			},
+			methods:{
+				AdvertisementtypeLoad:function(){
+					$.getJSON("/clm/api/selectAdvertisementtypeInfo",function(data){
+						vm.Advertisementtype=data;
+					})
+				},
+				selectInfo:function(e){
+					vm1.AdvertisingVoLoad($("[name=city]").attr("selected","selected").val());
+				}
+			},
+			created:function(){
+				var vm=this;
+				
+				vm.AdvertisementtypeLoad();
+			}
+		});
+		
+
+		var vm1=new Vue({
+			el:"#selectAdvertisingVoInfo",
+			data:{
+				AdvertisingVo:{}
+			},
+			methods:{
+				AdvertisingVoLoad:function(types){
+					$.getJSON("/clm/api/selectAdvertisingVoInfo/"+types,function(data){
+						console.info(data);
+						vm1.AdvertisingVo=data;
+					})
+				},
+				addAdver:function(){
+					location.href="AdvertisementCaoZuo.html";
+				},
+				deleteAdver:function(){
+					var falg=false;
+					var id="";
+						$(".check").each(function(){
+							if(this.checked){
+								id=id+$(this).val()+",";
+								falg=true;
+							}
+						})
+						console.info(id);
+					if(falg==true){
+						 id=id.substring(0,id.length-1);
+						 console.info(id);
+						 $.ajax("/clm/api/deleteAdvertisementtype/"+id,{
+							type:"delete",
+							dataType:"json",
+							success:function(data){
+								if(data.code=="200"){
+									vm1.AdvertisingVoLoad("0");
+									layer.msg('删除成功!', {icon: 1});
+									$(".check").attr("checked",false);
+									
+								}
+							}
+						}) 
+					}else{
+						layer.msg('请选择删除广告!', {icon: 5});
+					}
+				},
+				updateAd:function(id){
+					location.href="AdvertisementUodate.html";
+					window.sessionStorage.setItem("id",id);
+				},load:function(){
+					vm1.AdvertisingVoLoad(0);
+					vm.AdvertisementtypeLoad();
+				}
+			},
+			created:function(){
+				var vm1=this;
+				vm1.AdvertisingVoLoad("0");
+			}
+		});
+		
+		vm1.AdvertisingVoLoad(0);
+		vm.AdvertisementtypeLoad();
+		
+		layui.use('table', function() {
+			var table = layui.table;
+			//第一个实例
+			table.render({
+				elem: '#demo',
+				height: 312,
+				width:1400,
+				url: '', //数据接口
+				page: true, //开启分页
+				cols: [
+					[ //表头
+						{
+							field: 'id',
+							title: '序号',
+							width: 300,
+							sort: true,
+							fixed: 'left'
+						}, {
+							field: 'username',
+							title: '费用名称',
+							width: 300
+						}, {
+							field: 'sex',
+							title: '分类',
+							width: 300
+						}, {
+							field: 'city',
+							title: '操作',
+							width: 300
+						}
+					]
+				]
+			});
+		});
+		</script>
+	</body>
+
+</html>

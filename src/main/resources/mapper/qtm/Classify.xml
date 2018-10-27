@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.qtm.IExamineAndApproveDao">
+
+	<select id="classify" resultType="String">
+		select stName from
+		`servicetype`
+	</select>
+
+	<select id="condition"
+		resultType="com.accp.vo.qtm.ExamineAndApprove">
+		select a.serviceID as serviceID,b.stName as stName,a.serviceTitle as
+		serviceTitle,c.userName as userName,a.auditStatus as
+		auditStatus,c.businessState as businessState,c.userRegistrationTime as
+		userRegistrationTime,a.recommendBool as recommendBool
+		from services a
+		inner join `servicetype` b on (a.stid=b.stid)
+		inner join `user` c on
+		(a.userID=c.userID)
+		<where>
+			<if test="type!=null">
+				and `stName`= #{type}
+			</if>
+			<if test="zt!=null">
+				and `auditStatus`=#{zt}
+			</if>
+			<if test="title!=null">
+				and `serviceTitle`=#{title}
+			</if>
+			<if test="ktime != null and jtime != nulll">
+				and userRegistrationTime BETWEEN #{ktime} AND #{jtime}
+			</if>
+		</where>
+	</select>
+
+	<select id="query"
+		resultType="com.accp.vo.qtm.ExamineAndApprove">
+		SELECT a.serviceID AS serviceID,b.stName AS
+		stName,a.serviceTitle AS
+		serviceTitle,c.userName AS
+		userName,a.auditStatus AS
+		auditStatus,c.businessState AS
+		businessState,c.userRegistrationTime AS
+		userRegistrationTime,a.recommendBool AS recommendBool
+		FROM services a
+		INNER JOIN `servicetype` b ON (a.stid=b.stid)
+		INNER JOIN `user` c ON
+		(a.userID=c.userID)
+	</select>
+
+	<select id="info"
+		resultType="com.accp.vo.qtm.ExamineAndApproveInfo">
+		SELECT a.serviceID AS serviceID,b.stName AS stName,a.serviceTitle AS
+		serviceTitle,c.userName AS userName,a.auditStatus AS
+		auditStatus,c.businessState AS businessState,c.userRegistrationTime AS
+		userRegistrationTime,a.recommendBool AS recommendBool,
+		a.serviceImgUrlOne AS serviceImgUrlOne,a.`serviceImgUrlTwo` AS
+		serviceImgUrlTwo, a.`serviceImgUrlThree` AS
+		serviceImgUrlThree,a.`serviceImgUrlFour` AS
+		serviceImgUrlFour,a.serviceFuTitle AS serviceFuTitle,a.servicePrice AS
+		servicePrice,a.serviceCostInclude AS
+		serviceCostInclude,a.serviceCostTypeID AS
+		serviceCostTypeID,a.serviceIntro AS serviceIntro,
+		c.`shopName` AS shopName,a.`adminOpinion` AS adminOpinion
+		FROM services a
+		INNER JOIN `servicetype` b ON (a.stid=b.stid)
+		INNER JOIN `user` c ON (a.userID=c.userID)
+		WHERE a.`serviceID`=#{id}
+	</select>
+	<update id="pupdate">
+		UPDATE services
+		set `auditStatus`= #{zt} ,`adminOpinion`= #{yijian}
+		WHERE serviceID IN(${id})
+	</update>
+	<update id="pupdatess">
+		UPDATE services
+		set `auditStatus`= #{zt} 
+		WHERE serviceID IN(${id})
+	</update>
+	<update id="tui">
+	UPDATE services
+	SET recommendBool=#{zt}
+	WHERE serviceID IN(${id})
+	</update>
+	<update id="yin">
+	update `user` a
+	inner join `services` b on(a.`userID`=b.`userID`)
+	set businessState=#{zt}
+	where serviceID in(${id})
+	</update>
+	<select id="tiaojian" resultType="com.accp.vo.qtm.ExamineAndApprove">
+		SELECT a.serviceID AS serviceID,b.stName AS
+		stName,a.serviceTitle AS
+		serviceTitle,c.userName AS
+		userName,a.auditStatus AS
+		auditStatus,c.businessState AS
+		businessState,c.userRegistrationTime AS
+		userRegistrationTime,a.recommendBool AS recommendBool
+		FROM services a
+		INNER JOIN `servicetype` b ON (a.stid=b.stid)
+		INNER JOIN `user` c ON
+		(a.userID=c.userID)
+		where b.`stid`= #{stid}
+		
+		
+		
+	</select>
+
+
+
+
+
+</mapper>

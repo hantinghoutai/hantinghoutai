@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../css/bootstrap.css" />
+		<link rel="stylesheet" href="../../layui/css/layui.css" />
+	</head>
+	<body>
+	<div id="tables">
+	
+	
+		<blockquote class="layui-elem-quote">
+			系统站内信
+		</blockquote>
+		<div class="layui-row">
+			<form class="layui-form">
+				<div class="layui-col-md11">
+					<div class="layui-col-md3">
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<input type="text" name="title" required lay-verify="required" placeholder="请输入收信用户昵称" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md3" style="margin-left: 20px;">
+						<div class="layui-btn-group">
+							<input class="layui-btn layui-btn-normal" type="button" onclick="shousuo()" value="搜索">&nbsp;&nbsp;
+							<input class="layui-btn layui-btn-normal" type="button" value="发布站内信" @click="add()">
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<table class="table table-bordered" style="text-align: center;">
+				<tr><th style="text-align: center;">序号</th><th style="text-align: center;">收信人</th><th style="text-align: center;">内容</th><th style="text-align: center;">发信时间</th></tr>
+				<tr v-for="(temp,index) in Message.list"><td v-text="index+1"></td><td v-text="temp.userName"></td><td v-text="temp.content"></td><td v-text="temp.sendingtime"></td></tr>
+				<tr><td colspan="4"><div id="domes" style="text-align: center;"></div></td></tr>
+		</table>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="../../js/vue.js" ></script>
+	<script src="../../layui/layui.js"></script>
+	<script>
+	
+			var pageNums=0;
+			var vm=new Vue({
+				el:"#tables",
+				data:{
+					Message:{}
+				},
+				methods:{
+					load:function(name,pageNum,pageSize){
+						$.getJSON("/clm/api/selectNewInfo/"+name+"/"+pageNum+"/"+pageSize,function(data){
+							console.info(data);
+							pageNums=data.lastPage*10;
+							vm.Message=data;
+						})
+					},
+					add:function(){
+						location.href="page/clm/AddSystemStationMessage.html";
+					},
+					upLoad:function(){
+						vm.load("null",1,2);
+					}
+				},
+				created:function(){
+					var vm=this;
+					vm.load("null",1,2);
+				}
+			})
+
+			function shousuo(){
+				var name= $("[name=title]").val();
+				if(name=="" || name=="null"){
+					name="null";
+				}else{
+					name= $("[name=title]").val();
+				}
+				vm.load(name,1,2);
+			}
+			setTimeout(function(){
+			vm.load("null",1,2);
+			layui.use('table', function() {
+				var table = layui.table;
+				var laypage=layui.laypage;
+				laypage.render({
+					elem:"domes",
+					count:pageNums,
+					skin:"green",
+					jump:function(obj,first){
+						var name= $("[name=title]").val();
+						if(name=="" || name=="null"){
+							name="null";
+						}else{
+							name= $("[name=title]").val();
+						}
+						vm.load(name,obj.curr,2);
+					}
+				})
+				//第一个实例
+				table.render({
+					elem: '#demo',
+					height: 312,
+					width:1400,
+					url: '', //数据接口
+					page: true, //开启分页
+					cols: [
+						[ //表头
+							{
+								field: 'id',
+								title: '序号',
+								width: 300,
+								sort: true,
+								fixed: 'left'
+							}, {
+								field: 'username',
+								title: '收信人',
+								width: 300
+							}, {
+								field: 'sex',
+								title: '内容',
+								width: 300
+							}, {
+								field: 'city',
+								title: '发信时间',
+								width: 300
+							}
+						]
+					]
+				});
+			});
+			},500);
+		</script>
+	</body>
+</html>

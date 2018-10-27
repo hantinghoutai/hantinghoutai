@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>商家入驻</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+	</head>
+
+	<body>
+		<br/>
+		<div class="layui-row">
+			<form class="layui-form">
+				<div class="layui-col-md11">
+					<div class="layui-col-md3">
+						<div class="layui-form-item">
+							<label class="layui-form-label">用户昵称</label>
+							<div class="layui-input-block">
+								<input type="text" name="userName" required lay-verify="required" placeholder="请输入用户昵称" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md3">
+						<div class="layui-form-item">
+							<label class="layui-form-label">会员组</label>
+							<div class="layui-input-block">
+								<select name="merchantType" lay-verify="">
+									<option value="0" selected>所有</option>
+									<option value="1">大陆商家</option>
+									<option value="2">海外商家</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md2">
+						<div class="layui-form-item">
+							<label class="layui-form-label">审核状态</label>
+							<div class="layui-input-block">
+								<select name="auditStatus" lay-verify="">
+									<option value="0" selected>所有</option>
+									<option value="1" >待审核</option>
+									<option value="2">已审核</option>
+									<option value="3">已拒绝</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md3" style="margin-left: 20px;">
+						<div class="layui-btn-group">
+							<button type="button" class="layui-btn layui-btn-normal" name="submit">搜索</button>
+							<button type="button" class="layui-btn layui-btn-normal" name="daochu">导出</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="layui-row">
+			<div class="layui-col-md12" style="padding-left: 5px;overflow-x: auto;">
+				<table id="demo" lay-filter="test"></table>
+			</div>
+		</div>
+		<script src="../../js/jquery-1.12.4.js"></script>
+		<script src="../../layui/layui.js"></script>
+		<script>
+			layui.use('table', function() {
+				var table = layui.table;
+				
+				var userName=null;
+				var auditStatus=null;
+				var merchantType=null;
+				
+				//第一个实例
+				table.render({
+					elem: '#demo',
+					id:'listReload',
+					url: '/c/ohl/user/queryRuzhuAll', //数据接口
+					page: true, 			//开启分页
+					method:"post",			//设置请求方式
+					skin: 'line',
+					where:{"userName":userName,"auditStatus":auditStatus,"merchantType":merchantType},
+					request: {pageName: 'pageNum',limitName: 'pageSize' }, 	//页码的参数名称，默认：page
+					cols: [
+						[ //表头
+							{
+								field: 'userid',
+								title: '编号',
+								width: 80
+							}, {
+								field: 'username',
+								title: '昵称',
+								width: 100
+							}, {
+								field: 'shopname',
+								title: '商铺名称',
+								width: 120
+							}, {
+								field: 'merchantemail',
+								title: '邮箱',
+								width: 160
+							}, {
+								field: 'userrealname',
+								title: '真实姓名',
+								width: 120
+							}, {
+								field: 'qq',
+								title: 'QQ',
+								width: 150
+							}, {
+								field: 'wechat',
+								title: '微信',
+								width: 150
+							}, {
+								field: 'identitynumder',
+								title: '身份证',
+								width: 180
+							}, {
+								field: 'merchanttype',
+								title: '申请类别',
+								width: 120,
+								templet:function(list){
+									if(list.merchanttype==0){
+										return '普通会员';
+									}else if(list.merchanttype==1){
+										return '大陆商家用户';
+									}else if(list.merchanttype==2){
+										return '海外商家用户';
+									}
+								}
+							}, {
+								field: 'livecityname',
+								title: '所在城市',
+								width: 120
+							}, {
+								field: 'auditstatus',
+								title: '状态',
+								width: 100,
+								templet:function(list){
+									if(list.auditstatus){
+										if(list.auditstatus==1){
+											return '待审核';
+										}else if(list.auditstatus==2){
+											return '已审核';
+										}else if(list.auditstatus==3){
+											return '已拒绝';
+										}
+									}else{
+										return '未提交';
+									}
+								}
+							}, {
+								field: 'audittime',
+								title: '申请时间',
+								width: 180,
+								sort: true
+							}, {
+								title: '操作',
+								width: 100,
+								templet:function(item){
+									return '<a href="merchantEntrySee.html?userID='+item.userid+'" class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改</a>&nbsp;&nbsp;';
+								} 
+							}
+						]
+					]
+				});
+				
+				//表刷新方法
+		        var reloadTable = function () {
+		            table.reload("listReload", { //此处是上文提到的 初始化标识id
+		                where:{"userName":userName,"auditStatus":auditStatus,"merchantType":merchantType}
+		            })
+		        };
+		        
+				//查询
+				$("[name=submit]").on("click",function(){
+					userName = $("[name=userName]").val();
+					auditStatus = $("[name=auditStatus]").val();
+					merchantType = $("[name=merchantType]").val();
+					//当前页的刷新
+					reloadTable();
+				});
+				
+				//导出表格
+				$("[name=daochu]").on("click",function(){
+					$.post("/c/ohl/user/queryRuzhuAlls",{"userName":userName,"auditStatus":auditStatus,"merchantType":merchantType},function(result){
+						var data=new Array();
+						var json=[];
+						for(var i=0;i<result.length;i++){
+							var item = {};
+							item["userid"]=result[i]["userid"];
+							item["username"]=result[i]["username"];
+							item["shopname"]=result[i]["shopname"];
+							item["merchanttype"]=result[i]["merchanttype"]==0?'普通商家':result[i]["merchanttype"]==1?'大陆商家':'海外商家';
+							item["livecityname"]=result[i]["livecityname"];
+							item["languagenametext"]=result[i]["languagenametext"];
+							item["majornametext"]=result[i]["majornametext"];
+							item["constellation"]=result[i]["constellation"];
+							item["guaranteemoney"]=result[i]["guaranteemoney"];
+							item["merchantemail"]=result[i]["merchantemail"];
+							item["merchantexp"]=result[i]["merchantexp"];
+							item["usermoney"]=result[i]["usermoney"];
+							item["mailboxverification"]=result[i]["mailboxverification"]?'已验证':'未验证';
+							item["auditstatus"]=result[i]["auditstatus"]==1?'待审核':result[i]["auditstatus"]==2?'未审核':result[i]["auditstatus"]==3?'已审核':'未提交';
+							item["authentication"]=result[i]["authentication"]?'已鉴定':'未鉴定';
+							item["businessstate"]=result[i]["businessstate"]==1?'营业中':result[i]["businessstate"]==2?'暂停':result[i]["businessstate"]==3?'关闭':'未申请';
+							item["merchantphone"]=result[i]["merchantphone"];
+							item["recententry"]=result[i]["recententry"];
+							item["browsenumber"]=result[i]["browsenumber"];
+							data.push(item);
+						}
+						table.exportFile(['用户编号','用户昵称','商铺名称','会员组','商家地址','服务语言','服务专业','星座','店铺保证金','商家联系邮箱','积分','金币','邮箱验证','商家审核','鉴定','状态','商家联系电话','最后登录','浏览量'],
+								data, 'xls'); //data 为该实例中的任意数量的数据
+					},"json");
+				})
+			});
+		</script>
+	</body>
+
+</html>

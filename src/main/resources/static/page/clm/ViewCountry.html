@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>广告位排版</title>
+		<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../../layui/css/layui.css" />
+		<style type="text/css">
+			.tables tr th{
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			城市管理
+		</blockquote>
+		<div class="tables" id="tables">
+			<table class="table table-bordered" style="text-align: center;">
+				<tr><th style="text-align: center;">地区名</th><th style="text-align: center;">操作</th><th style="text-align: center;">地区名</th><th style="text-align: center;">操作</th></tr>
+				<tbody id="bodys">
+				
+				</tbody>
+				
+				<tr><td colspan="6"><input type="button" class="btn btn-danger" value="添加" name="tianjia">&nbsp;&nbsp;<input type="button" class="btn btn-danger" value="更新"></td></tr>
+			</table>
+		</div>
+		
+	</body>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="../../js/vue.js" ></script>
+	<script type="text/javascript" src="../../js/bootstrap.js" ></script>
+	<script src="../../layui/layui.js"></script>
+	<script>
+	LoadViewCountry(0);
+	function LoadViewCountry(id){
+		var td1=null;
+		var td2=null;
+		var td3=null;
+		var is=1;
+		$.ajax("/clm/api/selectShareaGu/"+id,{
+			type:"get",
+			dataType:"json",
+			success:function(data){
+				console.info(data);
+				$("#bodys").html("");
+				$.each(data,function(i,obj){
+					var tr=$("<tr></tr>");
+					if(is!=data.length){
+						if(is%2!=0 && is==data.length-1){
+							td3=("<td>"+obj.name+"</td><td><a href='javascript:void(0)' class='xiougai' value="+obj.areaid+" onclick='loads("+obj.areaid+")'>修改</a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='View("+obj.areaid+")'>查看城市</a></td>");
+						}else{
+							if(is%2==0){
+								td1=("<td>"+obj.name+"</td><td><a href='javascript:void(0)' class='xiougai' value="+obj.areaid+" onclick='loads("+obj.areaid+")'>修改</a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='View("+obj.areaid+")'>查看城市</a></td>");
+								var td=td1+td2;
+								tr.append(td);
+								$("#bodys").append(tr);
+							}else{
+								td2=("<td>"+obj.name+"</td><td><a href='javascript:void(0)' class='xiougai' value="+obj.areaid+" onclick='loads("+obj.areaid+")'>修改</a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='View("+obj.areaid+")'>查看城市</a></td>");
+							}
+						}
+					}else{
+						td1=("<td>"+obj.name+"</td><td><a href='javascript:void(0)' class='xiougai' onclick='loads("+obj.areaid+")'>修改</a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='View("+obj.areaid+")'>查看城市</a></td>");
+						td3=td3+td1;
+						tr.append(td3);
+						$("#bodys").append(tr);
+						is=1;
+					}
+					is++;
+				})
+			}
+		})
+	}
+	
+	$("[value='更新']").click(function(){
+		LoadViewCountry(0);
+	})
+	
+	$("[name=tianjia]").click(function(){
+		location.href="page/clm/NewCountry.html";
+	})
+	
+	function loads(id){
+		location.href="page/clm/UpdateNewCountry.html";
+		window.sessionStorage.getItem("NewCountry");
+	}
+	
+	//查看城市
+	function View(id){
+		location.href="page/clm/ViewProvince.html";
+		window.sessionStorage.setItem("NewCountry",id);
+	}
+	
+	
+	
+	layui.use('table', function() {
+		var table = layui.table;
+		//第一个实例
+		table.render({
+			elem: '#demo',
+			height: 312,
+			width:1400,
+			url: '', //数据接口
+			page: true, //开启分页
+			cols: [
+				[ //表头
+					{
+						field: 'id',
+						title: '序号',
+						width: 300,
+						sort: true,
+						fixed: 'left'
+					}, {
+						field: 'username',
+						title: '费用名称',
+						width: 300
+					}, {
+						field: 'sex',
+						title: '分类',
+						width: 300
+					}, {
+						field: 'city',
+						title: '操作',
+						width: 300
+					}
+				]
+			]
+		});
+	});
+	</script>
+</html>

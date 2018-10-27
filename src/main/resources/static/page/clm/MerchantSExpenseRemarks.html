@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>商家费用备注</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+	</head>
+
+	<body>
+		<br/>
+		<div id="tables">
+	
+		<blockquote class="layui-elem-quote">
+			
+		<div class="layui-row">
+		
+			<form class="layui-form">
+				<span style="font-size:20px ;">商家费用备注</span>
+				<div class="layui-col-md11" id="Kuang">
+					<div class="layui-col-md3">
+						<div class="layui-form-item">
+							<label class="layui-form-label">分类:</label>
+							<div class="layui-input-block">
+								<select name="city" lay-verify="">
+									<option value="0" selected>所有</option>
+									<option v-for="(temps,index) in ServiceK" :value="temps.stid" v-text="temps.stname">大陆商家</option>
+								</select>
+								
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md3" style="margin-left: 20px;">
+						<div class="layui-btn-group">
+							<input type="button" class="layui-btn layui-btn-normal" value="搜索" @click="types()"/>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		</blockquote>
+		<div class="layui-row" >
+			<div class="layui-col-md12" style="padding-left: 5px;overflow-x: auto;">
+				<table class="layui-table">
+			  <colgroup>
+				    <col width="150">
+				    <col width="200">
+				    <col>
+			  </colgroup>
+			  <thead>
+				    <tr>
+				      <th style="text-align: center;">序号</th>
+				      <th style="text-align: center;">费用名称</th>
+				      <th style="text-align: center;">分类</th>
+				      <th style="text-align: center;">操作</th>
+				    </tr> 
+			  </thead>
+			  <tbody>
+				    <tr v-for="(temp,index) in ServiceCost">
+				      <td style="text-align: center;" v-text="index+1">贤心</td>
+				      <td style="text-align: center;" v-text="temp.servicecosttypename">2016-11-29</td>
+				      <td style="text-align: center;" v-text="temp.stname">人生就像是一场修行</td>
+				      <td style="text-align: center;" v-text=""><a href="javascript:void(0)" @click="updateService(temp.servicecosttypeid)">修改</a>&nbsp;&nbsp;<a href="javascript:void(0)" @click="deletes(temp.servicecosttypeid)">删除</a></td>
+				    </tr>
+			  </tbody>
+		</table>
+		<input type="button" class="layui-btn btn-danger" value="更新" @click="Load();"/>&nbsp;&nbsp;
+		<input type="button" class="layui-btn btn-danger" value="增加费用" @click="addService()"/>
+			</div>
+		</div>
+			
+		</div>
+		<script type="text/javascript" src="../../js/jquery-1.12.4.js"></script>
+		<script type="text/javascript" src="../../js/vue.js"></script>
+		<script src="../../layui/layui.js"></script>
+		<script>
+		var vm=new Vue({
+			el:"#tables",
+			data:{
+				ServiceCost:{},
+				ServiceK:{}
+			},
+			methods:{
+				LoadServiceCost:function(id){
+
+					$.getJSON("/clm/api/selectServiceCostInfo/"+id,function(data){
+						console.info(data);
+						vm.ServiceCost=data;
+					})
+				},
+				LoadServiceK:function(){
+					$.getJSON("/clm/api/selectServicetypeInfo",function(data){
+						console.info(data);
+						vm.ServiceK=data;
+					})
+				},addService:function(){
+					location.href="Servicecostmanagement.html";
+				},updateService:function(id){
+					location.href="UpdateServicecostmanagement.html";
+					window.sessionStorage.setItem("ServiceId",id);
+				},types:function(){
+					var id=$("[name=city]").attr("selected","selected").val();
+					vm.LoadServiceCost(id);
+				},Load:function(){
+					vm.LoadServiceCost("null");
+					vm.LoadServiceK();
+				},deletes:function(id){
+					$.ajax("/clm/api/deleteServicetype/"+id,{
+						type:"delete",
+						dataType:"json",
+						success:function(data){
+							if(data.code=="200"){
+								layer.msg('删除成功!', {icon: 1});
+								vm.LoadServiceCost("null");
+							}
+						}
+					})
+				}
+			},
+			created:function(){
+				var vm=this;
+				vm.LoadServiceCost("null");
+				vm.LoadServiceK();
+			}
+		});
+		
+			layui.use('table', function() {
+				var table = layui.table;
+				//第一个实例
+				table.render({
+					elem: '#demo',
+					height: 312,
+					width:1400,
+					url: '', //数据接口
+					page: true, //开启分页
+					cols: [
+						[ //表头
+							{
+								field: 'id',
+								title: '序号',
+								width: 300,
+								sort: true,
+								fixed: 'left'
+							}, {
+								field: 'username',
+								title: '费用名称',
+								width: 300
+							}, {
+								field: 'sex',
+								title: '分类',
+								width: 300
+							}, {
+								field: 'city',
+								title: '操作',
+								width: 300
+							}
+						]
+					]
+				});
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>店铺收藏</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+	</head>
+	<body>
+		<br/>
+		<div class="layui-row">
+			<form class="layui-form">
+				<div class="layui-col-md11">
+					<div class="layui-col-md3">
+						<div class="layui-form-item">
+							<label class="layui-form-label">用户昵称</label>
+							<div class="layui-input-block">
+								<input type="text" name="userName" required lay-verify="required" placeholder="请输入用户昵称" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md3">
+						<div class="layui-form-item">
+							<label class="layui-form-label">输入店铺称</label>
+							<div class="layui-input-block">
+								<input type="text" name="shopName" required lay-verify="required" placeholder="请输入商铺昵称" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md1" style="margin-left: 20px;">
+						<div class="layui-btn-group">
+							<button type="button" class="layui-btn layui-btn-normal" name="submit">搜索</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="layui-row">
+			<div class="layui-col-md12" style="padding-left: 5px;overflow-x: auto;">
+				<table id="demo" lay-filter="test"></table>
+			</div>
+		</div>
+
+		<script src="../../layui/layui.js"></script>
+		<script src="../../js/jquery-1.12.4.js"></script>
+		<script>
+			layui.use('table', function() {
+				var table = layui.table;
+				var userName = null;
+				var shopName = null;
+				//第一个实例
+				table.render({
+					elem: '#demo',
+					id:'listReload',
+					height: 312,
+					width:1400,
+					url: '/c/th/queryDianpuAll', //数据接口
+					page: true, //开启分页
+					method:"post",				//设置请求方式
+					skin: 'line',
+					where:{"userName":userName,"shopName":shopName},
+					request: {pageName: 'pageNum',limitName: 'pageSize' }, 	//页码的参数名称，默认：page
+					cols: [
+						[ //表头
+							{
+								field: 'collectid',
+								title: '序号',
+								width: 80,
+								sort: true,
+								fixed: 'left'
+							}, {
+								field: 'username',
+								title: '用户',
+								width: 270
+							}, {
+								field: 'shangjiaNames',
+								title: '店铺名用户名',
+								width: 270
+							}, {
+								field: 'shopname',
+								title: '店铺名称',
+								width: 270
+							}, {
+								field: 'collectiontime',
+								title: '收藏时间',
+								sort: true,
+								width: 270
+							}, 
+						]
+					]
+				});
+				//表刷新方法
+		        var reloadTable = function () {
+		            table.reload("listReload", { //此处是上文提到的 初始化标识id
+		            	where:{"userName":userName,"shopName":shopName}
+		            })
+		        };
+		      //查询
+				$("[name=submit]").on("click",function(){
+				 	userName = $("[name=userName]").val();
+				 	shopName = $("[name=shopName]").val();
+					//当前页的刷新
+					reloadTable(); 
+				});
+			});
+		</script>
+	</body>
+
+</html>

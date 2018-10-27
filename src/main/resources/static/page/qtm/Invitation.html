@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+	</head>
+
+	<body>
+		<br/>
+				<div class="layui-form-item layui-form">
+					<div class="layui-col-md3">
+				    	<div class="layui-form-item">
+							<label class="layui-form-label">分类</label>
+							<div class="layui-input-block">
+								<select id="type" lay-verify="">
+									<option value="0" selected>所有</option>
+								</select>
+							</div>
+						</div>
+				    </div>
+				    <div class="layui-col-md4">
+				    	<label class="layui-form-label">标题</label>
+					    <div class="layui-input-block">
+					      <input type="text" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input"/>
+					    </div>
+				    </div>
+				     <div class="layui-col-md2">
+				    	 <div class="layui-btn-group" style="padding-left: 10px">
+					   		<button  name="so" class="layui-btn">搜索</button>
+					  		<button  class="layui-btn" id="jia">删除</button>
+						 </div>
+				    </div>
+			  </div>
+			<div class="layui-row" style="padding-left: 5px">
+					<table class="layui-table" >
+						<colgroup>
+							<col width="20">
+							<col width="20">
+							<col>
+						</colgroup>
+						<thead>
+							<tr>
+								<th></th>
+								<th>ID</th>
+								<th>分类</th>
+								<th>标题</th>
+								<th>发布时间</th>
+								<th>状态</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="tad">
+						</tbody>
+					</table>
+					
+				</div>
+			
+		<script src="js/jquery-1.8.3.js"></script>
+		<script src="layui/layui.js"></script>
+		<script>
+		layui.use('table', function() {})
+			function cha(){
+
+				jQuery.getJSON("http://127.0.0.1:8080/tiezi/select", function(data) {
+					var shenghe;
+					var shijian;
+					var zt;
+					var sj;
+					$.each(data, function(i, obj) {
+							var zt;
+							if(obj.auditStatus==1){
+								zt="待审批"
+							}else if(obj.auditStatus==2){
+								zt="审核成功"
+							}else if(obj.auditStatus==3){
+								zt="未通过"
+							}
+							var tr = $("<tr></tr>");
+							tr.append("<td><input type='checkbox'  name='pi' value='" + obj.postID + "'></td>")
+							tr.append("<td>" + obj.postID + "</td>")
+							tr.append("<td>" + obj.fmName + "</td>")
+							tr.append("<td>" + obj.title + "</td>")
+							tr.append("<td>" + obj.releaseTime + "</td>")
+							tr.append("<td>" + zt + "</td>")
+							tr.append("<td><button type='button' class='layui-btn layui-btn-primary layui-btn-xs' name='rr'>查看</button></td>")
+							$("#tad").append(tr);
+						
+						
+					})
+				})
+			}
+			cha();
+			$("#jia").click(function(){
+				var id = [];
+				$("[name=pi]:checked").each(function() {
+					id.push($(this).val());
+				});
+				if(id!=""){
+					if(confirm("确定删除吗？")){
+						$.ajax({
+						type: "delete",
+						url: "http://127.0.0.1:8080/tiezi/delete/"+id,
+						dataType: "json",
+						success: function(res) {
+							if(res>0){
+								layer.open({title: '操作提示',content: '提交成功'}); 
+								cha();
+							}
+
+						}
+					});
+					}
+				}else{
+					layer.open({title: '操作提示',content: '请先选中需要删除的数据'}); 
+				}
+				
+			})
+			$("[name=rr]").live("click",function(){
+				var postID=$(this).parents("tr").find("td:eq(1)").html();
+				window.sessionStorage.setItem("postID",postID);
+				location.href="Invitationinfo.html";
+			})
+			
+		
+		</script>
+	</body>
+
+</html>

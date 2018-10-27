@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.clm.ISystems">
+	<select id="querySystemById" resultType="com.accp.pojo.System">
+		select * from system
+	</select>
+	<update id="updateSystem">
+		update system
+		set exchangeRate=#{system.exchangerate},charge=#{system.charge},signIn=#{system.signin},postIntegral=#{system.postintegral},track=#{system.track},releaseBeauty=#{system.releasebeauty},logisticMin=#{system.logisticmin},logisticMinSeller=#{system.logisticminseller},logisticWeight=#{system.logisticweight},logisticPrice=#{system.logisticprice},bond=#{system.bond},videoSize=#{system.videosize},closeorderdays=#{system.closeorderdays},receivedays=#{system.receivedays},refunddays=#{system.refunddays},refundconfirmdays=#{system.refundconfirmdays},shopFreeStatus=#{system.shopfreestatus},freeTime=#{system.freetime}
+		where sysID=#{system.sysid};
+	</update>
+</mapper>

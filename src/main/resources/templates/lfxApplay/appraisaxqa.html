@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!-- 1.命名空间 (非常重要)-->
+<html  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+body { 
+font: normal 11px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+background: #E6EAE9; 
+} 
+ 
+a { 
+color: #c75f3e; 
+text-decoration: none;
+} 
+
+.ys {
+    display: inline-block;
+    padding: .3em .5em;
+    background-image: linear-gradient(#ddd, #bbb);
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3em;
+    box-shadow: 0 1px white inset;
+    text-align: center;
+    text-shadow: 0 1px 1px black;
+    color:white;
+    font-weight: bold;
+}
+.ys:active{
+    box-shadow: .05em .1em .2em rgba(0,0,0,.6) inset;
+    border-color: rgba(0,0,0,.3);
+    background: #bbb;
+}
+ 
+#mytable { 
+text-align:center;
+padding: 0; 
+margin: 0; 
+} 
+ 
+caption { 
+padding: 0 0 5px 0; 
+width: 700px; 
+font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+text-align: right; 
+} 
+ 
+th { 
+font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+border-top: 1px solid #C1DAD7; 
+letter-spacing: 2px; 
+text-transform: uppercase; 
+text-align: left; 
+padding: 6px 6px 6px 12px; 
+background: #CAE8EA  no-repeat; 
+text-align: center;
+} 
+th.nobg { 
+border-top: 0; 
+border-left: 0; 
+border-right: 1px solid #C1DAD7; 
+background: none; 
+} 
+ 
+td { 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+background: #fff; 
+font-size:11px; 
+padding: 6px 6px 6px 12px; 
+color: #4f6b72; 
+} 
+td.alt { 
+background: #F5FAFA; 
+color: #797268; 
+} 
+th.spec { 
+border-left: 1px solid #C1DAD7; 
+border-top: 0; 
+background: #fff no-repeat; 
+font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+} 
+th.specalt { 
+border-left: 1px solid #C1DAD7; 
+border-top: 0; 
+background: #f5fafa no-repeat; 
+font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #797268; 
+} 
+html>body td{ font-size:11px;} 
+body,td,th { 
+font-family: 宋体, Arial; 
+font-size: 12px; 
+</style>
+<BODY class="oneColLiqCtrHdr">
+    <H3>鉴定信息</H3>
+<BR>
+<!--       <TABLE border=0 cellSpacing=1 cellPadding=6 width="100%" class="tablesorter"> -->
+<!--         <TBODY  > -->
+<!--           <TR th:each="temp,iterState : ${xiangvo}"> -->
+<!--             <TD width="89" align=right noWrap><strong >会员:</strong></TD> -->
+<!--             <TD th:text="${temp.userName}"></TD> -->
+<!--             <TD align=right><strong >类型：<span  th:text="${iterState.count}"></span></strong></TD> -->
+<!--             <TD width="169" th:text="${temp.stName}">自驾游</TD> -->
+<!--             <td > -->
+<!--                 <input  th:if="${temp.auditStatus==0}" checked type="radio" name="status" value="1" id="status_1"> -->
+<!--                 待审核 -->
+<!--                 <input th:if="${temp.auditStatus==1}" checked type="radio" name="status" value="2" id="status_2"> -->
+<!--                 审核不通过 -->
+<!--                 <input th:if="${temp.auditStatus==2}" checked type="radio" name="status" value="3" id="status_3"> -->
+<!--                 审核通过 -->
+<!--             </td> -->
+<!--           </TR> -->
+<!--           </TBODY> -->
+<!--           </TABLE> -->
+  
+<div id=container>
+  <div id="header">
+    <H3>会员信息</H3>
+  </DIV>
+  <DIV id="mainContent"><BR>
+    <form action="" method="POST" class="table" enctype="multipart/form-data" name="form1" id="form10">
+      <TABLE border=0 cellSpacing=1 cellPadding=6 width="100%" class="tablesorter">
+        <TBODY>
+          <TR>
+          
+            <TD width="18%" align=right noWrap><strong>会员组:</strong></TD>
+           
+            <TD th:text="水电费是">咯</TD>
+   
+            <TD width="18%" noWrap align=right>&nbsp;</TD>
+            <TD width="32%" noWrap>&nbsp;</TD>
+          </TR>
+          <TR>
+            <TD align=right noWrap>签证类型：</TD>
+            <TD ><input name="mobile" style="width: 120px;height:20px;outline:none; border-radius:5px;"  type="text" class="" id="mobile" th:value="${xiangvo.stName}" maxlength="13"></TD>
+            <TD align=right>微整资质:</TD>
+            <TD th:text="大风">			
+			</TD>
+          </TR>
+          <TR>
+            <TD align=right>整形医院营业执照:</TD>
+            <TD align=right>           
+            <label><input name="sex" type="radio" value="0" id="wei">审核未通过</label>
+            <label><input type="radio" name="sex" value="1" id="tong" >审核通过</label>
+            <label><input type="radio" name="sex" value="2" id="dai" >审核未通过</label>
+            </TD>
+                    <TD align=right>合作医院官网网址:</TD>
+            <TD align=right>           
+            <label><input name="sex" type="radio" value="0" id="wei">审核未通过</label>
+            <label><input type="radio" name="sex" value="1" id="tong" >审核通过</label>
+            <label><input type="radio" name="sex" value="2" id="dai" >审核未通过</label>
+            </TD>
+          </TR>
+          <TR>
+        </tbody>
+      </table>
+	        <TABLE border=0 cellSpacing=1 cellPadding=6 width="100%" class="tablesorter">
+        <TBODY>
+			<TR>
+            <TD width="18%" align=right noWrap> 在韩工作/学习时间:</TD>
+            <TD  width="32%">
+            2018-10-10 10:47            </TD>
+            <TD  width="18%" align="right">联系电话:</TD>
+            <TD  width="32%" >43.250.200.63</TD>
+          </TR>
+                    <TR>
+            <TD align=right noWrap>在韩住址：</TD>
+            <TD ><input name="mobile" style="width: 120px;height:20px;outline:none; border-radius:5px;"  type="text" class="" id="mobile" th:value="${xiangvo.stName}" maxlength="13"></TD>
+            <TD align=right>医院实力展示:</TD>
+            <TD th:text="阿斯蒂芬">			
+			</TD>
+          </TR>
+                    <TR>
+            <TD align=right noWrap>相关证明文件：</TD>
+            <TD ><input name="mobile" style="width: 120px;height:20px;outline:none; border-radius:5px;"  type="text" class="" id="mobile" th:value="${xiangvo.stName}" maxlength="13"></TD>
+            <TD align=right>状态:</TD>
+            <TD th:text="ad是否收到">			
+			</TD>
+          </TR>
+                    <TR>
+            <TD align=right noWrap>管理员理由：</TD>
+            <TD ><input name="mobile" style="width: 120px;height:20px;outline:none; border-radius:5px;"  type="text" class="" id="mobile" th:value="${xiangvo.stName}" maxlength="13"></TD>
+            <TD align=right>真实姓名:</TD>
+            <TD th:text="阿斯蒂芬">			
+			</TD>
+          </TR>
+        </tbody>
+      </table>
+</form>
+    <p>&nbsp;</p>
+  </div>
+  
+</div>
+</BODY>
+<script src="../js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	$(function(){
+
+		
+		if([[${xiangvo.auditStatus}]]==0){
+			$("#wei").attr("checked","checked");
+		}else if([[${xiangvo.auditStatus}]]==2){
+			$("#dai").attr("checked","checked");
+		}else if([[${xiangvo.auditStatus}]]==1){
+			$("#tong").attr("checked","checked");
+		}
+		}
+		
+	})
+</script>
+</html>
+

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>退款管理</title>
+<link rel="stylesheet" href="layui/css/layui.css" media="all">
+</head>
+
+<body>
+	<br />
+	<form class="layui-form">
+	<br/>
+		<div class="layui-form-item">
+		<div class=" layui-col-md5">
+			<label class="layui-form-label">帖子标题</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="userName" required
+					lay-verify="required" class="layui-input">
+			</div>
+			</div>
+		<div class=" layui-col-md5">
+			<label class="layui-form-label">帖子栏目</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="shopName" required lay-verify="required" class="layui-input">
+			</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		<div class=" layui-col-md5">
+			<label class="layui-form-label">发布时间</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="jine" required lay-verify="required" class="layui-input">
+			</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		<div class=" layui-col-md5">
+			<label class="layui-form-label">发布内容</label>
+			<div class="layui-input-block">
+				<textarea name="adminOpinion" placeholder="如果拒绝请输入原因" class="layui-textarea"></textarea>
+			</div>
+			</div>
+		</div>
+			
+			<div class="layui-form-item">
+				<div class=" layui-col-md5">
+					<label class="layui-form-label">审批意见</label>
+					<div class="layui-input-block">
+						<textarea name="yijian" placeholder="请完善" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				</div>
+				<div class="layui-form-item">
+				<div class=" layui-col-md5">
+					<label class="layui-form-label">审核状态</label>
+					<div >
+						<input type="radio" name="shenhe" value="1" title="待审核">
+						<input type="radio" name="shenhe" value="2" title="已完成">
+						<input type="radio" name="shenhe" value="3" title="未通过">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+			<div class=" layui-col-md5">
+				<label class="layui-form-label">删除状态</label>
+				<div >
+					<input type="radio" name="shan" value="1"  title="未删除">
+					<input type="radio" name="shan" value="2"  title="删除">
+				</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+			<div class=" layui-col-md5">
+				<label class="layui-form-label">推荐设置</label>
+				<div >
+					<input type="checkbox"  id="jiaj" value="1" title="加精" >
+					<input type="checkbox"  id="jiag" value="1" title="固顶">
+				</div>
+				</div>
+			</div>
+			<div class=" layui-col-md5">
+				<label class="layui-form-label"></label>
+				<div >
+					<button type="button" id="hui" class="layui-btn layui-btn-normal">保存</button>
+					<button type="button"  class="layui-btn layui-btn-warm" onclick="window.history.go(-1);">返回</button>
+				</div>
+				</div>
+			</form>
+</body>
+<script src="js/jquery-1.8.3.js"></script>
+<script src="layui/layui.js"></script>
+<script>
+layui.use('form', function() {
+	var form=layui.form;
+	var postID = window.sessionStorage.getItem("postID");
+	load();
+	function load(){
+		$.ajax({
+			type: "get",
+			url: "/tiezi/select/info/" + postID,
+			dataType: "json",
+			success: function(data) {
+				$("[name=userName]").val(data.title)
+				$("[name=shopName]").val(data.fmName)
+				$("[name=jine]").val(data.releaseTime)
+				$("[name=adminOpinion]").text(data.content)
+				
+				if(data.operatingState==1){
+					$("input[name=shan]:eq(0)").attr("checked","checked");
+				}else if(data.operatingState==2){
+					$("input[name=shan]:eq(1)").attr("checked","checked");
+				}
+				if(data.auditStatus==1){
+					$("[name=shenhe]:eq(0)").attr("checked","checked");
+					form.render('radio');
+				}else if(data.auditStatus==2){
+					$("[name=shenhe]:eq(1)").attr("checked","checked");
+					form.render('radio');
+				}else if(data.auditStatus==3){
+					$("[name=shenhe]:eq(2)").attr("checked","checked");
+					form.render('radio');
+				}
+				if(data.essence==1){
+					$("#jiaj").prop("checked","checked");
+					form.render('checkbox');
+				}
+				if(data.solid==1){
+					$("#jiag").prop("checked","checked");
+					form.render('checkbox');
+				}
+
+			}
+		});
+	}
+	
+	$("#hui").click(function(){
+		var jiajin=0;
+		var jiagu=0;
+		if($('#jiaj:checked').val()==1){
+			jiajin=1
+		}
+		if($('#jiag:checked').val()==1){
+			jiagu=1
+		}
+		var t={};
+			t["postID"]=postID;
+			t["auditStatus"]=$('input[name=shenhe]:checked').val();
+			t["operatingState"]=$('input[name=shan]:checked').val();
+			t["adminOpinion"]=$("[name=yijian]").val();
+			t["essence"]=jiajin;
+			t["solid"]=jiagu;
+		$.ajax({
+			url:"/tiezi/update",
+			type:"post",
+			contentType:"application/json",
+			data:JSON.stringify(t),
+			dataType:"json",
+			success:function(data){
+				if(data>0){
+					layer.open({title: '操作提示',content: '提交成功'}); 
+				}else{
+					layer.open({title: '操作提示',content: '提交失败'}); 
+				}
+			}
+		}) 
+	})
+
+})
+</script>
+
+</html>

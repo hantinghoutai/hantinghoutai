@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>退款管理</title>
+<link rel="stylesheet" href="layui/css/layui.css" media="all">
+</head>
+
+<body>
+	<br/>
+	<form class="layui-form">
+		<div class="layui-form-item">
+			<div class="layui-col-md5">
+				<label class="layui-form-label">会员</label>
+				<div class="layui-input-block">
+					<input type="text" readonly="readonly" name="userName" required
+						lay-verify="required" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-col-md5">
+			<label class="layui-form-label">订单号</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="shopName" required
+					lay-verify="required" class="layui-input">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+			<div class="layui-col-md5">
+		<div class="layui-form-item">
+			<label class="layui-form-label">订单金额</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="jine" required
+					lay-verify="required" class="layui-input">
+			</div>
+		</div>
+	</div>
+			<div class="layui-col-md5">
+			<label class="layui-form-label">申请原因</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="yuany" required
+					lay-verify="required" class="layui-input">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+			<div class="layui-col-md5">
+			<label class="layui-form-label">申请日期</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="rq" required
+					lay-verify="required" class="layui-input">
+			</div>
+		</div>
+			<div class="layui-col-md5">
+			<label class="layui-form-label">处理状态</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="cl" required
+					lay-verify="required" class="layui-input">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+			<div class="layui-col-md5">
+			<label class="layui-form-label">商家备注</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="beizhu" required
+					lay-verify="required" class="layui-input">
+			</div>
+		</div>
+			<div class="layui-col-md5">
+			<label class="layui-form-label" style="margin-top: 50px;">附带图片</label>
+			<div id="img"></div>
+		</div>
+		
+	</div>
+	<div class="layui-form-item">
+			<div class="layui-col-md5">
+			<label class="layui-form-label">退款金额</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" name="tuijine" required lay-verify="required" class="layui-input">
+			</div>
+		</div>
+			<div class="layui-col-md5">
+			<label class="layui-form-label">实际退款</label>
+			<div class="layui-input-block">
+				<input type="text"  name="shi" required lay-verify="required" class="layui-input">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-col-md5">
+			<label class="layui-form-label">审批备注</label>
+			<div class="layui-input-block">
+				<textarea name="adminOpinion" placeholder="如果拒绝请输入原因" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		</div>
+	<div class="layui-form-item">
+		<div class="layui-col-md5">
+			<label class="layui-form-label">管理员操作</label>
+			<div>
+				<input type="radio" name="sex" value="2" title="同意退款" checked>
+				<input type="radio" name="sex" value="3" title="拒绝退款">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+	<div class=" layui-col-md5"></div>
+		<div class=" layui-col-md5">
+			<label class="layui-form-label"></label>
+				<div >
+					<button type="button" id="hui" class="layui-btn layui-btn-normal">保存</button>
+					<button type="button"  class="layui-btn layui-btn-warm" onclick="window.history.go(-1);">返回</button>
+				</div>
+		</div>
+	</div>
+</form>
+</body>
+<script src="js/jquery-1.8.3.js"></script>
+<script src="layui/layui.js"></script>
+<script>
+layui.use('form', function() {})
+var refundID = window.sessionStorage.getItem("refundID");
+	$.ajax({
+		type: "get",
+		url: "http://127.0.0.1:8080/tuikuan/select/" + refundID,
+		dataType: "json",
+		success: function(data) {
+			if(data==1){
+				$("#guan").hide();
+				$("[name=shi]").hide();
+				tianjian1();
+				$("#hui").html("返回");
+			}else if(data==2){
+				tianjian2();
+			}
+
+		}
+	});
+	function tianjian2(){
+		$.ajax({
+			type: "get",
+			url: "http://127.0.0.1:8080/tuikuan/select/info/" + refundID,
+			dataType: "json",
+			success: function(data) {
+				var zt;
+				
+					if(data.adminStatus==1){
+						zt="申请管理员介入";
+					}else if (data.adminStatus==2){
+						zt="退款成功";
+						$("#guan").hide();
+						$("#hui").html("返回");
+						$("[name=shi]").show();
+					}else if (data.adminStatus==3){
+						zt="管理员拒绝";
+						$("#guan").hide();
+						$("#hui").html("返回");
+					}
+				
+				$("[name=userName]").val(data.userName)
+				$("[name=shopName]").val(data.orderID)
+				$("[name=jine]").val(data.servicePrice)
+				$("[name=yuany]").val(data.refundReason)
+				$("[name=rq]").val(data.applicationTime)
+				$("[name=cl]").val(zt)
+				$("[name=beizhu]").val(data.adminRemarks )
+				$("#img").append("<img src='" + data.refundImg + "' style='width: 150px;height: 150px;'> ")
+				$("[name=tuijine]").val(data.servicePrice)
+				if(data.actualRefundMoney==0){
+					$("[name=shi]").val()
+				}else{
+					$("[name=shi]").val(data.actualRefundMone)
+				}
+				
+			}
+		});
+	}
+	function tianjian1(){
+		$.ajax({
+			type: "get",
+			url: "http://127.0.0.1:8080/tuikuan/select/info/" + refundID,
+			dataType: "json",
+			success: function(data) {
+				var shenghe;
+				
+				if(data.auditStatus==1){
+					shenghe="未审批"
+				}else if(data.auditStatus==2){
+					shenghe="退款成功"
+				}else if(data.auditStatus==3){
+					shenghe="商家不同意"
+				}
+				
+				$("[name=userName]").val(data.userName)
+				$("[name=shopName]").val(data.orderID)
+				$("[name=jine]").val(data.servicePrice)
+				$("[name=yuany]").val(data.refundReason)
+				$("[name=rq]").val(data.applicationTime)
+				$("[name=cl]").val(shenghe)
+				$("[name=beizhu]").val(data.businessRemarks )
+				$("#img").append("<img src='" + data.refundImg + "' style='width: 150px;height: 150px;'> ")
+				$("[name=tuijine]").val(data.servicePrice)
+				$("[name=shi]").val(data.ActualRefundMoney)
+			}
+		});
+	}
+	$("#hui").click(function(){
+		var adminStatus = $('input[name="sex"]:checked').val();
+		var adminRemarks=$("[name=adminOpinion]").val();
+		var ActualRefundMoney=$("[name=shi]").val();
+		if(adminStatus==3){
+			if(adminRemarks==""){
+				alert("请写明理由！");
+			}else {
+				$.ajax({
+					type: "put",
+					url: "http://127.0.0.1:8080/tuikuan/update/"+adminStatus+"/"+refundID+"/"+adminRemarks,
+					dataType: "json",
+					success: function(data) {
+						if(data>0){
+							alert("修改成功！");
+							location.href="Refund.html"
+						
+						}
+					}
+				});
+			}
+		}else if(adminStatus==2){
+			if(ActualRefundMoney==""){
+				alert("请输入实际退款金额！")
+			}else {
+				$.ajax({
+					type: "put",
+					url: "http://127.0.0.1:8080/tuikuan/updates/"+adminStatus+"/"+refundID+"/"+ActualRefundMoney,
+					dataType: "json",
+					success: function(data) {
+						if(data>0){
+							alert("修改成功！");
+							location.href="Refund.html"
+						
+						}
+					}
+				});
+			}
+		}
+		
+	})
+		
+
+
+</script>
+
+</html>

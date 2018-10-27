@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../../layui/css/layui.css" />
+		<style type="text/css">
+			.tables tr th{
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			专业/学习资源管理
+		</blockquote>
+		<table class="table table-bordered" style="text-align: center;" id="bodys">
+				<tr><th style="text-align: center;">序号</th><th style="text-align: center;">排序</th><th style="text-align: center;">类型</th><th style="text-align: center;">名称</th><th style="text-align: center;">操作</th></tr>
+				<tr v-for="(temp,index) in Pro"><td v-text="index+1"></td><td v-text="index+1"></td><td v-text="temp.category==1?'专业':'学习资源'"></td><td v-text="temp.majorname"></td><td><a href="javascript:void(0)" @click="update(temp.majorid)">修改</a></td></tr>
+				<tr><td colspan="5"><input type="button" class="btn btn-danger" value="增加" @click="add()">&nbsp;&nbsp;<input type="button" class="btn btn-danger" value="更新" @click="loads()"></td></tr>
+		</table>
+	</body>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="../../js/vue.js" ></script>
+	<script src="../../layui/layui.js"></script>
+		<script>
+			var vm=new Vue({
+				el:"#bodys",
+				data:{
+					Pro:{}
+				},
+				methods:{
+					load:function(){
+						$.getJSON("/clm/api/selectLanguageType",function(data){
+							console.info(data);
+							vm.Pro=data;
+						})
+					},
+					update:function(id){
+						window.sessionStorage.setItem("ProId",id);
+						location.href="page/clm/UpdateManagementOfProfessionalLearningMaterials.html";
+					},
+					add:function(){
+						location.href="page/clm/ManagementOfProfessionalLearningMaterials.html";
+					},
+					loads:function(){
+						vm.load();
+					}
+				},
+				created:function(){
+					var vm=this;
+					vm.load();
+				}
+			})
+		
+			layui.use('table', function() {
+				var table = layui.table;
+				//第一个实例
+				table.render({
+					elem: '#demo',
+					height: 312,
+					width:1400,
+					url: '', //数据接口
+					page: true, //开启分页
+					cols: [
+						[ //表头
+							{
+								field: 'id',
+								title: '序号',
+								width: 300,
+								sort: true,
+								fixed: 'left'
+							}, {
+								field: 'username',
+								title: '排序',
+								width: 300
+							}, {
+								field: 'sex',
+								title: '类型',
+								width: 300
+							}, {
+								field: 'city',
+								title: '名称',
+								width: 300
+							}, {
+								field: 'sign',
+								title: '操作',
+								width: 300
+							}
+						]
+					]
+				});
+			});
+		</script>
+</html>

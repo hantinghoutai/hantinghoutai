@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="layui/css/layui.css" />
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			银行管理
+		</blockquote>
+		<table class="table table-bordered" style="" id="tbody">
+			<tr>
+				<td style="text-align: right;">添加银行名称:</td>
+				<td><input type="text" width="100px" value="" v-model="addBank.bankname"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">排序:</td>
+				<td><input type="text" width="100px" value="" v-model="addBank.sort"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">是否显示:</td>
+				<td>
+					<input type="radio" value="1" v-model="addBank.show"/>是
+					<input type="radio" value="0" v-model="addBank.show"/>否
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;"></td>
+				<td>
+					<input type="button" value="保存" class="btn btn-danger" @click="add()"/>
+					<input type="button" value="返回"  class="btn btn-danger" @click="fanhui()"/>
+				</td>
+			</tr>
+		</table>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="js/vue.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.js" ></script>
+	<script src="layui/layui.js"></script>
+	<script type="text/javascript">
+		var vm=new Vue({
+			el:"#tbody",
+			data:{
+				addBank:{}
+			},
+			methods:{
+				add:function(){
+					$.ajax("/clm/api/addBank",{
+						type:"post",
+						contentType:"application/json",
+						data:JSON.stringify(vm.addBank),
+						dataType:"json",
+						success:function(data){
+							if(data.code=="200"){
+								layer.msg('新增成功!!', {icon: 1});
+							}else{
+								layer.msg('新增失败!!', {icon: 5});
+							}
+						}
+					})
+				},
+				fanhui:function(){
+					window.history.go(-1);
+				}
+			}
+			
+		})
+		
+		layui.use('table', function() {
+			var table = layui.table;
+			//第一个实例
+			table.render({
+				elem: '#demo',
+				height: 312,
+				width:1400,
+				url: '', //数据接口
+				page: true, //开启分页
+				cols: [
+					[ //表头
+						{
+							field: 'id',
+							title: '序号',
+							width: 300,
+							sort: true,
+							fixed: 'left'
+						}, {
+							field: 'username',
+							title: '费用名称',
+							width: 300
+						}, {
+							field: 'sex',
+							title: '分类',
+							width: 300
+						}, {
+							field: 'city',
+							title: '操作',
+							width: 300
+						}
+					]
+				]
+			});
+		});
+	</script>
+</html>

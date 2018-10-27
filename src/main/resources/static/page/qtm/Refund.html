@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+	</head>
+
+	<body>
+		<br/>
+		<form class="layui-form">
+					<div class="layui-col-md3">
+				    	<div class="layui-form-item">
+							<label class="layui-form-label">会员名</label>
+							<div class="layui-input-block">
+								<input type="text" name="userName" required  lay-verify="required" placeholder="请输入会员名" autocomplete="off" class="layui-input"/>
+					    	</div>
+						</div>
+				    </div>
+				    <div class="layui-col-md3">
+				    	<label class="layui-form-label">退款编号</label>
+					    <div class="layui-input-block">
+					     	<input type="text" name="refundID" required  lay-verify="required" placeholder="请输入编号" autocomplete="off" class="layui-input"/>
+					    </div>
+				    </div>
+				    
+				<div class="layui-form-item">
+				 <div class="layui-col-md3">
+				    	<label class="layui-form-label">退款状态</label>
+					    <div class="layui-input-block">
+					      <select id="refundstatus" lay-verify="">
+									<option value="0" selected>全部</option>
+									<option value="1" >待审核</option>
+									<option value="2" >已拒绝</option>
+									<option value="3" >管理员介入</option>
+									<option value="3" >管理员拒绝</option>
+									<option value="3" >退款完成</option>
+									<option value="3" >退款取消</option>
+							</select>
+						</div>
+				    </div>
+				    <div class="layui-col-md6">
+				    	<label class="layui-form-label">申请时间</label>
+					    <div class="layui-input-block">
+					     	<div class="layui-col-md5"><input type="text" class="layui-input" id="data1"></div> 
+					     	<div class="layui-col-md1"><center style="line-height: 30px;">~<center></div> 
+					     	<div class="layui-col-md5"><input type="text" class="layui-input" id="data2"></div> 
+					     </div>
+				    </div>
+				     <div class="layui-btn-group">
+						  <button  name="so" class="layui-btn">搜索</button>
+						  <button class="layui-btn" id="jia">删除</button>
+						</div>
+			  </div>
+			
+			
+			<div class="layui-form-item" style="padding-left: 5px">
+					<table class="layui-table">
+						<colgroup>
+							<col width="20">
+							<col width="100">
+							<col width="150">
+							<col width="200">
+							<col>
+						</colgroup>
+						<thead>
+							<tr>
+								<th></th>
+								<th>退款编号</th>
+								<th>订单号</th>
+								<th>退款申请时间</th>
+								<th>申请会员</th>
+								<th>订单服务</th>
+								<th>金币</th>
+								<th>处理状态</th>
+								<th>处理时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="tad">
+						</tbody>
+					</table>
+				</div>
+				</form>
+		<script src="js/jquery-1.8.3.js"></script>
+		<script src="layui/layui.js"></script>
+		<script>
+		layui.use('laydate', function(){
+  			var laydate = layui.laydate;
+		  laydate.render({elem: '#data1' });//激活时间控件1
+		  laydate.render({elem: '#data2' });//激活时间控件2
+		});
+		layui.use('form', function() {
+			var form=layui.form;
+			form.render('select');
+			
+			function cha(){
+				jQuery.getJSON("/tuikuan/list", function(data) {
+					var shenghe;
+					var shijian;
+					var zt;
+					var sj;
+					$.each(data, function(i, obj) {
+						if(obj.point==1){
+							
+							if(obj.auditStatus==1){
+								shenghe="未审批"
+							}else if(obj.auditStatus==2){
+								shenghe="退款成功"
+							}else if(obj.auditStatus==3){
+								shenghe="商家不同意"
+							}
+							if(obj.auditTime==""||obj.auditTime==null){
+								shijian="未处理"
+							}else{
+								shijian=obj.auditTime;
+							}
+							var tr = $("<tr></tr>");
+							tr.append("<td><input type='checkbox'  name='pi' value='" + obj.refundID + "'></td>")
+							tr.append("<td>" + obj.refundID + "</td>")
+							tr.append("<td>" + obj.orderID + "</td>")
+							tr.append("<td>" + obj.applicationTime + "</td>")
+							tr.append("<td>" + obj.userName + "</td>")
+							tr.append("<td>" + obj.serviceTitle + "</td>")
+							tr.append("<td>" + obj.servicePrice + "</td>")
+							tr.append("<td>" + shenghe + "</td>")
+							tr.append("<td>" + shijian + "</td>")
+							tr.append("<td><button type='button' class='layui-btn layui-btn-primary layui-btn-xs' name='rr'>查看</button></td>")
+							$("#tad").append(tr);
+						}else if(obj.point==2){
+							if(obj.adminStatus==1){
+								zt="申请管理员介入";
+							}else if (obj.adminStatus==2){
+								zt="退款成功";
+							}else if (obj.adminStatus==3){
+								zt="管理员拒绝";
+							}
+							if(obj.adminTime==""||obj.adminTime==null){
+								sj="未处理";
+							}else{
+								sj=obj.adminTime;
+							}
+							var tr = $("<tr></tr>");
+							tr.append("<td><input type='checkbox'  name='pi' value='" + obj.refundID + "'></td>")
+							tr.append("<td>" + obj.refundID + "</td>")
+							tr.append("<td>" + obj.orderID + "</td>")
+							tr.append("<td>" + obj.applicationTime + "</td>")
+							tr.append("<td>" + obj.userName + "</td>")
+							tr.append("<td>" + obj.serviceTitle + "</td>")
+							tr.append("<td>" + obj.servicePrice + "</td>")
+							tr.append("<td>" + zt + "</td>")
+							tr.append("<td>" + sj + "</td>")
+							tr.append("<td><button type='button' class='layui-btn layui-btn-primary layui-btn-xs' name='rr'>查看</button></td>")
+							$("#tad").append(tr);
+						}
+						
+					})
+				})
+			}
+			cha();
+			$("[name=rr]").live("click",function(){
+				var refundID=$(this).parents("tr").find("td:eq(1)").html();
+				window.sessionStorage.setItem("refundID",refundID);
+				location.href="Refundinfo.html"
+			})
+			$("#jia").click(function() {
+				var id = [];
+				$("[name=pi]:checked").each(function() {
+					id.push($(this).val());
+				});
+				if(id!=""){
+					$.ajax({
+						type: "delete",
+						url: "http://127.0.0.1:8080/tuikuan/delete/"+id,
+						dataType: "json",
+						success: function(res) {
+							if(res>0){
+								alert("删除成功！")
+								fenye(a, b);
+							}
+
+						}
+					});
+				}else{
+					alert("请先一条数据！")
+				}
+			})
+			
+			
+			
+		})
+			
+		
+		</script>
+	</body>
+
+</html>

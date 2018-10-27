@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>托管设置</title>
+		<link rel="stylesheet" href="../../css/bootstrap.css" />
+		<link rel="stylesheet" href="../../layui/css/layui.css" />
+		<style type="text/css">
+			#tables tr th{
+				text-align: center;
+			}	
+		</style>
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			管理员日志
+		</blockquote>
+		<table class="table table-bordered" style="text-align: center;" id="tables">
+			<tr><th style="text-align: center;">序号</th><th style="text-align: center;">登录用户名</th><th style="text-align: center;">备注</th><th style="text-align: center;">时间</th><th style="text-align: center;">IP</th></tr>
+			<tr v-for="(temp,index) in admin.list"><td v-text="index+1">10034</td><td v-text="temp.name">0</td><td v-text="temp.remarks">社区右侧广告位</td><td v-text="temp.remarkstime"></td><td v-text="temp.remarksip">帖子详细页面右侧图片</td></tr>
+			<tr><td colspan="5"><div id="domes" style="text-align: center;"></td></tr>
+		</table>
+	</body>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="../../js/vue.js" ></script>
+	<script src="../../layui/layui.js"></script>
+	<script>
+			var pageNums=0;
+			var vm=new Vue({
+				el:"#tables",
+				data:{
+					admin:{}
+				},
+				methods:{
+					load:function(pageNum,pageSize){
+						$.getJSON("/clm/api/selectInfoAdmin/"+pageNum+"/"+pageSize,function(data){
+							console.info(data);
+							pageNums=data.lastPage*10;
+							vm.admin=data;
+						})
+					}
+				},
+				created:function(){
+					var vm=this;
+					vm.load(1,2);
+				}
+			})
+	
+			setTimeout(function(){
+				layui.use(['table','laypage'], function() {
+					var table = layui.table;
+					var laypage=layui.laypage;
+					laypage.render({
+						elem:"domes",
+						count:pageNums,
+						skin:"green",
+						jump:function(obj,first){
+							vm.load(obj.curr,2);
+						}
+					})
+					//第一个实例
+					table.render({
+						elem: '#demo',
+						height: 312,
+						width:1400,
+						url: '', //数据接口
+						page: true, //开启分页
+						cols: [
+							[ //表头
+								{
+									field: 'id',
+									title: '序号',
+									width: 300,
+									sort: true,
+									fixed: 'left'
+								}, {
+									field: 'username',
+									title: '登录用户名',
+									width: 300
+								}, {
+									field: 'sex',
+									title: '备注',
+									width: 300
+								}, {
+									field: 'city',
+									title: '时间',
+									width: 300
+								}, {
+									field: 'sign',
+									title: 'IP',
+									width: 300
+								}
+							]
+						]
+					});
+				});
+			},500);
+			
+			
+		</script>
+</html>

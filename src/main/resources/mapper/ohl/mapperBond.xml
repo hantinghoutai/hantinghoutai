@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.ohl.IBondDao">
+
+	<update id="guaranteeUpdate">
+		UPDATE `user` 
+		SET guaranteeMoney=${guaranteeMoney}
+		WHERE userID=#{userID};
+	</update>
+	
+	<insert id="bondAdd">
+		INSERT `bond`(`userID`,`goldCoin`,`submitTime`,`completeTime`,`auditStatus`)
+		VALUES (#{userID},${goldCoin},NOW(),NOW(),2);
+	</insert>
+	
+</mapper>

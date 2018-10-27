@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.qtm.IRefundDao">
+	<select id="list" resultType="com.accp.vo.qtm.Refund">
+			SELECT a.refundID AS refundID,b.orderID AS orderID,a.applicationTime AS
+		applicationTime,c.userName AS userName,d.serviceTitle AS
+		serviceTitle,d.servicePrice AS servicePrice,a.applicationTime
+		asapplicationTime,a.refundImg AS refundImg,a.auditStatus AS
+		auditStatus, a.`businessRemarks` AS businessRemarks,
+		a.`adminStatus` AS adminStatus ,a.`point` AS `point`,a.`adminRemarks` AS adminRemarks,a.`adminTime`AS adminTime,a.`ActualRefundMoney` AS actualRefundMoney
+ 	 	FROM refund a
+		INNER JOIN orders b ON (a.orderID=b.orderID)
+		INNER JOIN `user` c ON (a.userID=c.userID)
+		INNER JOIN services d ON (c.userID=d.userID)
+	</select>
+	
+	<select id="pan" resultType="int">
+		SELECT a.`point`
+ 	 	FROM refund a
+		INNER JOIN orders b ON (a.orderID=b.orderID)
+		INNER JOIN `user` c ON (a.userID=c.userID)
+		INNER JOIN services d ON (c.userID=d.userID)
+		where refundID=#{refundID}
+	</select>
+	<select id="listinfo" resultType="com.accp.vo.qtm.Refund">
+			SELECT a.refundID AS refundID,b.orderID AS orderID,a.applicationTime AS
+		applicationTime,c.userName AS userName,d.serviceTitle AS
+		serviceTitle,d.servicePrice AS servicePrice,a.applicationTime
+		asapplicationTime,a.refundImg AS refundImg,a.auditStatus AS
+		auditStatus, a.`businessRemarks` AS businessRemarks,
+		a.`adminStatus` AS adminStatus ,a.`point` AS `point`,a.`adminRemarks` AS adminRemarks,a.`adminTime`AS adminTime,a.`ActualRefundMoney` AS actualRefundMoney
+ 	 	FROM refund a
+		INNER JOIN orders b ON (a.orderID=b.orderID)
+		INNER JOIN `user` c ON (a.userID=c.userID)
+		INNER JOIN services d ON (c.userID=d.userID)
+		WHERE refundID=#{refundID}
+	</select>
+	<update id="updates">
+		UPDATE refund a
+		SET a.`adminStatus`=#{adminStatus} ,a.`ActualRefundMoney`=#{ActualRefundMoney},a.`adminTime`=NOW()
+		WHERE a.`refundID`=#{refundID}
+	</update>
+	<update id="updatess">
+		UPDATE refund a
+		SET a.`adminStatus`=#{adminStatus} ,a.`adminRemarks`=#{adminRemarks},a.`adminTime`=NOW()
+		WHERE a.`refundID`=#{refundID}
+	</update>
+	<delete id="deletes">
+		DELETE FROM `refund`
+		WHERE refundID IN(${id})
+	</delete>
+
+
+
+
+</mapper>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="layui/css/layui.css" />
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			城市管理
+		</blockquote>
+		<table class="table table-bordered" style="" id="tables">
+			<tr>
+				<td style="text-align: right;">城市:</td>
+				<td><input type="text" width="100px" name="name" v-model="Sharea.name"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">地区全称:</td>
+				<td><input type="text" width="100px" name="GName" v-model="Sharea.mergername"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;"></td>
+				<td>
+					<input type="button" value="保存" class="btn btn-danger" name="baocun" @click="addLoad()"/>
+					<input type="button" value="返回"  class="btn btn-danger" name="fanhui"/>
+				</td>
+			</tr>
+		</table>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="js/vue.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.js" ></script>
+	<script src="layui/layui.js"></script>
+	<script type="text/javascript">
+	
+	var vm=new Vue({
+		el:"#tables",
+		data:{
+			Sharea:{}
+		},
+		methods:{
+			Load:function(id){
+				$.getJSON("/clm/api/selectSharea/"+id,function(data){
+					console.info(data);
+					vm.Sharea=data;
+				})
+			},
+			addLoad:function(){
+				$.ajax("/clm/api/updateSharea",{
+					type:"put",
+					contentType:"application/json",
+					data:JSON.stringify(vm.Sharea),
+					dataType:"json",
+					success:function(data){
+						if(data.code=="200"){
+							layer.msg('修改成功!', {icon: 1});
+						}else{
+							layer.msg('修改成功!', {icon:5});
+						}
+					}
+				})
+			}
+		},
+		created:function(){
+			var vm=this;
+			var id=window.sessionStorage.getItem("NewCountry");
+			vm.Load(id);
+		}
+	})
+	
+	$("[name=fanhui]").click(function(){
+		window.history.go(-1);
+	})
+	layui.use('table', function() {
+		var table = layui.table;
+		//第一个实例
+		table.render({
+			elem: '#demo',
+			height: 312,
+			width:1400,
+			url: '', //数据接口
+			page: true, //开启分页
+			cols: [
+				[ //表头
+					{
+						field: 'id',
+						title: '序号',
+						width: 300,
+						sort: true,
+						fixed: 'left'
+					}, {
+						field: 'username',
+						title: '费用名称',
+						width: 300
+					}, {
+						field: 'sex',
+						title: '分类',
+						width: 300
+					}, {
+						field: 'city',
+						title: '操作',
+						width: 300
+					}
+				]
+			]
+		});
+	});
+	</script>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>充值记录</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+	</head>
+	<body>
+		<br/>
+		<div class="layui-row">
+			<form class="layui-form">
+				<div class="layui-col-md11">
+					<div class="layui-col-md3">
+						<div class="layui-form-item">
+							<label class="layui-form-label">用户昵称</label>
+							<div class="layui-input-block">
+								<input type="text" name="title" required lay-verify="required" placeholder="请输入用户昵称" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md2">
+						<div class="layui-form-item">
+							<label class="layui-form-label">充值方式</label>
+							<div class="layui-input-block">
+								<select name="city" lay-verify="">
+									<option value="1" selected>所有</option>
+									<option value="2" >线下充值</option>
+									<option value="3">支付宝</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md2">
+						<div class="layui-form-item">
+							<label class="layui-form-label">状态</label>
+							<div class="layui-input-block">
+								<select name="city" lay-verify="">
+									<option value="1" selected>全部</option>
+									<option value="2" >待审核</option>
+									<option value="3">已完成</option>
+									<option value="3">已拒绝</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md1" style="margin-left: 20px;">
+						<div class="layui-btn-group">
+							<button class="layui-btn layui-btn-normal">搜索</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="layui-row">
+			<div class="layui-col-md12" style="padding-left: 5px;overflow-x: auto;">
+				<table id="demo" lay-filter="test"></table>
+			</div>
+		</div>
+
+		<script src="../../layui/layui.js"></script>
+		<script>
+			layui.use('table', function() {
+				var table = layui.table;
+				//第一个实例
+				table.render({
+					elem: '#demo',
+					height: 312,
+					width:1400,
+					url: '', //数据接口
+					page: true, //开启分页
+					cols: [
+						[ //表头
+							{
+								field: 'id',
+								title: '序号',
+								width: 80,
+								sort: true,
+								fixed: 'left'
+							}, {
+								field: 'username',
+								title: '昵称',
+								width: 120
+							}, {
+								field: 'sign',
+								title: '充值时间',
+								width: 120,
+								sort: true
+							}, {
+								field: 'sex',
+								title: '类型',
+								width: 120
+							}, {
+								field: 'sign',
+								title: '充值方式',
+								width: 120
+							}, {
+								field: 'city',
+								title: '充值记录',
+								width: 120
+							}, {
+								field: 'sign',
+								title: '状态',
+								width: 120
+							}, {
+								field: 'sign',
+								title: '备注',
+								width: 120
+							}, {
+								field: 'classify',
+								title: '操作'
+							}
+						]
+					]
+				});
+			});
+		</script>
+	</body>
+
+</html>

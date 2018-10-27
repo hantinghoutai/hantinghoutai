@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.clm.AdvertisingDao">
+
+	<select id="selectAdvertisingVoInfo" resultType="com.accp.vo.clm.AdvertisingVo">
+		select advertisementtype.`atid`,advertisementtype.`atname`,advertisementtype.`atpx`,advertisement.`aappUrl`,advertisement.`adescribe`,advertisement.`aid`,advertisement.`aimgPath`,advertisement.`aorder`,advertisement.`apcUrl`,advertisement.`atitle` from `advertisementtype` inner join `advertisement` on(advertisementtype.`atid`=advertisement.`atid`)
+		<trim prefix="where" prefixOverrides="and">
+			<if test="atid!='' and atid!=null and atid!='null' and atid!='0' and atid!=0">
+				and advertisement.atid=#{atid}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="selectAdvertisementtypeInfo" resultType="com.accp.pojo.Advertisementtype">
+		select * from advertisementtype
+	</select>
+	
+	<delete id="deleteAdvertisementtype">
+		<foreach collection="aid" item="temp">
+			delete from advertisement where aid=#{temp};
+		</foreach>
+	</delete>
+	
+	<insert id="addAdvertisementtype">
+		INSERT INTO `advertisement`(`atitle`,`aorder`,`aimgPath`,`apcUrl`,`aappUrl`,`adescribe`,`atid`)
+		VALUES(#{advertisementtype.atitle},#{advertisementtype.aorder},#{advertisementtype.aimgpath},#{advertisementtype.apcurl},#{advertisementtype.aappurl},#{advertisementtype.adescribe},#{advertisementtype.atid});
+	</insert>
+	
+	<update id="updateAdvertisementtype">
+		update advertisement
+		set atitle=#{advertisementtype.atitle},aorder=#{advertisementtype.aorder},aimgPath=#{advertisementtype.aimgpath},apcUrl=#{advertisementtype.apcurl},aappUrl=#{advertisementtype.aappurl},adescribe=#{advertisementtype.adescribe},atid=#{advertisementtype.atid}
+		where aid=#{advertisementtype.aid};
+	</update>
+	
+	<select id="selectAdvertisementInfos" resultType="com.accp.pojo.Advertisement">
+		select * from advertisement where aid=#{id};
+	</select>
+
+</mapper>

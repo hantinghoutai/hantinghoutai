@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="layui/css/layui.css" />
+		<style type="text/css">
+			.tables tr th{
+				text-align: center;
+			}	
+		</style>
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			管理员
+		</blockquote>
+		<table class="table table-bordered" style="" id="tables">
+			<tr>
+				<td style="text-align: right;">管理员建立时间:</td>
+				<td>{{user.creationtime}}由{{user.founders}}创建</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">系统ID:</td>
+				<td v-text="user.adminid"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">用户名:</td>
+				<td><input type="text" width="100px" name="name" v-model="user.name"><span name="names"></span></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">密码:</td>
+				<td><input type="text" width="100px" name="pwd" v-model="user.password">如果不修改请留空!</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">管理员类型:</td>
+				<td>
+					<input type="radio" value="1" name="radio" v-model="user.admintype"/>超级管理员
+					<input type="radio" value="2" name="radio" v-model="user.admintype"/>普通管理员
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;"></td>
+				<td>
+					<input type="button" value="保存"  class="btn btn-danger" @click="add()"/>
+					<input type="button" value="返回"  class="btn btn-danger" @click="fanhui()"/>
+				</td>
+			</tr>
+		</table>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="js/vue.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.js" ></script>
+	<script src="layui/layui.js"></script>
+	<script type="text/javascript">
+	var id= window.sessionStorage.getItem("AdminsUpdateId");
+		var vm=new Vue({
+			el:"#tables",
+			data:{
+				user:{}
+			},
+			methods:{
+				add:function(){
+					var json={};
+					json["name"]=$("[name=name]").val();
+					json["adminid"]=id;
+					json["password"]=$("[name=pwd]").val();
+					$("[name=radio]").each(function(i,obj){
+						if(obj.checked==true){
+							json["admintype"]=obj.value;
+							json["roleid"]=obj.value;
+						}
+					})
+					json["founder"]=2; /* window.sessionStorage.getItem("Admin").adminid; */
+					console.info(json)
+					$.ajax("/clm/api/updateAdmin",{
+						type:"put",
+						contentType:"application/json",
+						data:JSON.stringify(json),
+						dataType:"json",
+						success:function(data){
+							if(data.code=="200"){
+								layer.msg('修改成功!', {icon: 1});
+							}else{
+								layer.msg('修改失败!', {icon: 5});
+							}
+						}
+					})
+				},
+				fanhui:function(){
+					window.history.go(-1);
+				},
+				Load:function(id){
+					$.getJSON("/clm/api/selectAdminInfo/"+id,function(data){
+						vm.user=data;
+					})
+				}
+			},
+			created:function(){
+				var vm=this;
+				vm.Load(id);
+			}
+		})
+		
+		$("[name=name]").blur(function(){
+			$.getJSON("/clm/api/selectUserInfoOne/"+$(this).val(),function(data){
+				if(data>0){
+					$("[name=names]").html("用户名已重复!").css("color","red");
+					$("[value='保存']").attr("disabled",true);
+				}else{
+					$("[name=names]").html("用户名正确!").css("color","green");
+					$("[value='保存']").attr("disabled",false);
+				}
+			})
+		})
+		
+		layui.use('table', function() {
+			var table = layui.table;
+			//第一个实例
+			table.render({
+				elem: '#demo',
+				height: 312,
+				width:1400,
+				url: '', //数据接口
+				page: true, //开启分页
+				cols: [
+					[ //表头
+						{
+							field: 'id',
+							title: '序号',
+							width: 300,
+							fixed: 'left'
+						}, {
+							field: 'username',
+							title: '登录用户名',
+							width: 300
+						}, {
+							field: 'sex',
+							title: '管理员类型',
+							width: 300
+						}, {
+							field: 'city',
+							title: '最后登录时间',
+							width: 300
+						}, {
+							field: 'sign',
+							title: '最后登录IP',
+							width: 300
+						}
+					]
+				]
+			});
+		});
+	</script>
+</html>

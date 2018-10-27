@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper  namespace="com.accp.dao.lfxDao.AppraisalapplyDao">
+<!--     <select id="queryapply" resultType="com.accp.pojo.Appraisalapply"> -->
+<!--     SELECT * FROM appraisalapply -->
+<!--     <where>  -->
+<!-- <if test="userid!=0"> -->
+<!-- and userid=#{userid} -->
+<!-- </if> -->
+<!-- <if test="auditstatus!=0"> -->
+<!-- and auditstatus=#{auditstatus} -->
+<!-- </if> -->
+<!-- </where> -->
+<!--     </select> -->
+        <select id="queryapplyVo" resultType="com.accp.vo.lfx.AppraisalapplyVo">
+ SELECT applyID,(SELECT userName FROM `user` WHERE A.userID=userID) AS 'userName',(SELECT stName FROM serviceType WHERE A.stid=stid ) AS 'stName',
+ submitTime,auditTime,adminOpinion,auditStatus
+FROM   `appraisalapply` AS A 
+    <where> 
+<if test="userName!=null">
+and userName=#{userName}
+</if>
+<if test="auditStatus!=0">
+and auditStatus=#{auditStatus}
+</if>
+</where>
+    </select>
+    <update id="modifyapply">
+     UPDATE appraisalapply SET auditStatus=#{auditStatus} WHERE applyID=#{applyID}
+    </update>
+<select id="queryapplyVox" resultType="com.accp.vo.lfx.AppraisalapplyVo">
+SELECT applyID,(SELECT userName FROM `user` WHERE A.userID=userID) AS 'userName',(SELECT stName FROM serviceType WHERE A.stid=stid ) AS 'stName',
+ submitTime,auditTime,adminOpinion,auditStatus
+FROM   `appraisalapply` AS A  WHERE applyID=#{applyID}
+</select>
+<select id="queryShoppentry" resultType="com.accp.pojo.User">
+SELECT * FROM `user`
+</select>
+<select id="queryentryx" resultType="com.accp.pojo.User">
+SELECT * FROM `user` WHERE userID=#{userid}
+</select>
+<select id="querytixian" resultType="com.accp.vo.lfx.PutforwardrecordVo">
+SELECT pfrID,userID,(SELECT userName FROM `user` WHERE userID=A.userID) AS 'userName',bankAccount,(SELECT bankName FROM BankType WHERE bankID=A.bankID) AS 'bankName',
+submitTime,completeTime,money,adminOpinion,(SELECT auditStatus FROM Putforward WHERE pfID=A.pfrID) AS 'auditStatus'
+FROM PutforwardRecord AS A
+</select>
+<select id="querytixianx" resultType="com.accp.vo.lfx.PutforwardrecordVo">
+SELECT pfrID,userID,(SELECT userName FROM `user` WHERE userID=A.userID) AS 'userName',bankAccount,(SELECT bankName FROM BankType WHERE bankID=A.bankID) AS 'bankName',
+submitTime,completeTime,money,adminOpinion,(SELECT auditStatus FROM Putforward WHERE pfID=A.pfrID) AS 'auditStatus'
+FROM PutforwardRecord AS A WHERE pfrID=#{pfrID}
+</select>
+<select id="querypost" resultType="com.accp.vo.lfx.PostVo">
+SELECT postID,userID,fmID,(SELECT userName FROM `user` WHERE A.userID=userID) AS 'userName',(SELECT fmName FROM `forummanagement` WHERE fmID=A.fmID) AS 'fmName',
+title,content,releaseTime,operatingState,adminOpinion,auditStatus
+FROM post AS A
+</select>
+<select id="querypostx" resultType="com.accp.vo.lfx.PostVo">
+SELECT postID,userID,fmID,(SELECT userName FROM `user` WHERE A.userID=userID) AS 'userName',(SELECT fmName FROM `forummanagement` WHERE fmID=A.fmID) AS 'fmName',
+title,content,releaseTime,operatingState,adminOpinion,auditStatus
+FROM post AS A WHERE postID=#{postID}
+</select>
+<update id="modifypost">
+	UPDATE post SET auditStatus= #{auditStatus},operatingState=#{operatingState}, adminOpinion=#{adminOpinion} WHERE postID=#{postID}
+</update>
+<delete id="removepost">
+		delete from post where postID in 
+		 <foreach collection="postid" item="i" index="index" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+	</delete>
+<select id="querypostbankuai" resultType="com.accp.vo.lfx.tiezibankuai">
+SELECT postID,userID,fmID,title,content,releaseTime,operatingState,adminOpinion,auditStatus,(SELECT fmName FROM `forummanagement` WHERE fmID=A.fmID) AS 'fmName',integral,(SELECT `name` FROM admin WHERE adminID=(SELECT adminID FROM forummanagement WHERE fmID=A.fmID)) AS 'name',(SELECT sort FROM forummanagement WHERE fmID=A.fmID) AS 'sort',(SELECT pid FROM forummanagement WHERE fmID=A.fmID) AS 'pid'
+FROM post AS A  ORDER BY pid 
+</select>
+<delete id="removepostbankuai">
+delete from forummanagement where fmID=#{fmID};
+delete from post where fmID=#{fmID};
+</delete>
+<!-- <delete id="removepostbankuait"> -->
+<!-- delete from post where postID=#{postID} -->
+<!-- </delete> -->
+<select id="querytiezit" resultType="com.accp.vo.lfx.tizitousu">
+SELECT cid,(SELECT userName FROM `user` WHERE A.userID=userID) AS 'userName',TimeOfComplaint,(SELECT title FROM post WHERE postID=A.posting) AS 'title'
+,auditStatus,(SELECT userName FROM `user` WHERE A.posting=userID) AS 'userNamet'
+FROM Complaint AS A
+</select>
+<delete id="removepostt">
+DELETE FROM Complaint WHERE cid=#{cid}
+</delete>
+<select id="querygolds" resultType="com.accp.vo.lfx.GoldsRecord">
+SELECT recordID,(SELECT userName FROM `user` WHERE A.userID=userID) AS 'userName',recordDate,recordDescribe,recordInAndOut,auditStatus,acquisitionMode,userID
+FROM goldnotes AS A ORDER BY recordDate 
+</select>
+<select id="querygodlsx" resultType="com.accp.vo.lfx.PutforwardrecordVo">
+SELECT p.pfrID,u.userName,p.userID,p.submitTime,p.completeTime,p.money,p.adminOpinion
+FROM PutforwardRecord AS p
+JOIN goldnotes AS g ON  g.recordDate=p.submitTime
+JOIN `user` AS u ON p.userID=u.userID
+WHERE u.userID=#{userID}
+</select>
+<update id="modifytixian">
+UPDATE putforward SET auditStatus=#{auditStatus} WHERE pfID=#{pfID}
+</update>
+<select id="queryRecharge" resultType="com.accp.vo.lfx.RecordVo">
+		SELECT u.userID,g.`recordID`,u.`userName`,g.`acquisitionMode`,g.`recordDate`,
+		g.`recordDescribe`,g.`recordInAndOut`,g.`auditStatus` FROM Goldnotes AS g
+		JOIN `user` AS u ON g.`userID`=u.`userID`
+		<where>
+			<if test="userName!=null">
+				u.userName like '%${userName}%' and
+			</if>
+			g.`acquisitionMode`=5 or g.`acquisitionMode`=6
+		</where>
+		</select>
+<update id="updateForward">
+			UPDATE `putforward` SET auditStatus='${vo.auditStatus}',auditTime=NOW() WHERE userID='${vo.userID}' AND submitTime='${Time}';
+			UPDATE `putforwardrecord` SET adminOpinion='${vo.adminOpinion}',completeTime=NOW() WHERE userID='${vo.userID}' AND submitTime='${Time}';
+			UPDATE `goldnotes` SET auditStatus='${vo.auditStatus}' WHERE userID='${vo.userID}' AND recordDate='${Time}';
+		</update>
+<select id="queryForward" resultType="com.accp.vo.lfx.ForwardVo">
+			SELECT u.userID,p.`pfID`,u.`userName`,p.`submitTime`,p.`money`,p.`bankAccount`,b.`bankName`,p.`openBankName`,
+			u.`userRealName`,p.`auditStatus`,pr.`adminOpinion` FROM goldnotes AS g
+			JOIN Putforward AS p ON g.`recordDate`=p.`submitTime`
+			JOIN `user` AS u ON g.`userID`=u.`userID`
+			JOIN PutforwardRecord AS pr ON u.`userID`=pr.`userID`
+			JOIN banktype AS b ON p.`bankID`=b.`bankID`
+			WHERE u.`userID`=#{userID}
+	</select>
+
+    </mapper>

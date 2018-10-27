@@ -1,0 +1,189 @@
+
+ <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<style>
+body { 
+font: normal 11px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+background: #E6EAE9; 
+} 
+ 
+a { 
+color: #c75f3e; 
+text-decoration: none;
+} 
+
+.ys {
+    display: inline-block;
+    padding: .3em .5em;
+    background-image: linear-gradient(#ddd, #bbb);
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3em;
+    box-shadow: 0 1px white inset;
+    text-align: center;
+    text-shadow: 0 1px 1px black;
+    color:white;
+    font-weight: bold;
+}
+.ys:active{
+    box-shadow: .05em .1em .2em rgba(0,0,0,.6) inset;
+    border-color: rgba(0,0,0,.3);
+    background: #bbb;
+}
+ 
+#mytable { 
+text-align:center;
+padding: 0; 
+margin: 0; 
+} 
+ 
+caption { 
+padding: 0 0 5px 0; 
+width: 700px; 
+font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+text-align: right; 
+} 
+ 
+th { 
+font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+border-top: 1px solid #C1DAD7; 
+letter-spacing: 2px; 
+text-transform: uppercase; 
+text-align: left; 
+padding: 6px 6px 6px 12px; 
+background: #CAE8EA  no-repeat; 
+text-align: center;
+} 
+th.nobg { 
+border-top: 0; 
+border-left: 0; 
+border-right: 1px solid #C1DAD7; 
+background: none; 
+} 
+ 
+td { 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+background: #fff; 
+font-size:11px; 
+padding: 6px 6px 6px 12px; 
+color: #4f6b72; 
+} 
+td.alt { 
+background: #F5FAFA; 
+color: #797268; 
+} 
+th.spec { 
+border-left: 1px solid #C1DAD7; 
+border-top: 0; 
+background: #fff no-repeat; 
+font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+} 
+th.specalt { 
+border-left: 1px solid #C1DAD7; 
+border-top: 0; 
+background: #f5fafa no-repeat; 
+font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #797268; 
+} 
+html>body td{ font-size:11px;} 
+body,td,th { 
+font-family: 宋体, Arial; 
+font-size: 12px; 
+</style>
+<body class="oneColLiqCtrHdr">
+
+<div id=container>
+  <div id="header">
+    <H3>会员信息</H3>
+  </DIV>
+  <DIV id="mainContent"><BR>
+    <form action="" method="POST" class="table" enctype="multipart/form-data" name="form1" id="form10">
+      <TABLE border=0 cellSpacing=1 cellPadding=6 width="100%" class="tablesorter">
+        <TBODY>
+          <TR>
+          
+            <TD width="18%" align=right noWrap><strong>会员组:</strong></TD>
+           
+            <TD th:text="${entryxiang.usernickname}">咯</TD>
+            </TD>
+            <TD width="18%" noWrap align=right>&nbsp;</TD>
+            <TD width="32%" noWrap>&nbsp;</TD>
+          </TR>
+          <TR>
+            <TD  align=right noWrap>用商家类别:</TD>
+<!--              <span th:if="${entryxiang.identitytype==1}">普通用户</span> -->
+<!--              <span th:if="${entryxiang.identitytype==2}">大陆商家用户</span> -->
+<!-- 			<span th:if="${entryxiang.identitytype==3}">海外商家用户</span> -->
+            <TD  align=right>服务类别:</TD>
+          </TR>
+          <TR>
+            <TD align=right noWrap>店户名称:</TD>
+            <TD ><input name="mobile" style="width: 120px;height:20px;outline:none; border-radius:5px;"  type="text" class="" id="mobile" th:value="${entryxiang.shopname}" maxlength="13"></TD>
+            <TD align=right>真实姓名:</TD>
+            <TD th:text="${entryxiang.usernickname}">			
+            <!--
+			<input name="email" type="text" id="email" value="" size=40  class="validate[required,custom[email]]">
+			-->
+			</TD>
+          </TR>
+          <TR>
+            <TD align=right>签名:</TD>
+            <TD align=right>:</TD>
+          </TR>
+          <TR>
+            <TD align=right>身份证/护照号码:</TD>
+            <TD>
+	<input name="address" style="width: 150px;height:15px; outline:none; border-radius:5px;"  type="text" class="input_c inf_inc" id="address" th:value="${entryxiang.identitynumder}" size="50"  />
+            </TD>
+          </TR>	
+        </tbody>
+      </table>
+	        <TABLE border=0 cellSpacing=1 cellPadding=6 width="100%" class="tablesorter">
+        <TBODY>
+			<TR>
+            <TD width="18%" align=right noWrap> 商家电铺图片:</TD>
+            <TD  width="32%">
+            2018-10-10 10:47            </TD>
+            <TD  width="18%" align="right">身份证正面:</TD>
+            <TD  width="32%" >43.250.200.63</TD>
+          </TR>
+          <TR>
+            <TD noWrap align=right>身份证背面:</TD>
+            <TD align="right">身份证背面手持:</TD>
+            <TD ></TD>
+          </TR>
+          <TR>
+		  <TR style="display:;">
+			  <TD noWrap align=right>身份证住址:</TD>
+            <TD noWrap align=right>QQ:</TD>
+            <TD th:text="${entryxiang.qq}" >
+
+            </TD>
+		  </TR>
+			<TR>
+<!--             <TD><input type="hidden" name="userid" th:value="${data.userID}"></TD> -->
+            <TD colspan="3" >
+              <INPUT id=button3 value="保存 " type=submit name=button3 class="ys">　
+              <INPUT class="ys" id="add" value="返回" type=button name="add" onClick="history.go(-1)">
+            </TD>
+          </TR>
+        </tbody>
+      </table>
+</form>
+    <p>&nbsp;</p>
+  </div>
+  
+</div>
+<script src="../js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+</script>
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!-- 1.命名空间 (非常重要)-->
+<html  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+body { 
+font: normal 11px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+background: #E6EAE9; 
+} 
+ 
+a { 
+color: #c75f3e; 
+text-decoration: none;
+} 
+
+.ys {
+    display: inline-block;
+    padding: .3em .5em;
+    background-image: linear-gradient(#ddd, #bbb);
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3em;
+    box-shadow: 0 1px white inset;
+    text-align: center;
+    text-shadow: 0 1px 1px black;
+    color:white;
+    font-weight: bold;
+}
+.ys:active{
+    box-shadow: .05em .1em .2em rgba(0,0,0,.6) inset;
+    border-color: rgba(0,0,0,.3);
+    background: #bbb;
+}
+ 
+#mytable { 
+text-align:center;
+padding: 0; 
+margin: 0; 
+} 
+ 
+caption { 
+padding: 0 0 5px 0; 
+width: 700px; 
+font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+text-align: right; 
+} 
+ 
+th { 
+font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+border-top: 1px solid #C1DAD7; 
+letter-spacing: 2px; 
+text-transform: uppercase; 
+text-align: left; 
+padding: 6px 6px 6px 12px; 
+background: #CAE8EA  no-repeat; 
+text-align: center;
+} 
+th.nobg { 
+border-top: 0; 
+border-left: 0; 
+border-right: 1px solid #C1DAD7; 
+background: none; 
+} 
+ 
+td { 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+background: #fff; 
+font-size:11px; 
+padding: 6px 6px 6px 12px; 
+color: #4f6b72; 
+} 
+td.alt { 
+background: #F5FAFA; 
+color: #797268; 
+} 
+th.spec { 
+border-left: 1px solid #C1DAD7; 
+border-top: 0; 
+background: #fff no-repeat; 
+font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+} 
+th.specalt { 
+border-left: 1px solid #C1DAD7; 
+border-top: 0; 
+background: #f5fafa no-repeat; 
+font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #797268; 
+} 
+html>body td{ font-size:11px;} 
+body,td,th { 
+font-family: 宋体, Arial; 
+font-size: 12px; 
+</style>
+<BODY class="oneColLiqCtrHdr">
+    <H3>帖子管理</H3>
+<div id=container>
+  <div id="header">
+
+  </DIV>
+  <DIV id="mainContent"><BR>
+    <form action="" method="POST" class="table" enctype="multipart/form-data" name="form1" id="form10">
+      <TABLE border=0 cellSpacing=1 cellPadding=6 width="100%" class="tablesorter">
+        <TBODY>
+          <TR>         
+            <TD width="18%" align=right noWrap><strong>标题:</strong></TD>          
+            <TD th:text="${postx.title}">咯</TD>  
+          </TR>
+          <TR>
+            <TD align=right noWrap>栏目：</TD>
+           <TD th:text="${postx.fmName}">咯</TD>  
+          </TR>
+          <TR>
+            <TD align=right>发布时间:</TD>                  
+	 <TD th:text="${#dates.format(postx.releaseTime,'yyyy-MM-dd')}" >咯</TD>       
+          </TR>
+          <tr>
+                  <TD align=right>内容:</TD>        
+	 		  <TD th:text="${postx.content}">咯</TD> 
+          </tr>
+       <TR>
+            <TD align=right>审核状态:</TD>
+            <TD >           
+	        <label><input name="auditStatus" type="radio" value="0" id="wei">审核未通过</label>
+            <label><input type="radio" name="auditStatus" value="1" id="tong" >审核通过</label>
+            <label><input type="radio" name="auditStatus" value="2" id="dai" >审核未通过</label>
+            </TD>         
+          <TR>
+                 <TR>
+            <TD align=right>删除状态:</TD>
+            <TD >           
+	        <label><input name="operatingState" type="radio" value="0" id="swei">删除</label>
+            <label><input type="radio" name="operatingState" value="1" id="stong" >未删除</label>
+            </TD>         
+          <TR>
+           <TR>
+            <TD align=right>管理员意见:</TD>
+            <TD >           
+			<input name="mobile" style="width: 120px;height:20px;outline:none; border-radius:5px;"  type="text" class="" id="mobile" th:value="${postx.adminOpinion}" maxlength="13">
+            </TD>          
+          <TR>
+          <tr>
+          <td>
+         <a th:onclick="|fnxiuMessage()|" href="javascript:void(0)">修改</a>
+          <INPUT class="ys" id="add" value="返回" type=button name="add" onClick="history.go(-1)">
+          </td>
+			<td></td>
+          </tr>
+        </tbody>
+        </TABLE>
+</form>
+    <p>&nbsp;</p>
+  </div>
+  
+</div>
+</BODY>
+<script src="../js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+$(function(){	
+	if([[${postx.auditStatus}]]==0){
+		$("#wei").attr("checked","checked");
+	}else if([[${postx.auditStatus}]]==2){
+		$("#dai").attr("checked","checked");
+	}else if([[${postx.auditStatus}]]==1){
+		$("#tong").attr("checked","checked");
+	}
+	
+	if([[${postx.operatingState}]]==0){
+		$("#swei").attr("checked","checked");
+	}else if([[${postx.operatingState}]]==1){
+		$("#stong").attr("checked","checked");
+	}
+	
+
+	
+})
+
+
+// auditStatus, operatingState, adminOpinion, postID
+// alert("auditStatus"+[[${postx.auditStatus}]]);
+// alert("operatingState"+[[${postx.operatingState}]])
+// alert("adminOpinion"+[[${postx.adminOpinion}]])
+// alert("postID"+[[${postx.postID}]])
+
+function fnxiuMessage(){
+	var auditStatus=[[${postx.auditStatus}]];
+	var operatingState=[[${postx.operatingState}]];
+	var postID=[[${postx.postID}]];
+	var mobile=$("#mobile").val();
+	alert(auditStatus);
+	alert(mobile);
+	if(window.confirm('是否修改')){
+		location.href='/lfxapply/xiupost?auditStatus='+auditStatus+'&operatingState='+operatingState+'&adminOpinion='+mobile+'&postID='+postID;
+	}
+}
+
+
+</script>
+</html>
+

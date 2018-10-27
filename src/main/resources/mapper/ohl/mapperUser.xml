@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.ohl.IUserDao">
+
+	<select id="query" resultType="user">
+		SELECT * FROM `user`
+		<where>
+			<if test="userRealName!=null and userRealName!=''">AND `userName` LIKE CONCAT('%',#{userRealName},'%')</if>
+			<if test="true"> AND `merchantType` = 0 OR `merchantType` = null</if>
+		</where>
+	</select>
+	
+	<select id="queryAll" resultType="com.accp.vo.ohl.VoUserEls">
+		 SELECT `userID`,`userName`,`userRealName`,IF(userSex=1,'男','女') as userSex,userPhone,contactMailbox,userMoney,userIntegral,adDetail,if(merchantType=0,'普通会员',if(merchantType=1,'大陆商家','海外商家')) as merchantType,userRegistrationTime,recentEntry  FROM `user` 
+		<where>
+			<if test="userRealName!=null and userRealName!=''">AND `userName` LIKE CONCAT('%',#{userRealName},'%')</if>
+			<if test="true"> AND `merchantType` = 0 OR `merchantType` = null</if>
+		</where>
+	</select>
+	
+	<select id="userQuery" resultType="com.accp.vo.ohl.VoUsersj">
+		SELECT *,(SELECT s2.stName FROM servicetype AS s2 WHERE stid=s1.firstServiceID) AS firstservicename,(SELECT s2.stName FROM servicetype AS s2 WHERE stid=s1.secondServiceID) AS secondervicename,
+		(select `name` from sharea where areaID=s1.liveCityID) as livecityname
+		 FROM `user` as s1 WHERE s1.userID=#{userID}
+	</select>
+	
+	<update id="userUpdate">
+		UPDATE `user`
+		SET `userPhone`=#{pojo.userphone},`userRealName`=#{pojo.userrealname},`userSex`=#{pojo.usersex},`country`=#{pojo.country},`provincialiD`=#{pojo.provincialid},`cityID`=#{pojo.cityid},`adDetail`=#{pojo.addetail},`stateboolean`=#{pojo.stateboolean},`mailboxVerification`=#{pojo.mailboxverification}
+		WHERE `userID`=#{pojo.userid}
+	</update>
+	
+	<update id="passwordUpdate">
+		UPDATE `login`
+		SET `userPwd`=#{password}
+		WHERE userID=#{userid} and loginType=1
+	</update>
+	
+	<select id="queryShangjiaAll" resultType="user">
+		 SELECT * FROM `user` 
+		<where>
+			<if test="userRealName!=null and userRealName!=''">AND `userName` LIKE CONCAT('%',#{userRealName},'%')</if>
+			<if test="shopName!=null and shopName!=''">AND `shopName` LIKE CONCAT('%',#{shopName},'%')</if>
+			<if test="merchantType!=null and merchantType!='' and merchantType!='0'.toString()"> AND `merchantType` = #{merchantType}</if>
+			<if test="true"> AND `merchantType` != 0 and `merchantType` !='null'</if>
+		</where>
+	</select>
+	
+	<update id="updateShangjiaAll">
+		UPDATE `user`
+		SET `userPhone`=#{pojo.userphone},`userRealName`=#{pojo.userrealname},`userSex`=#{pojo.usersex},`country`=#{pojo.country},`provincialiD`=#{pojo.provincialid},`cityID`=#{pojo.cityid},`adDetail`=#{pojo.addetail},`stateboolean`=#{pojo.stateboolean},`mailboxVerification`=#{pojo.mailboxverification},`businessState`=#{pojo.businessstate},`auditstatus`=#{pojo.auditstatus}
+		WHERE `userID`=#{pojo.userid}
+	</update>
+	
+	<select id="queryRuzhuAll" resultType="com.accp.vo.ohl.VoUserRuzhu">
+		 SELECT *,(SELECT `name` FROM sharea WHERE areaID=user.liveCityID) AS livecityname,
+		 (SELECT stname FROM servicetype WHERE stid=user.firstServiceID) AS firstservicename,
+		 (SELECT stname FROM servicetype WHERE stid=user.secondServiceID) AS secondservicename
+		 FROM `user` 
+		<where>
+			<if test="userName!=null and userName!=''">AND `userName` LIKE CONCAT('%',#{userName},'%')</if>
+			<if test="merchantType!=null and merchantType!='' and merchantType!='0'.toString()"> AND `merchantType` = #{merchantType}</if>
+			<if test="auditStatus!=null and auditStatus!='' and auditStatus!='0'.toString()"> AND `auditStatus` = #{auditStatus}</if>
+			<if test="true"> AND `merchantType` != 0 and `merchantType` !='null'</if>
+		</where>
+	</select>
+	
+	<select id="queryRuzhuSee" resultType="com.accp.vo.ohl.VoUserRuzhu">
+		 SELECT *,(SELECT `name` FROM sharea WHERE areaID=user.liveCityID) AS livecityname,
+		 (SELECT stname FROM servicetype WHERE stid=user.firstServiceID) AS firstservicename,
+		 (SELECT stname FROM servicetype WHERE stid=user.secondServiceID) AS secondservicename
+		 FROM `user` 
+		<where>
+			<if test="userID!=null and userID!=''">AND `userID`=#{userID}</if>
+		</where>
+	</select>
+	
+	<update id="updateShangjiaSee">
+		update `user`
+		set auditStatus=#{auditStatus},merchantType=#{merchantType},reason=#{reason},creditScore=60,businessState=1
+		where userID=#{userID}
+	</update>
+	
+	<select id="queryJianding" resultType="com.accp.vo.ohl.VoUserJianding">
+		SELECT serviceType.`stName`,`user`.`userName`,appraisalapply.* FROM `appraisalapply`
+		LEFT JOIN serviceType ON serviceType.stid=appraisalapply.`stid`
+		LEFT JOIN `user` ON `user`.`userID`=appraisalapply.`userID`
+		<where>
+			<if test="auditStatus!='' and auditStatus!=null and auditStatus!='0'.toString()">
+				AND appraisalapply.auditStatus=#{auditStatus}
+			</if>
+			<if test="userName!=null and userName!=''">
+				AND `user`.`userName` LIKE CONCAT('%',#{userName},'%')
+			</if>
+		</where>
+	</select>
+	<select id="queryJiandingSee" resultType="com.accp.vo.ohl.VoUserJianding">
+		SELECT serviceType.`stName`,`user`.`userName`,appraisalapply.* FROM `appraisalapply`
+		LEFT JOIN serviceType ON serviceType.stid=appraisalapply.`stid`
+		LEFT JOIN `user` ON `user`.`userID`=appraisalapply.`userID`
+		WHERE applyID=#{applyID}
+	</select>
+	
+	<update id="updateJiandingSee">
+		UPDATE AppraisalApply
+		SET auditTime=NOW(),adminOpinion=#{adminOpinion},auditStatus=#{auditStatus}
+		WHERE applyID=#{applyID}
+	</update>
+	
+	<select id="selectfirstServiceID" resultType="java.lang.String">
+		SELECT IF(firstServiceID=#{stid},'1','2') AS cation FROM `user` WHERE userID=#{userID}
+	</select>
+	<update id="updateUserCation">
+		UPDATE `user`
+		<if test="cation==1">SET authentication=${bool}</if>
+		<if test="cation==2">SET authenticationer=${bool}</if>
+		WHERE userID=#{userID}
+	</update>
+</mapper>

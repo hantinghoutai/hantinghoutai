@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.clm.ProfessionalCategoryDao">
+	<select id="selectLanguageType" resultType="com.accp.pojo.Majortype">
+		select * from majortype
+	</select>
+	
+	<insert id="addLanguageType">
+		insert majortype(category,majorName)
+		values(#{la.category},#{la.majorname});
+	</insert>
+	
+	<update id="updateLanguageType">
+		update majortype
+		set category=#{la.category},majorName=#{la.majorname}
+		where majorID=#{la.majorid};
+	</update>
+
+	<select id="selectMajortypeInfo" resultType="com.accp.pojo.Majortype">
+		select * from majortype where majorID=#{id}
+	</select>
+	
+	<select id="selectType" resultType="com.accp.pojo.Majortype">
+		SELECT * FROM `majortype` GROUP BY `category`
+	</select>
+</mapper>

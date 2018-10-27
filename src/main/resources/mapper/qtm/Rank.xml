@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.qtm.IRankDao">
+	<select id="fenlei" resultType="String">
+		SELECT b.`stName` FROM `servicelevel` a
+		INNER JOIN `servicetype` b ON (a.`stid`=b.`stid`)
+		GROUP BY b.`stid`
+	</select>
+	
+	<select id="chaxun" resultType="com.accp.vo.qtm.Rank">
+		SELECT * FROM
+		`servicelevel`
+	</select>
+	<select id="info" resultType="com.accp.vo.qtm.Rank">
+		SELECT * FROM
+		`servicelevel`
+		WHERE serlevelID=#{id}
+	</select>
+	<delete id="delete">
+		DELETE FROM `servicelevel`
+	 	WHERE serlevelID=#{id}
+	</delete>
+	<update id="update">
+		UPDATE `servicelevel`
+		set serlevelName=#{rank.serlevelName},stid=#{rank.stid},serviceIntegralMin=#{rank.serviceIntegralMin},serviceIntegralMax=#{rank.serviceIntegralMax}
+		where serlevelID=#{rank.serlevelID}
+	</update>
+	<select id="fenleicha" resultType="com.accp.vo.qtm.Rank">
+		SELECT * FROM
+		`servicelevel`
+		WHERE  stid=#{stid}
+	</select>
+	<insert id="inserts">
+	INSERT INTO `servicelevel`(`serlevelName`,`stid`,`serviceIntegralMin`,`serviceIntegralMax`)
+	VALUE (#{rank.serlevelName},#{rank.stid},#{rank.serviceIntegralMin},#{rank.serviceIntegralMax})
+	</insert>
+
+
+
+</mapper>

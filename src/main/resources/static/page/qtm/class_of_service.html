@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>服务审核</title>
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+	</head>
+
+	<body>
+		<br/>
+				<div class="layui-form-item layui-form">
+					<div class="layui-col-md3">
+				    	<div class="layui-form-item">
+							<label class="layui-form-label">服务类型</label>
+							<div class="layui-input-block">
+								<select id="type" lay-verify="">
+									<option value="0" selected>全部</option>
+								</select>
+							</div>
+						</div>
+				    </div>
+				    <div class="layui-col-md3">
+				    	<label class="layui-form-label">审核状态</label>
+					    <div class="layui-input-block">
+					     	<select id="static" lay-verify="">
+									<option value="0" selected>全部</option>
+									<option value="1" >待审核</option>
+									<option value="2" >已审核</option>
+									<option value="3" >已拒绝</option>
+							</select>
+					     </div>
+				    </div>
+				    </div>
+				    <div class="layui-form-item">
+				    <div class="layui-col-md3">
+				    	<label class="layui-form-label">服务标题</label>
+					    <div class="layui-input-block">
+					      <input type="text" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input"/>
+					    </div>
+				    </div>
+				    <div class="layui-col-md6">
+				    	<label class="layui-form-label">发布时间</label>
+					    <div class="layui-input-block">
+					     	<div class="layui-col-md5"><input type="text" class="layui-input" id="data1"></div> 
+					     	<div class="layui-col-md1"><center style="line-height: 30px;">~<center></div> 
+					     	<div class="layui-col-md5"><input type="text" class="layui-input" id="data2"></div> 
+					     </div>
+				    </div>
+				     <button  name="so" class="layui-btn">搜索</button>
+			  </div>
+		
+		
+		<div class="layui-row" style="padding-left: 5px;">
+				<table class="layui-table">
+					<colgroup>
+						<col width="20">
+						<col width="20">
+						<col width="100">
+						<col width="200">
+						<col>
+					</colgroup>
+					<thead>
+						<tr>
+							<th></th>
+							<th>ID</th>
+							<th>类型</th>
+							<th>标题</th>
+							<th>会员</th>
+							<th>审核状态</th>
+							<th>营业状态</th>
+							<th>发布时间</th>
+							<th>推荐状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="tad">
+
+					</tbody>
+				</table>
+		</div>
+		<form class="layui-form">
+		<div class="layui-form-item">
+			<div class=" layui-col-md5">
+				<label class="layui-form-label">推荐状态</label>
+				<div class="layui-input-block">
+					<div >
+						<input checked type="radio" name="tj" value="0" title="推荐">
+						<input type="radio" name="tj" value="1" title="不推荐">
+					</div>
+				</div>
+			</div>
+			<div class=" layui-col-md5">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-block">
+					<button type="button" id="tui" class="layui-btn layui-btn-normal">批量推荐</button>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class=" layui-col-md5">
+				<label class="layui-form-label">营业状态</label>
+				<div class="layui-input-block">
+					<div >
+						<input checked type="radio" name="yy" value="1" title="营业">
+						<input type="radio" name="yy" value="2" title="停业">
+					</div>
+				</div>
+			</div>
+			<div class=" layui-col-md5">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-block">
+					<button type="button" id="ying" class="layui-btn layui-btn-normal">批量开关</button>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		<div class=" layui-col-md5">
+			<label class="layui-form-label">审核意见</label>
+			<div class="layui-input-block">
+				<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请填写" class="layui-input">
+			</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class=" layui-col-md5">
+				<label class="layui-form-label">审核状态</label>
+				<div class="layui-input-block">
+					<div >
+						<input checked type="radio" name="sh" value="1" title="待审批">
+						<input type="radio" name="sh" value="2" title="已审批">
+						<input type="radio" name="sh" value="3" title="已拒绝">
+					</div>
+				</div>
+			</div>
+			<div class=" layui-col-md5">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-block">
+					<button type="button" id="jia" class="layui-btn layui-btn-normal">批量审核</button>
+				</div>
+			</div>
+		</div>
+		</form>
+		<script src="js/jquery-1.8.3.js"></script>
+		<script src="layui/layui.js"></script>
+		<script>
+		layui.use('form', function() {
+			var form=layui.form;
+			form.render('radio');
+			
+			jQuery.getJSON("http://127.0.0.1:8080/shenpi/select", function(data) {
+				$.each(data, function(i, obj) {
+					$("#type").append("<option value='"+(i+1)+"'>" + obj + "</option>");
+				})
+			});
+			var a = 1;
+			var b = 3;
+
+				function fenye(a, b) {
+					var shenghe;
+					var yingye;
+					var tuijian;
+					jQuery.getJSON("http://127.0.0.1:8080/shenpi/select/query/" + a + "/" + b, function(data) {
+						$.each(data.list, function(i, obj) {
+
+							if(obj.auditStatus == 1) {
+								shenghe = "待审批";
+							} else if(obj.auditStatus == 2) {
+								shenghe = "审批成功";
+							} else if(obj.auditStatus == 3) {
+								shenghe = "未通过";
+							}
+							if(obj.businessState == 1) {
+								yingye = "营业";
+							} else if(obj.businessState == 2) {
+								yingye = "停业";
+							} else if(obj.businessState == 3) {
+								yingye = "关闭";
+							}
+							if(obj.recommendBool == 0) {
+								tuijian = "推荐";
+							} else if(obj.recommendBool == 1) {
+								tuijian = "不推荐";
+							}
+
+							var tr = $("<tr></tr>");
+							tr.append("<td><input type='checkbox'  name='pi' value='" + obj.serviceID + "'></td>")
+							tr.append("<td>" + obj.serviceID + "</td>")
+							tr.append("<td>" + obj.stName + "</td>")
+							tr.append("<td>" + obj.serviceTitle + "</td>")
+							tr.append("<td>" + obj.userName + "</td>")
+							tr.append("<td>" + shenghe + "</td>")
+							tr.append("<td>" + yingye + "</td>")
+							tr.append("<td>" + obj.userRegistrationTime + "</td>")
+							tr.append("<td>" + tuijian + "</td>")
+							tr.append("<td><button type='button' class='layui-btn layui-btn-primary layui-btn-xs' name='rr'>查看</button></td>")
+							$("#tad").append(tr);
+						})
+					});
+				}
+				fenye(a, b);
+
+				$("[name=jia]").click(function() {
+					var id = [];
+					$("[name=pi]:checked").each(function() {
+						id.push($(this).val());
+					});
+					var zt = $('input[name="sh"]:checked').val();
+					var yijian=$("[name=title]").val();
+					if(zt == 3 && yijian=="") {
+						alert("请填写拒绝原因！")
+					} else {
+						if(id!=""){
+							if(zt == 2){
+							$.ajax({
+							type: "put",
+							url: "http://127.0.0.1:8080/shenpi/update/"+zt+"/"+id,
+							dataType: "json",
+							success: function(res) {
+								if(res>0){
+									alert("修改成功！")
+									$("#tad").html("");
+									fenye(a, b);
+									$("[name=title]").val("");
+								}
+
+							}
+						});
+						}else{
+						$.ajax({
+							type: "put",
+							url: "http://127.0.0.1:8080/shenpi/update/"+zt+"/"+yijian+"/"+id,
+							dataType: "json",
+							success: function(res) {
+								if(res>0){
+									alert("修改成功！")
+									$("#tad").html("");
+									fenye(a, b);
+									$("[name=title]").val("");
+								}
+
+							}
+						});
+						}
+						}else{
+							alert("请先选择服务！")
+						}
+					}
+				})
+				
+				$("[name=tui]").click(function() {
+					var id = [];
+					$("[name=pi]:checked").each(function() {
+						id.push($(this).val());
+					});
+					var zt = $('input[name="tj"]:checked').val();
+					if(id!=""){
+						$.ajax({
+							type: "put",
+							url: "http://127.0.0.1:8080/shenpi/update/tuijian/"+zt+"/"+id,
+							dataType: "json",
+							success: function(res) {
+								if(res>0){
+									alert("修改成功！")
+									$("#tad").html("");
+									fenye(a, b);
+									$("[name=title]").val("");
+								}
+
+							}
+						});
+					}else{
+						alert("请先选择服务！")
+					}
+				})
+				$("[name=yin]").click(function() {
+					var id = [];
+					$("[name=pi]:checked").each(function() {
+						id.push($(this).val());
+					});
+					var zt = $('input[name="yy"]:checked').val();
+					if(id!=""){
+						$.ajax({
+							type: "put",
+							url: "http://127.0.0.1:8080/shenpi/update/yinye/"+zt+"/"+id,
+							dataType: "json",
+							success: function(res) {
+								if(res>0){
+									alert("修改成功！")
+									$("#tad").html("");
+									fenye(a, b);
+								}
+
+							}
+						});
+					}else{
+						alert("请先选择服务！")
+					}
+				})
+				$("[name=so]").click(function(){
+					var stid=$("#type").val();
+					jQuery.getJSON("http://127.0.0.1:8080/shenpi/select/tianjiao/"+stid, function(data) {
+						$("#tad").html("");
+						$.each(data, function(i, obj) {
+							
+							if(obj.auditStatus == 1) {
+								shenghe = "待审批";
+							} else if(obj.auditStatus == 2) {
+								shenghe = "审批成功";
+							} else if(obj.auditStatus == 3) {
+								shenghe = "未通过";
+							}
+							if(obj.businessState == 1) {
+								yingye = "营业";
+							} else if(obj.businessState == 2) {
+								yingye = "停业";
+							} else if(obj.businessState == 3) {
+								yingye = "关闭";
+							}
+							if(obj.recommendBool == 0) {
+								tuijian = "推荐";
+							} else if(obj.recommendBool == 1) {
+								tuijian = "不推荐";
+							}
+
+							var tr = $("<tr></tr>");
+							tr.append("<td><input type='checkbox'  name='pi' value='" + obj.serviceID + "'></td>")
+							tr.append("<td>" + obj.serviceID + "</td>")
+							tr.append("<td>" + obj.stName + "</td>")
+							tr.append("<td>" + obj.serviceTitle + "</td>")
+							tr.append("<td>" + obj.userName + "</td>")
+							tr.append("<td>" + shenghe + "</td>")
+							tr.append("<td>" + yingye + "</td>")
+							tr.append("<td>" + obj.userRegistrationTime + "</td>")
+							tr.append("<td>" + tuijian + "</td>")
+							tr.append("<td><input name='rr' type='button' value='查看'></td>")
+							$("#tad").append(tr);
+						})
+					});
+					
+				})
+				$("[name=rr]").live("click",function(){
+					var names=$(this).parents("tr").find("td:eq(1)").html();
+					window.sessionStorage.setItem("names",names);
+					location.href="Change_assortment_class.html"
+				})
+		})
+		layui.use('laydate', function(){
+  			var laydate = layui.laydate;
+		  laydate.render({elem: '#data1' });//激活时间控件1
+		  laydate.render({elem: '#data2' });//激活时间控件2
+		});
+		</script>
+	</body>
+
+</html>

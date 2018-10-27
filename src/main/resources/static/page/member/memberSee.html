@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>会员查看详情</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+
+	</head>
+	<body>
+		<br/>
+		<br/>
+		<form class="layui-form" id="form"> 
+		  <div class="layui-form-item">
+		  	<div class=" layui-col-md5"><label class="layui-form-label">会员组</label><div class="layui-input-block">
+		  	<input v-model="user.merchanttype==0?'普通会员':user.merchanttype==1?'大陆商家':'海外商家'" disabled="disabled" type="text" name="merchanttype"   lay-verify=""  autocomplete="off" class="layui-input"></div></div>
+		  </div>
+		  <div class="layui-form-item">
+		  	<div class=" layui-col-md5"><label class="layui-form-label">用户名</label><div class="layui-input-block">
+		  	<input v-model="user.username" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="请输入" autocomplete="off" class="layui-input"></div></div>
+		  	<div class=" layui-col-md5"><label class="layui-form-label">密码</label><div class="layui-input-block">
+		  	<input type="password" name="password"   placeholder="请输入" autocomplete="off" class="layui-input"></div></div>
+		  </div>
+		  <div class="layui-form-item">
+		  	<div class=" layui-col-md5"><label class="layui-form-label">手机</label><div class="layui-input-block">
+		  	<input v-model="user.userphone" type="text" name="userphone"   lay-verify="" placeholder="请输入标题" autocomplete="off" class="layui-input"></div></div>
+		  	<div class=" layui-col-md5"><label class="layui-form-label">邮箱</label><div class="layui-input-block">
+		  	<input v-model="user.contactmailbox" disabled="disabled" type="text" name="contactmailbox"   lay-verify=""  autocomplete="off" class="layui-input"></div></div>
+		  </div>
+		  <div class="layui-form-item">
+		  	<div class=" layui-col-md5"><label class="layui-form-label">真实姓名</label><div class="layui-input-block">
+		  	<input  v-model="user.userrealname" type="text" name="userrealname"   lay-verify="" placeholder="请输入标题" autocomplete="off" class="layui-input"></div></div>
+		  	<div class=" layui-col-md5"><label class="layui-form-label">性别</label><div class="layui-input-block">
+      			<input  lay-filter="boolUpdate"  type="radio" name="usersex" value="1" title="男" >
+      			<input  lay-filter="boolUpdate" type="radio" name="usersex" value="2" title="女" checked>
+    		</div></div>
+		  </div>
+		  <div class="layui-form-item">
+		  <div class="layui-col-md5">
+		  <label class="layui-form-label">地址</label>
+		  	<div class="layui-col-md3">
+			    <div class="layui-input-block left0" >
+			      <select name="country" lay-verify="" lay-filter="country">
+			      	<option>国</option>
+			      </select>
+			    </div>
+			</div>
+			<div class="layui-col-md3">
+			    <div class="layui-input-block left10">
+			      <select name="provincialid" lay-verify="" lay-filter="provincialid">
+			      	<option>省</option>
+			      </select>
+			    </div>
+			</div>
+			<div class="layui-col-md3">
+			    <div class="layui-input-block left10">
+			      <select name="cityid" lay-verify="" lay-filter="cityid">
+			     	 <option>市</option>
+			      </select>
+			    </div>
+			</div>
+			</div>
+			
+			<div class="layui-col-md3">
+		  	<label class="layui-form-label">详细地址</label><div class="layui-input-block">
+		  	<input type="text"  v-model="user.addetail" name="addetail" autocomplete="off" class="layui-input"></div>
+		 	</div>
+		  </div>
+		  <div class="layui-form-item">
+		  	<div class=" layui-col-md5"><label class="layui-form-label">注册时间</label><div class="layui-input-block">
+		  	<input v-model="user.userregistrationtime"  disabled="disabled" type="text" name="userregistrationtime"   lay-verify=""  autocomplete="off" class="layui-input"></div></div>
+		  	<div class=" layui-col-md5"><label class="layui-form-label">注册IP</label><div class="layui-input-block">
+		  	<input v-model="user.registerip" disabled="disabled" type="text" name="registerip"   lay-verify=""  autocomplete="off" class="layui-input"></div></div>
+		  </div>
+		  <div class="layui-form-item">
+		  	<div class=" layui-col-md5"><label class="layui-form-label">最后登录</label><div class="layui-input-block">
+		  	<input v-model="user.recententry" disabled="disabled" type="text" name="recententry"   autocomplete="off" class="layui-input"></div></div>
+		  	<div class=" layui-col-md5"><label class="layui-form-label">最后登录IP</label><div class="layui-input-block">
+		  	<input v-model="user.lastentry" disabled="disabled" type="text" name="lastentry"  autocomplete="off" class="layui-input"></div></div>
+		  </div>
+		  <div class="layui-form-item">
+		  	<div class=" layui-col-md5">
+		  		<label class="layui-form-label">会员状态</label><div class="layui-input-block">
+		      	<input lay-filter="boolUpdate" type="radio" name="stateboolean" value="true" title="正常"><input lay-filter="boolUpdate" type="radio" name="stateboolean" value="false" title="禁用" checked></div>
+			</div>
+		  	<div class=" layui-col-md5">
+		  		<label class="layui-form-label">邮箱验证</label>
+			    <div class="layui-input-block">
+			    <input lay-filter="boolUpdate" type="radio" name="mailboxverification" value="true" title="已通过验证"><input lay-filter="boolUpdate" type="radio" name="mailboxverification" value="false" title="未通过验证" checked></div>
+		  	</div>
+		  </div>
+		  <div class="layui-row">
+		    <button type="button"  @click="update()" class="layui-btn layui-btn-normal" style="margin-left: 100px;">提交</button><button type="button"  class="layui-btn layui-btn-warm" onclick="window.history.go(-1);">返回</button>
+		  </div>
+		</form>
+		
+	</body>		
+	<script src="../../js/jquery-1.12.4.js"></script>
+	<script src="../../layui/layui.js"></script>
+	<script src="../../js/vue.js"></script>
+	<script>
+		layui.use(['form', 'upload'] , function () {
+			var form=layui.form;
+			var vm=new Vue({
+				el:'#form',
+				data:{
+					user:{},
+					sharea:{}
+					
+				},
+				created:function(){
+					var path = window.location.search;//获取传递的参数
+					var userID = path.substr(path.indexOf('=') + 1, path.length);	//传递过来的sid
+					this.getList(userID);	
+				},
+				methods:{
+					getList:function(userID){
+						var vm=this;
+						$.getJSON('/c/ohl/user/userQuery',{'userID':userID},function(result){   
+							console.debug(result);
+							vm.user=result;												//给VUE赋值
+							vm.sex();													//给性别控件设置默认值
+							vm.shareaQuery("country",0,0);								//查询国家
+							vm.shareaQuery("provincialid",result.country,1);			//根据国遍查询省
+							vm.shareaQuery("cityid",result.provincialid,2);				//根据省遍查询市
+							setTimeout(function(){
+								vm.addHtml();
+							},100)
+							
+						})
+						$(".left10").css("margin-left","10px");
+						$(".left0").css("margin-left","0px");
+					},
+					sex:function(){
+						var vm = this;
+						if(1==vm.user.usersex){
+							$('[name=usersex]:eq(0)').attr('checked','checked');
+						}
+						if(vm.user.stateboolean){
+							$('[name=stateboolean]:eq(0)').attr('checked','checked');
+						}
+						if(vm.user.mailboxverification){
+							$('[name=mailboxverification]:eq(0)').attr('checked','checked');
+						}
+						form.render('radio');
+						form.on('radio(boolUpdate)', function(data){
+							  var name=$(data.elem).attr("name");
+							  vm.user[name]=data.value;
+						});
+					},
+					shareaQuery:function(objName,pid,level){	//绚烂地址
+						var vm = this;
+						$.getJSON('/c/ohl/sharea/query',{'pid':pid,'level':level},function(result){
+							vm.sharea[objName]=result;
+						});
+					},
+					update:function(){
+						var vm=this;
+						$.post("/c/ohl/user/userUpdate",{"user":JSON.stringify(vm.user),"password":$("input[name=password]").val()},function(result){
+							if(result.code==200){
+								layer.open({title: '操作提示',content: '保存成功'}); 
+							}else{
+								layer.open({title: '操作提示',content: '保存失败'}); 
+							}
+						})
+					},
+					addHtml:function(){
+						var vm=this;
+						$("select[name=country]").find("option").remove();
+						$("select[name=provincialid]").find("option").remove();
+						$("select[name=cityid]").find("option").remove();
+						for(item in vm.sharea){
+							var str="";
+							for(items in vm.sharea[item]){
+								str+='<option value='+vm.sharea[item][items]["areaid"]+' level='+vm.sharea[item][items]["level"]+'>'+vm.sharea[item][items]["name"]+'</option>';
+							}
+							$("select[name="+item+"]").append(str);
+						}
+
+						$("select[name=country]").find("option[value="+vm.user.country+"]").attr("selected","selected");
+						$("select[name=provincialid]").find("option[value="+vm.user.provincialid+"]").attr("selected","selected");
+						$("select[name=cityid]").find("option[value="+vm.user.cityid+"]").attr("selected","selected");
+						form.render('select');
+						form.on('select', function(data){
+							  var areaid=data.value;
+							  var obj  = data.elem;
+							  var level = $(obj).find("option[value="+areaid+"]").attr("level");
+							  vm.user.country = $(obj).attr('name')=='country'?areaid:vm.user.country;
+							  vm.user.provincialid = $(obj).attr('name')=='provincialid'?areaid:vm.user.provincialid;
+							  vm.user.cityid = $(obj).attr('name')=='cityid'?areaid:vm.user.cityid;
+								
+							  if(level==0||level==1){
+								  vm.shareaQuery($(obj).attr('name')=='country'?'provincialid':'cityid',areaid,parseInt(level)+1);
+								  setTimeout(function(){vm.addHtml()},100);
+							  }
+						});
+					}
+				}
+			})
+			
+			 
+		});
+		
+	</script>
+</html>

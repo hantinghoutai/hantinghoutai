@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.clm.IAdminDao">
+	<select id="selectUserInfo" resultType="com.accp.pojo.Admin">
+		select * from admin
+	</select>
+	<insert id="insertUser">
+		insert admin(adminType,name,password,creationTime,roleID,creationIP,founder,recentEntry,IP)
+		values(#{admin.admintype},#{admin.name},#{admin.password},Now(),#{admin.roleid},#{admin.creationip},#{admin.founder},#{admin.recententry},#{admin.ip});
+	</insert>
+	
+	<select id="selectUserInfos" resultType="int">
+		select count(*) from admin where name=#{name}
+	</select>
+	
+	<select id="selectAdminInfo" resultType="com.accp.vo.clm.AdminVo">
+		SELECT *,(SELECT `name` FROM admin WHERE admin.adminID=admins.founder) AS founders FROM admin AS admins WHERE admins.adminID=#{id}
+	</select>
+	
+	<update id="updateAdmin">
+		update admin
+		set name=#{admin.name},PASSWORD=#{admin.password},adminType=#{admin.admintype},creationTime=Now(),creationIP=#{admin.creationip},roleID=#{admin.roleid},founder=#{admin.founder}
+		where adminID=#{admin.adminid};
+	</update>
+	
+	<delete id="deleteAdmin">
+		delete from admin where adminID=#{id};
+	</delete>
+</mapper>

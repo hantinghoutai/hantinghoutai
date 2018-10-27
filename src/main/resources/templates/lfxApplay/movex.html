@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!-- 1.命名空间 (非常重要)-->
+<html  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+<BODY class=oneColLiqCtrHdr>
+<div id=container>
+  <div id="header">
+    <H3>鉴定信息</H3>
+  </DIV>
+  <DIV id="mainContent"><BR>
+    
+      <TABLE border=0 cellSpacing=1 cellPadding=6 width="100%" class="tablesorter">
+        <TBODY  >
+          <TR th:each="temp,iterState : ${entryxiang}">
+            <TD width="89" align=right noWrap><strong >会员:</strong></TD>
+            <TD th:text="${temp.usernickname}"></TD>
+            <TD align=right><strong >商家类别：</TD>
+            <TD width="169" th:text="${temp.merchantexp}"></TD>
+            <TD align=right><strong >qq：</TD>
+            <TD width="169" th:text="${temp.qq}"></TD>
+            <TD align=right><strong >微信</TD>
+            <TD width="169" th:text="${temp.wechat}"></TD>
+          </TR>
+          
+
+</BODY>
+</html>
+

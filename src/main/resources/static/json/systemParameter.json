@@ -1,0 +1,10 @@
+{
+    "cmsName": "韩汀社区",
+    "version": "v1.0.0",
+    "author": "admin",
+    "homePage": "page/index.html",
+    "server": "windows",
+    "dataBase": "5.5",
+    "maxUpload": "2M",
+    "userRights": "管理员"
+}

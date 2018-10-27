@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.th.ITHDao">
+<!-- 服务收藏 -->
+<select id="SelectServiceUserVo" resultType="com.accp.vo.th.ServiceUserVo">
+SELECT ServiceCollection.*,user.`userName`,services.`serviceTitle`,serviceType.`stName` FROM ServiceCollection
+LEFT JOIN services ON services.`serviceID`=ServiceCollection.`serviceID`
+LEFT JOIN `user` ON user.`userID` = ServiceCollection.`userID`
+LEFT JOIN serviceType ON serviceType.`stid`=services.`stid`
+<where>
+	<if test="userName!=null and userName!=''">
+	user.`userName` LIKE '%${userName}%'
+	</if>
+	<if test="serviceTitle!=null and serviceTitle!=''">
+	AND `serviceTitle` LIKE '%${serviceTitle}%'
+	</if>
+	<if test="stid!='0'.toString() and stid!=''">
+	AND services.`stid`=#{stid}
+	</if>
+</where>
+</select>
+
+<select id="SelectPostCollectionComment" resultType="com.accp.vo.th.PostCollectionPostCommentVo">
+	SELECT postCollection.*,postCollection.`CollectionID`,user.userName,PostComment.`content`,postCollection.`collectionTime` FROM postCollection 
+	LEFT JOIN `user` ON postCollection.`userID`=user.`userID` 
+	LEFT JOIN PostComment ON postCollection.`pcID`=PostComment.`pcID`
+<where>
+<if test="userName!=null and userName!=''">
+`userName` LIKE '%${userName}%'
+</if>
+<if test="content!=null and content!=''">
+AND `content` LIKE '%${content}%'
+</if>
+</where>
+</select>
+
+<select id="SelectMerchantCollectionUser" resultType="com.accp.vo.th.MerchantCollectionUserVo">
+	SELECT MerchantCollection.`collectID`,user1.`userName`, user2.`userName`AS shangjiaNames,user2.`shopName`,MerchantCollection.`collectionTime` FROM MerchantCollection
+	LEFT JOIN `user` AS user1 ON user1.userID=MerchantCollection.`userID`
+	LEFT JOIN `user` AS user2 ON user2.userID=MerchantCollection.merchantOrServiceByID
+<where>
+	<if test="userName!=null and userName!=''">
+	AND user1.`userName` LIKE '%${userName}%'
+	</if>
+	<if test="shopName!=null and shopName!=''">
+	AND user2.`shopName` LIKE '%${shopName}%'
+	</if>
+</where>
+</select>
+
+</mapper>

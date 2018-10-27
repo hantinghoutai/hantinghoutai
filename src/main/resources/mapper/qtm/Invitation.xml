@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.qtm.IinvitationDao">
+		<select id="list" resultType="com.accp.vo.qtm.Invitation">
+			SELECT a.`postID` AS postID,b.`fmName` AS fmName,a.`title` AS title,a.releaseTime AS releaseTime,a.auditStatus AS auditStatus,a.`content` AS content,a.operatingState AS operatingState,a.essence AS essence,a.solid AS solid FROM post a
+			INNER JOIN `forummanagement` b ON(a.`fmID`=b.`fmID`)
+		</select>
+		<select id="info" resultType="com.accp.vo.qtm.Invitation">
+			SELECT a.`postID` AS postID,b.`fmName` AS fmName,a.`title` AS title,a.releaseTime AS releaseTime,a.auditStatus AS auditStatus,a.`content` AS content,a.operatingState AS operatingState,a.essence AS essence,a.solid AS solid FROM post a
+			INNER JOIN `forummanagement` b ON(a.`fmID`=b.`fmID`)
+			WHERE a.`postID`=#{postid}
+		</select>
+		<update id="updates">
+			UPDATE `post`
+			<set>
+			<if test="t.auditStatus!=null">
+				`auditStatus`= #{t.auditStatus},
+			</if>
+			<if test="t.operatingState!=null">
+				`operatingState`= #{t.operatingState},
+			</if>
+			<if test="t.adminOpinion!=null">
+				`adminOpinion`= #{t.adminOpinion},
+			</if>
+			<if test="t.essence!=null">
+				`essence`= #{t.essence},
+			</if>
+			<if test="t.solid!=null">
+				`solid`= #{t.solid},
+			</if>
+			</set>
+			where postID=#{t.postID}
+		</update>
+		<delete id="deletes">
+			DELETE FROM `post`
+	 		WHERE postID IN (${id})
+		</delete>
+</mapper>

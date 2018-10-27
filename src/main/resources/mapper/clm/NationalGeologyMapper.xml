@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.clm.INationalGeology">
+	<select id="selectShareaG" resultType="com.accp.pojo.Sharea">
+		select *
+		from `sharea`
+		<trim prefix="where" prefixOverrides="and">
+			<if test="areaId!=null and areaId!='null' and areaId!='' and areaId!=0 and areaId!='0'">
+				and pid in(select areaID from sharea where areaID=#{areaId})
+			</if>
+		</trim>
+	</select>
+	<select id="selectShareaGu" resultType="com.accp.pojo.Sharea">
+		select *
+		from `sharea`
+		where pid=#{areaId}
+	</select>
+	
+	<delete id="deleteSharea">
+		<foreach collection="areaId" item="temp">
+			delete from sharea where pid=#{temp};
+			delete from sharea where areaID=#{temp};
+		</foreach>
+	</delete>
+	
+	<update id="updateSharea">
+		update sharea
+		set name=#{sharea.name},mergerName=#{sharea.mergername}
+		where areaID=#{sharea.areaid};
+	</update>
+	
+	<insert id="addSharea">
+		insert sharea(pid,name,mergerName,level)
+		values(#{sharea.pid},#{sharea.name},#{sharea.mergername},#{sharea.level});
+	</insert>
+	<insert id="addShareaG">
+		insert sharea(pid,name,mergerName,level)
+		values(0,#{sharea.name},#{sharea.mergername},#{sharea.level});
+	</insert>
+	
+	<select id="selectSharea" resultType="com.accp.pojo.Sharea">
+		select * from sharea where areaID=#{areaID}
+	</select>
+	
+</mapper>

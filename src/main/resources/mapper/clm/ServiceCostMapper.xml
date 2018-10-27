@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.clm.IServiceCostDao">
+	<select id="selectServiceCostInfo" resultType="com.accp.vo.clm.ServiceCostVo">
+		select servicecosttype.`serviceCostTypeID`,servicecosttype.`serviceCostTypeName`,servicetype.`stid`,servicetype.`advertisement`,servicetype.`confirmTime`,servicetype.`display`,servicetype.`operationTime`,servicetype.`proportion`,servicetype.`sort`,servicetype.`stName`,servicetype.`stPid`,servicetype.`toExamine`,servicetype.`violatedNumber`
+		from `servicetype`
+		inner join `servicecosttype` on(servicetype.`stid`=servicecosttype.stid)
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id!=null and id!='null' and id!='' and id!=0 and id!='0'">
+				and servicecosttype.stid=#{id}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="selectServicecosttype" resultType="com.accp.pojo.Servicecosttype">
+		select * from servicecosttype where serviceCostTypeID=#{id}
+	</select>
+	
+	<select id="selectServicetypeInfo" resultType="com.accp.pojo.Servicetype">
+		select * from servicetype where `stPid`=0
+	</select>
+	 
+	<insert id="addServicetype">
+		insert servicecosttype(serviceCostTypeName,stid)
+		values(#{servicecosttype.servicecosttypename},#{servicecosttype.stid});
+	</insert>
+	
+	<delete id="deleteServicetype">
+		delete from servicecosttype where serviceCostTypeID=#{id};
+	</delete>
+	
+	<update id="updateServicetype">
+		update servicecosttype
+		set serviceCostTypeName=#{servicecosttype.servicecosttypename},stid=#{servicecosttype.stid}
+		where serviceCostTypeID=#{servicecosttype.servicecosttypeid};
+	</update>
+</mapper>

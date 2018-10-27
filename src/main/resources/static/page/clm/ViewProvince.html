@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>广告位排版</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="layui/css/layui.css" />
+	</head>
+	<body>
+		<blockquote class="layui-elem-quote">
+			城市管理
+		</blockquote>
+		<div class="tables">
+			<table class="table table-bordered" style="text-align: center;">
+				<tr><th style="text-align: center;">全选</th><th style="text-align: center;">名称</th><th style="text-align: center;">操作</th><th style="text-align: center;">全选</th><th style="text-align: center;">名称</th><th style="text-align: center;">操作</th></tr>
+				<tbody id="bodys">
+						 
+				</tbody>
+				<tr><td colspan="6"><input type="button" class="btn btn-danger" value="添加">&nbsp;&nbsp;<input type="button" class="btn btn-danger" value="选择所有">&nbsp;&nbsp;<input type="button" class="btn btn-danger" value="删除">&nbsp;&nbsp;<input type="button" class="btn btn-danger" value="返回" onclick="FanHui()">&nbsp;&nbsp;<input type="button" class="btn btn-danger" value="更新" onclick="loads()"></td></tr>
+			</table>
+		</div>
+		
+	</body>
+	<script type="text/javascript" src="js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="js/vue.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.js" ></script>
+	<script src="layui/layui.js"></script>
+	<script>
+	var id=window.sessionStorage.getItem("NewCountry");
+	LoadViewCountry(id);
+	function LoadViewCountry(id){
+		var td1=null;
+		var td2=null;
+		var td3=null;
+		var is=1;
+		$.ajax("/clm/api/selectShareaG/"+id,{
+			type:"get",
+			dataType:"json",
+			success:function(data){
+				console.info(data);
+				$("#bodys").html("");
+				$.each(data,function(i,obj){
+					var tr=$("<tr></tr>");
+					if(is!=data.length){
+						if(is%2!=0 && is==data.length-1){
+							td3=("<td><input type='checkbox' class='check' value="+obj.areaid+"></td><td>"+obj.name+"</td><td><a href='javascript:void(0)' onclick='update("+obj.areaid+")'>修改</a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='ChaKan("+obj.areaid+")'>查看城市</a></td>");
+						}else{
+							if(is%2==0){
+								td1=("<td><input type='checkbox' class='check' value="+obj.areaid+"></td><td>"+obj.name+"</td><td><a href='javascript:void(0)' onclick='update("+obj.areaid+")'>修改</a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='ChaKan("+obj.areaid+")'>查看城市</a></td>");
+								var td=td1+td2;
+								tr.append(td);
+								$("#bodys").append(tr);
+							}else{
+								td2=("<td><input type='checkbox' class='check' value="+obj.areaid+"></td><td>"+obj.name+"</td><td><a href='javascript:void(0)' onclick='update("+obj.areaid+")'>修改</a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='ChaKan("+obj.areaid+")'>查看城市</a></td>");
+							}
+						}
+					}else{
+						td1=("<td><input type='checkbox' class='check' value="+obj.areaid+"></td><td>"+obj.name+"</td><td><a href='javascript:void(0)' onclick='update("+obj.areaid+")'>修改</a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='ChaKan("+obj.areaid+")'>查看城市</a></td>");
+						td3=td3+td1;
+						tr.append(td3);
+						$("#bodys").append(tr);
+						is=1;
+					}
+					is++;
+				})
+			}
+		})
+	}
+	
+	function FanHui(){
+		window.history.go(-1);
+	}
+	
+	$("[value='添加']").click(function(){
+		location.href="AddProvince.html";
+	})
+	
+	$("[value='选择所有']").click(function(){
+		$(".check").attr("checked","checked");
+	})
+	
+	function update(id){
+		var id=window.sessionStorage.setItem("SPid",id);
+		location.href="UpdateAddProvince.html";
+	}
+	
+	function ChaKan(id){
+		var id=window.sessionStorage.setItem("Csid",id);
+		location.href="CheckTheMarket.html";
+	}
+	
+	function loads(){
+		LoadViewCountry(id);
+	}
+	
+	$("[value='删除']").click(function(){
+		var ids="";
+		var falg=false;
+			$(".check").each(function(i,obj){
+				if(this.checked){
+					ids=ids+$(this).attr("value")+","
+					falg=true;
+				}
+			})
+					
+		console.info(ids);
+			if(falg==true){
+				$.ajax("/clm/api/deleteSharea/"+ids,{
+					type:"delete",
+					dataType:"json",
+					success:function(data){
+						if(data.code=="200"){
+							LoadViewCountry(id);
+							layer.msg('删除成功!!', {icon: 1});
+						}else{
+							layer.msg('删除失败!!', {icon: 5});
+						}
+					}
+				})
+			}else{
+				layer.msg('请选择要删除元素!', {icon: 5});
+			}
+	})
+	
+	layui.use('table', function() {
+		var table = layui.table;
+		//第一个实例
+		table.render({
+			elem: '#demo',
+			height: 312,
+			width:1400,
+			url: '', //数据接口
+			page: true, //开启分页
+			cols: [
+				[ //表头
+					{
+						field: 'id',
+						title: '序号',
+						width: 300,
+						sort: true,
+						fixed: 'left'
+					}, {
+						field: 'username',
+						title: '费用名称',
+						width: 300
+					}, {
+						field: 'sex',
+						title: '分类',
+						width: 300
+					}, {
+						field: 'city',
+						title: '操作',
+						width: 300
+					}
+				]
+			]
+		});
+	});
+	</script>
+</html>

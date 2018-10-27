@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<!-- 导入命名空间 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="/css/bootstrap.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<style type="text/css">
+a {
+	text-decoration: none;
+}
+
+td {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+  table        {            border-collapse: collapse;            margin: 0 auto;            text-align: center;        }        
+  table td, table th        {            border: 1px solid #cad9ea;            color: #666;            height: 30px;        }        
+  table thead th        {            background-color: #CCE8EB;            width: 100px;        }        
+  table tr:nth-child(odd)        {            background: #fff;        }        
+  table tr:nth-child(even)        {            background: #F5FAFA;        }
+
+
+
+div {
+	display: block;
+}
+
+.oneColLiqCtrHdr #container {
+	text-align: left;
+	BORDER-BOTTOM: #000000 1px solid;
+	BORDER-LEFT: #000000 1px solid;
+	MARGIN: 0px auto;
+	WIDTH: 100%;
+	BACKGROUND: #ffffff;
+	BORDER-TOP: #000000 1px solid;
+	BORDER-RIGHT: #000000 1px solid;
+}
+
+.oneColLiqCtrHdr #header {
+	PADDING-BOTTOM: 10px;
+	PADDING-LEFT: 20px;
+	PADDING-RIGHT: 10px;
+	BACKGROUND: #dddddd;
+	PADDING-TOP: 10px;
+}
+
+h1 {
+	display: block;
+	font-size: 2em;
+	-webkit-margin-before: 0.67em;
+	-webkit-margin-after: 0.67em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+}
+
+.oneColLiqCtrHdr #header {
+	PADDING-BOTTOM: 10px;
+	PADDING-LEFT: 20px;
+	PADDING-RIGHT: 10px;
+	BACKGROUND: #dddddd;
+	PADDING-TOP: 10px;
+}
+
+.oneColLiqCtrHdr #container {
+	text-align: left;
+	BORDER-BOTTOM: #000000 1px solid;
+	BORDER-LEFT: #000000 1px solid;
+	MARGIN: 0px auto;
+	WIDTH: 100%;
+	BACKGROUND: #ffffff;
+	BORDER-TOP: #000000 1px solid;
+	BORDER-RIGHT: #000000 1px solid;
+}
+
+BODY {
+	TEXT-ALIGN: center;
+	PADDING-BOTTOM: 0px;
+	PADDING-LEFT: 0px;
+	PADDING-RIGHT: 0px;
+	FONT: 12px Verdana, Arial, Helvetica, sans-serif;
+	/* BACKGROUND: #666666; */
+	COLOR: #000000;
+	TEXT-DECORATION: none;
+	PADDING-TOP: 0px;
+}
+
+#dqy {
+	font-size: 14px;
+}
+
+user agent stylesheet
+body {
+	display: block;
+	margin: 8px;
+}
+
+.oneColLiqCtrHdr #mainContent {
+	PADDING-BOTTOM: 0px;
+	PADDING-LEFT: 20px;
+	PADDING-RIGHT: 20px;
+	BACKGROUND: #ffffff;
+	PADDING-TOP: 0px;
+}
+
+form {
+	display: block;
+	margin-top: 0em;
+}
+
+table {
+	display: table;
+	border-collapse: separate;
+	border-spacing: 2px;
+	border-color: grey;
+}
+
+tr {
+	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit;
+}
+
+tbody {
+	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
+}
+
+td, th {
+	display: table-cell;
+	vertical-align: inherit;
+}
+
+INPUT {
+	BORDER-BOTTOM: #999999 1px outset;
+	BORDER-LEFT: #999999 1px outset;
+	BORDER-TOP: #999999 1px outset;
+	BORDER-RIGHT: #999999 1px outset;
+}
+</style>
+</head>
+<body class=".oneColLiqCtrHdr">
+	<div id="container">
+		<div id="header">
+			<h1>服务类型预约</h1>
+		</div>
+	</div>
+	<div id="mainContent">
+		<br>
+		<form method="post">
+			<td>会员名/商家名/订单号: <input name="title" type="text" value=""
+				id="title" size="15"> 时间: <input type="text" value=""
+				name="starttime" id="starttime" size="14" class="Wdate"
+				onfocus="WdatePicker({doubleCalendar:true,skin:'default',firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:00'})">
+				—— <input type="text" value="" name="endtime" id="endtime" size="14"
+				class="Wdate"
+				onfocus="WdatePicker({doubleCalendar:true,skin:'default',firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:59'})">
+				服务类别: <select name="catid" id="catid">
+					<option value="0">不限</option>
+					<option value="3">自驾游</option>
+					<option value="4">微整形</option>
+					<option value="5">留学中介</option>
+					<option value="6">韩语翻译</option>
+					<option value="7">学习资源</option>
+			</select> 状态: <select name="status" id="status">
+					<option value="0">不限</option>
+					<option value="1">待付款</option>
+					<option value="2">待接单</option>
+					<option value="3">待提供服务</option>
+					<option value="4">待提供服务</option>
+					<option value="5">已提供服务</option>
+					<option value="6">服务完成</option>
+					<option value="7">服务取消</option>
+					<option value="8">未接单</option>
+					<option value="9">已退款</option>
+			</select> <input type="hidden" name="p" value="1"> <input value="搜索"
+				type="submit">
+			</td>
+			<table border="1" cellpadding="6" cellspacing="0" width="100%"
+				bgcolor="#FFFFFF">
+				<thead>
+					<tr>
+						<td>单号</td>
+						<td>会员</td>
+						<td>商家</td>
+						<td>服务类别</td>
+						<td>服务名称</td>
+						<td>积分</td>
+						<td>下单时间</td>
+						<td>订单状态</td>
+						<td>支付时间</td>
+						<td>备注</td>
+						<td>操作</td>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr id="data-row" style="background-color: rgb(255, 255, 255);"
+						th:each="temp,iterState:${PAGE_INFO.list}">
+						<td th:text="${temp.orderid}"></td>
+						<td th:text="${temp.username}"></td>
+						<td th:text="${temp.shopname}"></td>
+						<td th:text="${temp.stname}"></td>
+						<td th:text="${temp.servicetitle}"></td>
+						<td th:text="${temp.userintegral}"></td>
+						<td th:text="${temp.ordertime}"></td>
+
+						<td>
+							<div th:switch="${temp.orderstatus}">
+								<span th:case="1">待付款</span> <span th:case="2">待接单</span> <span
+									th:case="3">待提供服务</span> <span th:case="4">已提供服务</span> <span
+									th:case="5">完成</span> <span th:case="6">取消</span>
+							</div>
+						</td>
+						<td th:text="${temp.paymenttime}"></td>
+						<td th:text="${temp.remarks}"></td>
+						<td><a href="#">查看</a></td>
+					</tr>
+				</tbody>
+
+				<tfoot>
+					<tr>
+						<td colspan="11">
+							<ul class="pager" style="list-style: none;">
+
+								<li><a
+									th:href="@{/th/findPaperByPageselectfwlxyy(p=${PAGE_INFO.prePage},s=${PAGE_INFO.pageSize})}">上一页</a>
+
+								</li>
+								<span id="dqy" style="color: red">当前是第[[${PAGE_INFO.pageNum}]]页,共[[${PAGE_INFO.lastPage}]]页</span>
+								<li><a
+									th:href="@{/th/findPaperByPageselectfwlxyy(p=${PAGE_INFO.nextPage},s=${PAGE_INFO.pageSize})}">下一页</a>
+								</li>
+
+							</ul>
+
+						</td>
+					</tr>
+				</tfoot>
+				</tbody>
+
+			</table>
+		</form>
+	</div>
+</body>
+<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/vue.js"></script>
+<script type="text/javascript" src="/js/dialog.js"></script>
+
+<script>
+	
+</script>
+</html>

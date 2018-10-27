@@ -1,0 +1,193 @@
+[
+	{
+		"title": "论坛管理",
+		"href": "",
+		"children": [
+			{
+				"title": "帖子管理",
+				"href": "page/qtm/Invitation.html",
+				"spread": false
+			}, {
+				"title": "帖子板块管理",
+				"href": "",
+				"spread": false
+			}, {
+				"title": "论坛投诉管理",
+				"href": "",
+				"spread": false
+			}
+		]
+	}, {
+		"title": "物流管理",
+		"href": "",
+		"children": [
+			{
+				"title": "物流订单详情",
+				"href": "",
+				"spread": false
+			}, {
+				"title": "物流区域管理",
+				"href": "",
+				"spread": false
+			}
+		]
+	}, {
+		"title": "服务管理",
+		"href": "",
+		"children": [
+			{
+				"title": "服务类别设置",
+				"href": "page/qtm/systematic_management.html",
+				"spread": false
+			}, {
+				"title": "服务审核设置",
+				"href": "",
+				"spread": false
+			}, {
+				"title": "服务分类管理",
+				"href": "",
+				"spread": false
+			}, {
+				"title": "服务类型预约",
+				"href": "",
+				"spread": false
+			}, {
+				"title": "服务审核",
+				"href": "page/qtm/class_of_service.html",
+				"spread": false
+			}, {
+				"title": "退款管理",
+				"href": "page/qtm/Refund.html",
+				"spread": false
+			}, {
+				"title": "服务投诉",
+				"href": "",
+				"spread": false
+			}
+		]
+	}, {
+		"title": "会员管理",
+		"href": "",
+		"children": [
+			{
+				"title": "会员审核",
+				"href": "page/member/member.html",
+				"spread": false
+			}, {
+				"title": "商家管理",
+				"href": "page/member/business.html",
+				"spread": false
+			}, {
+				"title": "商家入驻",
+				"href": "page/member/merchantEntry.html",
+				"spread": false
+			}, {
+				"title": "鉴定审核",
+				"href": "page/member/appraisal.html",
+				"spread": false
+			}, {
+				"title": "商家推荐",
+				"href": "page/member/recommend.html",
+				"spread": false
+			}, {
+				"title": "商家托管",
+				"href": "page/member/trusteeship.html",
+				"spread": false
+			}, {
+				"title": "评价管理",
+				"href": "page/member/comment.html",
+				"spread": false
+			}, {
+				"title": "金币记录",
+				"href": "/lfxapply/querygolds?pageNum=1&pageSize=10",
+				"spread": false
+			}, {
+				"title": "积分记录",
+				"href": "page/member/integral.html",
+				"spread": false
+			}, {
+				"title": "充值记录",
+				"href": "/lfxapply/queryRecharge?p=1&s=10&userName=zhi",
+				"spread": false
+			}, {
+				"title": "提现记录",
+				"href": "/lfxapply/querytixian?p=1&s=10",
+				"spread": false
+			}, {
+				"title": "保证金详情",
+				"href": "page/member/bond.html",
+				"spread": false
+			}, {
+				"title": "服务收藏",
+				"href": "page/member/serviceCollection.html",
+				"spread": false
+			}, {
+				"title": "BBS收藏",
+				"href": "page/member/BBSCollection.html",
+				"spread": false
+			}, {
+				"title": "店铺收藏",
+				"href": "page/member/storeCollection.html",
+				"spread": false
+			}, {
+				"title": "会员站内信",
+				"href": "page/member/mail.html",
+				"spread": false
+			}, {
+				"title": "留言反馈",
+				"href": "page/member/feedback.html",
+				"spread": false
+			}
+		]
+	}, {
+		"title": "广告位管理",
+		"href": "page/clm/Advertisementlayout.html",
+		"spread": false
+	}, {
+		"title": "系统",
+		"href": "",
+		"children": [
+			{
+				"title": "系统配置",
+				"href": "",
+				"spread": false
+			}, {
+				"title": "托管设置",
+				"href": "",
+				"spread": false
+			}, {
+				"title": "商家费用备注",
+				"href": "page/clm/MerchantSExpenseRemarks.html",
+				"spread": false
+			}, {
+				"title": "专业类别管理",
+				"href": "page/clm/ProfessionalCategoryManagement.html",
+				"spread": false
+			}, {
+				"title": "国家地管理",
+				"href": "page/clm/ViewCountry.html",
+				"spread": false
+			}, {
+				"title": "银行管理",
+				"href": "page/clm/BankManagement.html",
+				"spread": false
+			}, {
+				"title": "管理员管理",
+				"href": "page/clm/User.html",
+				"spread": false
+			}, {
+				"title": "管理员日志",
+				"href": "page/clm/TheAdministratorLogs.html",
+				"spread": false
+			}, {
+				"title": "系统站内信",
+				"href": "page/clm/SystemStationMessage.html",
+				"spread": false
+			}, {
+				"title": "身份查询系统",
+				"href": "",
+				"spread": false
+			}
+		]
+	}
+]
