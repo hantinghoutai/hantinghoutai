@@ -21,9 +21,19 @@ public class Putforward {
 
     private Float money;
 
+    private String adminOpinion;
+    
     private Integer auditstatus;
 
-    public Integer getPfid() {
+    public String getAdminOpinion() {
+		return adminOpinion;
+	}
+
+	public void setAdminOpinion(String adminOpinion) {
+		this.adminOpinion = adminOpinion;
+	}
+
+	public Integer getPfid() {
         return pfid;
     }
 

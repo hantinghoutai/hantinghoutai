@@ -124,14 +124,13 @@ layui.use('form', function() {})
 var refundID = window.sessionStorage.getItem("refundID");
 	$.ajax({
 		type: "get",
-		url: "http://127.0.0.1:8080/tuikuan/select/" + refundID,
+		url: "/tuikuan/select/" + refundID,
 		dataType: "json",
 		success: function(data) {
 			if(data==1){
 				$("#guan").hide();
 				$("[name=shi]").hide();
 				tianjian1();
-				$("#hui").html("返回");
 			}else if(data==2){
 				tianjian2();
 			}
@@ -141,7 +140,7 @@ var refundID = window.sessionStorage.getItem("refundID");
 	function tianjian2(){
 		$.ajax({
 			type: "get",
-			url: "http://127.0.0.1:8080/tuikuan/select/info/" + refundID,
+			url: "/tuikuan/select/info/" + refundID,
 			dataType: "json",
 			success: function(data) {
 				var zt;
@@ -151,12 +150,10 @@ var refundID = window.sessionStorage.getItem("refundID");
 					}else if (data.adminStatus==2){
 						zt="退款成功";
 						$("#guan").hide();
-						$("#hui").html("返回");
 						$("[name=shi]").show();
 					}else if (data.adminStatus==3){
 						zt="管理员拒绝";
 						$("#guan").hide();
-						$("#hui").html("返回");
 					}
 				
 				$("[name=userName]").val(data.userName)
@@ -180,7 +177,7 @@ var refundID = window.sessionStorage.getItem("refundID");
 	function tianjian1(){
 		$.ajax({
 			type: "get",
-			url: "http://127.0.0.1:8080/tuikuan/select/info/" + refundID,
+			url: "/tuikuan/select/info/" + refundID,
 			dataType: "json",
 			success: function(data) {
 				var shenghe;
@@ -212,15 +209,15 @@ var refundID = window.sessionStorage.getItem("refundID");
 		var ActualRefundMoney=$("[name=shi]").val();
 		if(adminStatus==3){
 			if(adminRemarks==""){
-				alert("请写明理由！");
+				layer.open({title: '操作提示',content: '请写明拒绝理由！'});  
 			}else {
 				$.ajax({
 					type: "put",
-					url: "http://127.0.0.1:8080/tuikuan/update/"+adminStatus+"/"+refundID+"/"+adminRemarks,
+					url: "/tuikuan/update/"+adminStatus+"/"+refundID+"/"+adminRemarks,
 					dataType: "json",
 					success: function(data) {
 						if(data>0){
-							alert("修改成功！");
+							layer.open({title: '操作提示',content: '保存成功！'});  
 							location.href="Refund.html"
 						
 						}
@@ -229,15 +226,15 @@ var refundID = window.sessionStorage.getItem("refundID");
 			}
 		}else if(adminStatus==2){
 			if(ActualRefundMoney==""){
-				alert("请输入实际退款金额！")
+				layer.open({title: '操作提示',content: '请输入实际退款金额！'}); 
 			}else {
 				$.ajax({
 					type: "put",
-					url: "http://127.0.0.1:8080/tuikuan/updates/"+adminStatus+"/"+refundID+"/"+ActualRefundMoney,
+					url: "/tuikuan/updates/"+adminStatus+"/"+refundID+"/"+ActualRefundMoney,
 					dataType: "json",
 					success: function(data) {
 						if(data>0){
-							alert("修改成功！");
+							layer.open({title: '操作提示',content: '保存成功！'}); 
 							location.href="Refund.html"
 						
 						}

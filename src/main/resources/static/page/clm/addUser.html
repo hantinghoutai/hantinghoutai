@@ -62,7 +62,7 @@
 							json["roleid"]=obj.value;
 						}
 					})
-					json["founder"]=2; /* window.sessionStorage.getItem("Admin").adminid; */
+					json["founder"]=window.sessionStorage.getItem("ADMIN").adminid;
 					$.ajax("/clm/api/insertUser",{
 						type:"post",
 						contentType:"application/json",
@@ -71,7 +71,7 @@
 						success:function(data){
 							if(data.code=="200"){
 								layer.msg('新增成功!', {icon: 1});
-								AddAdministrator(2/* window.sessionStorage.getItem("Admin").adminid; */,"新增了管理员");
+								AddAdministrator(window.sessionStorage.getItem("ADMIN").adminid,"新增了管理员");
 							}else{
 								layer.msg('新增失败!', {icon: 5});
 							}

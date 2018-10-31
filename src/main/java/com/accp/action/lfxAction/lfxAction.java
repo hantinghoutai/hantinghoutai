@@ -1,5 +1,6 @@
 package com.accp.action.lfxAction;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -10,8 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.accp.biz.lfxBiz.AppraisalapplyBiz;
+import com.accp.pojo.Goldnotes;
 import com.accp.pojo.User;
 import com.accp.vo.lfx.*;
 import com.github.pagehelper.PageInfo;
@@ -20,18 +23,7 @@ import com.github.pagehelper.PageInfo;
 public class lfxAction {
 	@Autowired
 	private AppraisalapplyBiz biz;
-//	@GetMapping("queryApply")
-//	public String getStudentList(Integer userid,Integer auditstatus,Integer p, Integer s, Model model, HttpSession session) {
-//		if(userid==null||userid==0) {
-//			userid=0;
-//		}
-//		if(auditstatus==0||auditstatus==null) {
-//			auditstatus=0;
-//		}
-//		PageInfo<Appraisalapply> pageInfo =biz.findAppraisalapply(userid,auditstatus,p, s);
-//		model.addAttribute("PAGE_INFO",pageInfo);
-//		return "lfxApplay/Appraisal-audit";
-//	}
+
 	@GetMapping("queryApplyVo")
 	public String getStudentListVo(String userName,Integer auditStatus,Integer p, Integer s, Model model, HttpSession session) {
 		if(userName==null||userName=="") {
@@ -78,18 +70,23 @@ public class lfxAction {
 		return "lfxApplay/shangjiaruzhux";
 	}	
 	//查看提现记录
-	@GetMapping("querytixian")
-	public String gettixian(Integer p, Integer s, Model model, HttpSession session) {
-		PageInfo<PutforwardrecordVo> pageInfotixian =biz.findtixian(p, s);
-		model.addAttribute("TIXIAN",pageInfotixian);
-		return "lfxApplay/tixian";
+	@PostMapping("/querytixian")
+	@ResponseBody
+	public HashMap<Object, Object>  gettixian(String userName,String auditStatus,Integer pageNum, Integer pageSize) {
+		HashMap<Object, Object> map=new HashMap<Object, Object>();
+		PageInfo<PutforwardrecordVo> pageInfo=biz.findtixian(userName, auditStatus,pageNum,pageSize);
+		map.put("code", 0);
+		map.put("msg", "");
+		map.put("data", pageInfo.getList());
+		map.put("count", pageInfo.getTotal());
+		return map;
 	}
 	//查看提现详情
-	@GetMapping("querytix")
-	public String gettixianx(Integer pfrID,Model model,HttpSession session) {
-		PutforwardrecordVo tixianVo=biz.querytixianx(pfrID);
-		model.addAttribute("tixianx",tixianVo);
-		return "lfxApplay/Modification-audit";
+	@GetMapping("/querytix")
+	@ResponseBody
+	public PutforwardrecordVo gettixianx(String pfID) {
+		PutforwardrecordVo tixianVo=biz.querytixianx(pfID);
+		return tixianVo;
 	}	
 	//查看帖子
 	@GetMapping("querypost")
@@ -136,12 +133,7 @@ public class lfxAction {
 		biz.removepostbankuai(fmID);;
 		return "redirect:/lfxapply/querypostbankuai?p=1&s=2";
 	}
-	//删除帖子板块的时候删除帖子
-//	@GetMapping("removepostbankuait")
-//	public String remvovepostbankuait(Integer postID) {
-//		biz.removepostbankuait(postID);
-//		return "redirect:/lfxapply/querypostbankuai?p=1&s=2";
-//	}
+
 	//查看帖子投诉
 	@GetMapping("tizitou")
 	public String getpost( Model model, HttpSession session) {
@@ -155,12 +147,18 @@ public class lfxAction {
 		biz.removetizit(cid);;
 		return "lfxApplay/tiezit";
 	}
+	
 	//查看金币
-	@GetMapping("querygolds")
-	public String findgolds(Integer pageNum,Integer pageSize,Model model,HttpSession session) {
-		PageInfo<GoldsRecord> golds=biz.querygolds( pageNum, pageSize);
-		model.addAttribute("gold",golds);
-		return "lfxApplay/golds";
+	@PostMapping("/querygolds")
+	@ResponseBody
+	public HashMap<Object, Object> findgolds(String userName, String userID,Integer pageNum,Integer pageSize) {
+		HashMap<Object, Object> map=new HashMap<Object, Object>();
+		PageInfo<GoldsRecord> pageInfo=biz.querygolds(userName,userID,pageNum, pageSize);
+		map.put("code", 0);
+		map.put("msg", "");
+		map.put("data", pageInfo.getList());
+		map.put("count", pageInfo.getTotal());
+		return map;
 	}
 	//查看金币详情
 	@GetMapping("querygoldsx")
@@ -170,41 +168,47 @@ public class lfxAction {
 		return "lfxApplay/goldsx";
 	}
 	//修改提现
-	@GetMapping("xiutixian")
-	public String xiugaitixian(Integer auditStatus, Integer pfID) {		
-	biz.modifytixian(auditStatus, pfID);
-		return "redirect:lfxApplay/tixian";
+	@PostMapping("/xiutixian")
+	@ResponseBody
+	public HashMap<Object, Object> xiugaitixian( String pfID,String auditStatus,String adminOpinion) {
+		System.out.println("auditStatus:"+auditStatus);
+		HashMap<Object, Object> map=new HashMap<Object, Object>();
+		int count=biz.modifytixian(pfID, auditStatus,adminOpinion);
+		if(count>0) {
+			map.put("code", 200);
+		}else {
+			map.put("code", 400);
+		}
+		return map;
 		
 	}
 	//查看充值
-	@GetMapping("queryRecharge")
-	public String queryRecharge(Integer p, Integer s,String userName,Model model) {
-		if (userName.equals("0")||userName.equals("")) {
-			userName = null;
-		}
-		PageInfo<RecordVo> pageInfo =biz.queryRecharge(p, s, userName);
-		model.addAttribute("PAGE_INFO", pageInfo);
-		model.addAttribute("userName", userName);
-		return "lfxApplay/Recharge-record";
+	@PostMapping("/queryRecharge")
+	@ResponseBody
+	public HashMap<Object, Object> queryRecharge(String userName,String userID,String acquisitionMode,String auditStatus,Integer pageNum, Integer pageSize) {
+		HashMap<Object, Object> map=new HashMap<Object, Object>();
+		PageInfo<RecordVo> pageInfo=biz.queryRecharge( userName,userID,acquisitionMode,auditStatus,pageNum,pageSize);
+		map.put("code", 0);
+		map.put("msg", "");
+		map.put("data", pageInfo.getList());
+		map.put("count", pageInfo.getTotal());
+		return map;
 	}
 	//修改充值
-	@PostMapping("updateForward")
-	public String updateForward(ForwardVo vo,Model model,String Time,String type) {
-			biz.updateForward(vo,Time);
-			if(type.equals("Recharge")) {
-		return "redirect:/lfxapply/queryRecharge?p=1&s=10&userName=0";
-			}else if(type.equals("Gold")) {
-				return "redirect:/lfxapply/getGoldList?p=1&s=10&userName=0";		
-			}
-			return null;
+	@PostMapping("/updateForward")
+	@ResponseBody
+	public HashMap<Object, Object> updateForward(String recordID,String auditStatus) {
+			biz.updateForward(recordID,auditStatus);
+			HashMap<Object, Object> map=new HashMap<Object, Object>();
+			map.put("code", 200);
+			return map;
 	}
 	//查询充值详情
-	@GetMapping("queryForward")
-	public String queryForward(int userID,Model model,String type) {
-		ForwardVo data=biz.queryForward(userID);
-		model.addAttribute("type",type);
-		model.addAttribute("data",data);
-		return "lfxApplay/Cash-management";
+	@GetMapping("/queryForward")
+	@ResponseBody
+	public Goldnotes queryForward(String recordID) {
+		Goldnotes data=biz.queryForward(recordID);
+		return data;
 	}
 
 	

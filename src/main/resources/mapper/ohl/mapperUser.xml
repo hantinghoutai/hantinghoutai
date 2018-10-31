@@ -10,7 +10,6 @@
 		SELECT * FROM `user`
 		<where>
 			<if test="userRealName!=null and userRealName!=''">AND `userName` LIKE CONCAT('%',#{userRealName},'%')</if>
-			<if test="true"> AND `merchantType` = 0 OR `merchantType` = null</if>
 		</where>
 	</select>
 	
@@ -65,8 +64,9 @@
 			<if test="userName!=null and userName!=''">AND `userName` LIKE CONCAT('%',#{userName},'%')</if>
 			<if test="merchantType!=null and merchantType!='' and merchantType!='0'.toString()"> AND `merchantType` = #{merchantType}</if>
 			<if test="auditStatus!=null and auditStatus!='' and auditStatus!='0'.toString()"> AND `auditStatus` = #{auditStatus}</if>
-			<if test="true"> AND `merchantType` != 0 and `merchantType` !='null'</if>
+			<if test="true"> AND `merchantType` != 0 and `merchantType` !='null' AND auditStatus!='null'</if>
 		</where>
+		ORDER BY auditStatus
 	</select>
 	
 	<select id="queryRuzhuSee" resultType="com.accp.vo.ohl.VoUserRuzhu">

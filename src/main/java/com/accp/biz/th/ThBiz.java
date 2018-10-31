@@ -2,6 +2,7 @@ package com.accp.biz.th;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.accp.dao.th.ITHDao;
+import com.accp.pojo.Logistics;
 import com.accp.pojo.User;
 import com.accp.vo.th.MerchantCollectionUserVo;
 import com.accp.vo.th.PostCollectionPostCommentVo;
@@ -22,33 +24,51 @@ public class ThBiz {
 
 	@Autowired
 	private ITHDao dao;
-	
+
 	/**
 	 * 查询商家信息
+	 * 
 	 * @param userRealName
 	 * @param shopName
 	 * @param merchantType
 	 * @return
 	 */
-	public PageInfo<ServiceUserVo> SelectServiceUserVo(String userName,String serviceTitle, String stid,Integer pageNum, Integer pageSize){
-		PageHelper.startPage(pageNum,pageSize);
-		List<ServiceUserVo> data=dao.SelectServiceUserVo(userName, serviceTitle,stid);
-		PageInfo<ServiceUserVo> pageInfo=new PageInfo<ServiceUserVo>(data);
+	public PageInfo<ServiceUserVo> SelectServiceUserVo(String userName, String serviceTitle, String stid,
+			Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<ServiceUserVo> data = dao.SelectServiceUserVo(userName, serviceTitle, stid);
+		PageInfo<ServiceUserVo> pageInfo = new PageInfo<ServiceUserVo>(data);
+		return pageInfo;
+	};
+
+	public PageInfo<PostCollectionPostCommentVo> SelectPostCollectionComment(String userName, String content,
+			Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<PostCollectionPostCommentVo> data = dao.SelectPostCollectionComment(userName, content);
+		PageInfo<PostCollectionPostCommentVo> pageInfo = new PageInfo<PostCollectionPostCommentVo>(data);
+		return pageInfo;
+	};
+
+	public PageInfo<MerchantCollectionUserVo> SelectMerchantCollectionUser(String userName, String shopName,
+			Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<MerchantCollectionUserVo> data = dao.SelectMerchantCollectionUser(userName, shopName);
+		PageInfo<MerchantCollectionUserVo> pageInfo = new PageInfo<MerchantCollectionUserVo>(data);
+		return pageInfo;
+	};
+
+	//物流
+	public PageInfo<Logistics> SelectLogisticsAndorderID(String userName,String orderID,String orderStatus,String orderType,
+			Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<Logistics> data = dao.SelectLogisticsAndorderID(userName, orderID, orderStatus, orderType);
+		PageInfo<Logistics> pageInfo = new PageInfo<Logistics>(data);
 		return pageInfo;
 	};
 	
-	public PageInfo<PostCollectionPostCommentVo> SelectPostCollectionComment(String userName,String content,Integer pageNum, Integer pageSize){
-		PageHelper.startPage(pageNum,pageSize);
-		List<PostCollectionPostCommentVo> data=dao.SelectPostCollectionComment(userName, content);
-		PageInfo<PostCollectionPostCommentVo> pageInfo=new PageInfo<PostCollectionPostCommentVo>(data);
-		return pageInfo;
-	};
-	
-	public PageInfo<MerchantCollectionUserVo> SelectMerchantCollectionUser(String userName,String shopName,Integer pageNum, Integer pageSize){
-		PageHelper.startPage(pageNum,pageSize);
-		List<MerchantCollectionUserVo> data=dao.SelectMerchantCollectionUser(userName, shopName);
-		PageInfo<MerchantCollectionUserVo> pageInfo=new PageInfo<MerchantCollectionUserVo>(data);
-		return pageInfo;
-	};
+	// 修改物流详情
+	public int updatewlqx(int auditstatus, int logisticsid, String logisticscompany, String logisticssinglenumber) {
+		return dao.updatewlqx(logisticsid, auditstatus, logisticscompany, logisticssinglenumber);
+	}
 
 }

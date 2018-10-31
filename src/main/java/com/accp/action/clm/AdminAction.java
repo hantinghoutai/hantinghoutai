@@ -40,7 +40,6 @@ public class AdminAction {
 		Map<String, String> map=new HashMap<String, String>();
 		InetAddress address = InetAddress.getLocalHost();
 		String hostAddress = address.getHostAddress();
-		System.out.println(hostAddress);
 		admin.setCreationip(hostAddress);
 		biz.insertUser(admin);
 		map.put("code","200");

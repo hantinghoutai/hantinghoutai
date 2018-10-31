@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.ohl.IOrdersDao">
+
+	<select id="query" resultType="com.accp.vo.ohl.VoOrders">
+		SELECT orders.*,services.`serviceTitle`,`user`.`userName`
+		FROM orders
+		LEFT JOIN services ON services.`serviceID`=orders.`serviceID`
+		LEFT JOIN `user` ON `user`.`userID`=orders.`userID`
+		<where>
+			<if test="userName!=null and userName!='null' and userName!=''">AND`user`.`userName` LIKE CONCAT('%',#{userName},'%')</if>
+			<if test="orderID!=null and orderID!='null' and orderID!=''">AND orders.`orderID` =#{orderID}</if>
+			<if test="orderStatus!=null and orderStatus!='null' and orderStatus!='' and orderStatus!='0'.toString()">AND orders.orderStatus=#{orderStatus}</if>
+			<if test="commentstatus!=null and commentstatus!='null' and commentstatus!='' and orderStatus!='0'.toString()">AND orders.commentstatus=#{commentstatus}</if>
+			<if test="refundstatus!=null and refundstatus!='null' and refundstatus!='' and orderStatus!='0'.toString()">AND orders.refundstatus=#{refundstatus}</if>
+		</where>
+		ORDER BY orders.orderTime DESC
+	</select>
+	
+</mapper>

@@ -13,6 +13,35 @@ private Date completeTime;
 private Integer money;
 private String adminOpinion;
 private Integer auditStatus;
+private String putName;
+private String bondName;
+private int pfID;
+private String openBankName;
+
+public String getOpenBankName() {
+	return openBankName;
+}
+public void setOpenBankName(String openBankName) {
+	this.openBankName = openBankName;
+}
+public int getPfID() {
+	return pfID;
+}
+public void setPfID(int pfID) {
+	this.pfID = pfID;
+}
+public String getBondName() {
+	return bondName;
+}
+public void setBondName(String bondName) {
+	this.bondName = bondName;
+}
+public String getPutName() {
+	return putName;
+}
+public void setPutName(String putName) {
+	this.putName = putName;
+}
 public Integer getPfrID() {
 	return pfrID;
 }

@@ -142,9 +142,9 @@
 								templet:function(list){
 									if(list.auditstatus){
 										if(list.auditstatus==1){
-											return '待审核';
+											return '<span style="color:red;">待审核</span>';
 										}else if(list.auditstatus==2){
-											return '已审核';
+											return '<span style="color:green;">已同意</span>';
 										}else if(list.auditstatus==3){
 											return '已拒绝';
 										}

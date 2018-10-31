@@ -21,13 +21,16 @@
 						<div class="layui-form-item">
 							<label class="layui-form-label">用户昵称</label>
 							<div class="layui-input-block">
-								<input type="text" name="title" required lay-verify="required" placeholder="请输入用户昵称" autocomplete="off" class="layui-input">
+								<input type="text" name="userName" required lay-verify="required" placeholder="请输入用户昵称" autocomplete="off" class="layui-input">
 							</div>
 						</div>
 					</div>
-					<div class="layui-col-md1" style="margin-left: 20px;">
+					<div class="layui-col-md2" style="margin-left: 20px;">
 						<div class="layui-btn-group">
-							<button class="layui-btn layui-btn-normal">搜索</button>
+							<div class="layui-btn-group">
+							  <button type="button" class="layui-btn layui-btn-normal" name="submit">搜索</button>
+							  <button type="button" class="layui-btn layui-btn-normal" name="userIDTRUE" style="display:none;" onclick="window.history.go(-1);">返回</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -38,61 +41,99 @@
 				<table id="demo" lay-filter="test"></table>
 			</div>
 		</div>
-
+		
+		<script src="../../js/jquery-1.12.4.js"></script>
 		<script src="../../layui/layui.js"></script>
 		<script>
+		var path = window.location.search;//获取传递的参数
+		var userID = path.substr(path.indexOf("=") + 1, path.length);//传递过来的userID
+		if(userID!=null && userID!=''){$("[name=userIDTRUE]").show();}
+		
 			layui.use('table', function() {
 				var table = layui.table;
+				var userName = null;
+				
 				//第一个实例
 				table.render({
 					elem: '#demo',
-					height: 312,
-					width:1400,
-					url: '', //数据接口
+					url: '/lfxapply/querygolds', //数据接口
+					page: true, 			//开启分页
+					method:"post",			//设置请求方式
+					skin: 'line',
+					id:"listReload",
+					where:{"userName":userName,"userID":userID},
+					request: {pageName: 'pageNum',limitName: 'pageSize' }, 	//页码的参数名称，默认：page
 					page: true, //开启分页
 					cols: [
 						[ //表头
 							{
-								field: 'id',
-								title: '序号',
-								width: 80,
-								sort: true,
-								fixed: 'left'
-							}, {
-								field: 'username',
-								title: '昵称',
+								field: 'userName',
+								title: '用户名',
 								width: 120
 							}, {
-								field: 'classify',
-								title: '类型',
-								width: 120,
-								sort: true
-							}, {
-								field: 'sex',
+								field: 'acquisitionMode',
 								title: '获取方式',
-								width: 120
+								width: 120,
+								templet:function(list){
+									switch(list.acquisitionMode){
+									case 1:return '预订服务';
+									case 2:return '服务收益';
+									case 3:return '取消物流订单';
+									case 4:return '其他';
+									case 5:return '充值';
+									case 6:return '线下充值';
+									case 7:return '退款';
+									case 8:return '提现';
+									}
+								}
 							}, {
-								field: 'city',
-								title: '记录',
-								width: 120
-							}, {
-								field: 'sign',
-								title: '状态',
-								width: 120
-							}, {
-								field: 'experience',
-								title: '备注',
-								width: 120
-							}, {
-								field: 'score',
+								field: 'recordInAndOut',
+								title: '操作记录',
+								width: 120,
+								templet:function(list){
+									if(list.recordInAndOut>0){
+										return '+'+list.recordInAndOut;
+									}else{
+										return list.recordInAndOut;
+									}
+								}
+							},{
+								field: 'recordDescribe',
+								title: '描述',
+								width: 220
+							},{
+								field: 'recordDate',
 								title: '消费时间',
-								width: 120
-							}, {
-								field: 'classify',
-								title: '操作'
+								width: 180,
+								sort: true
+							},  {
+								field: 'auditStatus',
+								title: '状态',
+								templet:function(list){
+									if(list.auditStatus==1){
+										return '<span style="color:red;">待审批</span>';
+									}else if(list.auditStatus==2){
+										return '<span style="color:green;">已完成</span>';
+									}else if(list.auditStatus==3){
+										return '已拒绝';
+									}
+								}
 							}
 						]
 					]
+				});
+				//表刷新方法
+		        var reloadTable = function () {
+		            table.reload("listReload", { //此处是上文提到的 初始化标识id
+		                where:{"userName":userName,"userID":userID}
+		            })
+		        };
+		        
+				//查询
+				$("[name=submit]").on("click",function(){
+					userName = $("[name=userName]").val();
+					//当前页的刷新
+					reloadTable();
 				});
 			});
 		</script>

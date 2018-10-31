@@ -18,7 +18,7 @@
 			<div class="layui-col-md11">
 				<div class="layui-col-md4">
 					<div class="layui-form-item">
-						<label class="layui-form-label">用户姓名</label>
+						<label class="layui-form-label">用户昵称</label>
 						<div class="layui-input-block">
 							<input type="text" name="userRealName" required lay-verify="required" placeholder="请输入用户昵称" autocomplete="off" class="layui-input">
 						</div>
@@ -64,12 +64,19 @@
 							{
 								field: 'username',
 								title: '昵称',
-								width: 80
+								width: 120
 							},
 							{
 								field: 'userrealname',
 								title: '真实姓名',
-								width: 120
+								width: 120,
+								templet:function(list){
+									if(''==list.userrealname || null==list.userrealname){
+										return '&nbsp;&nbsp;---';
+									}else{
+										return list.userrealname;
+									}
+								}
 							}, {
 								field: 'merchanttype',
 								title: '会员组',
@@ -87,7 +94,14 @@
 							}, {
 								field: 'contactmailbox',
 								title: '邮箱',
-								width: 180
+								width: 180,
+								templet:function(list){
+									if(''==list.contactmailbox || null==list.contactmailbox){
+										return '&nbsp;&nbsp;---';
+									}else{
+										return list.contactmailbox;
+									}
+								}
 							}, {
 								field: 'userintegral',
 								title: '积分',
@@ -105,9 +119,9 @@
 								templet:function(list){
 									if(list.auditStatus){
 										if(list.auditStatus==1){
-											return '待审核';
+											return '<span style="color:red;">待审核</span>';
 										}else if(auditStatus==2){
-											return '已审核';
+											return '<span style="color:green;">已同意</span>';
 										}else if(auditStatus==3){
 											return '已拒绝';
 										}
@@ -140,11 +154,25 @@
 							}, {
 								field: 'userphone',
 								title: '电话',
-								width: 120
+								width: 120,
+								templet:function(list){
+									if(''==list.userphone || null==list.userphone){
+										return '&nbsp;&nbsp;---';
+									}else{
+										return list.userphone;
+									}
+								}
 							}, {
 								field: 'recententry',
 								title: '最后登录',
-								width: 170
+								width: 170,
+								templet:function(list){
+									if(''==list.recententry || null==list.recententry){
+										return '&nbsp;&nbsp;---';
+									}else{
+										return list.recententry;
+									}
+								}
 							}, {
 								field: 'browsenumber',
 								title: '浏览量',
@@ -155,6 +183,7 @@
 								width: 200,
 								templet:function(item){
 									return '<a href="memberSee.html?userID='+item.userid+'" class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改</a>&nbsp;&nbsp;'+
+									'<a href="goldCoin.html?userID='+item.userid+'" class="layui-btn layui-btn-xs" lay-event="edit">金币</a>&nbsp;&nbsp;'+
 									'<a href="#" class="layui-btn layui-btn-xs" lay-event="edit">积分</a>&nbsp;&nbsp;'+
 									'<a href="#" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">评论</a>';
 								} 

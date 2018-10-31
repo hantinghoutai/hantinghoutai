@@ -71,7 +71,7 @@
 							json["roleid"]=obj.value;
 						}
 					})
-					json["founder"]=2; /* window.sessionStorage.getItem("Admin").adminid; */
+					json["founder"]=window.sessionStorage.getItem("ADMIN").adminid;
 					console.info(json)
 					$.ajax("/clm/api/updateAdmin",{
 						type:"put",

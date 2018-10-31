@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.accp.biz.ohl.BondBiz;
 import com.accp.biz.ohl.UserBiz;
 import com.accp.pojo.User;
+import com.accp.utils.MD5Signature;
 import com.accp.vo.ohl.VoUserEls;
 import com.accp.vo.ohl.VoUserJianding;
 import com.accp.vo.ohl.VoUserRuzhu;
@@ -59,13 +60,17 @@ public class UserAction {
 	@PostMapping("/userUpdate")
 	@ResponseBody
 	public HashMap<Object,Object> userUpdate(String user,String password) {
+		HashMap<Object,Object> map=new HashMap<Object,Object>();
 		User obj=JSON.parseObject(user, User.class);
 		userBiz.userUpdate(obj);				//修改用户信息
 		if(obj.getMailboxverification()) {		//判断邮箱是否激活
-			userBiz.passwordUpdate(obj.getUserid(), password);//修改密码
+			try {
+				userBiz.passwordUpdate(obj.getUserid(), MD5Signature.md5(password));
+				map.put("code", 200);
+			} catch (Exception e) {
+				map.put("code", 400);
+			}//修改密码
 		}
-		HashMap<Object,Object> map=new HashMap<Object,Object>();
-		map.put("code", 200);
 		return map;
 	}
 
@@ -97,17 +102,21 @@ public class UserAction {
 	@PostMapping("/updateShangjiaAll")
 	@ResponseBody
 	public HashMap<Object,Object> updateShangjiaAll(String user,String password,float goldCoin) {
-		User obj=JSON.parseObject(user, User.class);
-		userBiz.updateShangjiaAll(obj);
-		if(obj.getMailboxverification()) {			//判断邮箱是否激活，修改密码
-			userBiz.passwordUpdate(obj.getUserid(), password);	
-		}
-		if(goldCoin!=obj.getGuaranteemoney()) {		//修改保证金
-			bondBiz.bondAdd(obj.getUserid(), goldCoin);
-			bondBiz.guaranteeUpdate(obj.getUserid(), goldCoin);
-		}
 		HashMap<Object,Object> map=new HashMap<Object,Object>();
-		map.put("code", 200);
+		User obj=JSON.parseObject(user, User.class);
+		if(obj.getMailboxverification()) {			//判断邮箱是否激活，修改密码
+			try {
+				userBiz.updateShangjiaAll(obj);
+				userBiz.passwordUpdate(obj.getUserid(), MD5Signature.md5(password));
+				if(goldCoin!=obj.getGuaranteemoney()) {		//修改保证金
+					bondBiz.bondAdd(obj.getUserid(), goldCoin);
+					bondBiz.guaranteeUpdate(obj.getUserid(), goldCoin);
+				}
+				map.put("code", 200);	
+			} catch (Exception e) {
+				map.put("code", 400);
+			}
+		}
 		return map; 
 	}
 	

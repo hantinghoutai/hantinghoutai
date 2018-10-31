@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.accp.dao.lfxDao.AppraisalapplyDao;
+import com.accp.pojo.Goldnotes;
 import com.accp.pojo.User;
 import com.accp.vo.lfx.*;
 import com.github.pagehelper.PageHelper;
@@ -19,11 +20,7 @@ import com.github.pagehelper.PageInfo;
 public class AppraisalapplyBiz {
 	@Autowired
 	private AppraisalapplyDao dao;
-//	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = false)
-//	public PageInfo<Appraisalapply> findAppraisalapply(Integer userid,Integer auditstatus,Integer pageNum,Integer pageSize){
-//		PageHelper.startPage(pageNum,pageSize);
-//		return new PageInfo<Appraisalapply>(dao.queryapply(userid,auditstatus));
-//	}
+
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = false)
 	public PageInfo<AppraisalapplyVo> findAppraisalapplyVo(String userName,Integer auditStatus,Integer pageNum,Integer pageSize){
 		PageHelper.startPage(pageNum,pageSize);
@@ -47,13 +44,13 @@ public class AppraisalapplyBiz {
 		return user;
 	}
 	//提现申请
-	public PageInfo<PutforwardrecordVo> findtixian(Integer pageNum,Integer pageSize){
+	public PageInfo<PutforwardrecordVo> findtixian(String userName,String auditStatus,Integer pageNum, Integer pageSize){
 		PageHelper.startPage(pageNum,pageSize);
-		return new PageInfo<PutforwardrecordVo>(dao.querytixian());
+		return new PageInfo<PutforwardrecordVo>(dao.querytixian(userName,auditStatus));
 	}
 	//查看提现详情
-	public PutforwardrecordVo querytixianx(Integer pfrID) {
-		PutforwardrecordVo tixvo=dao.querytixianx(pfrID);
+	public PutforwardrecordVo querytixianx(String pfID) {
+		PutforwardrecordVo tixvo=dao.querytixianx(pfID);
 		return tixvo;
 	}
 	//查看帖子
@@ -98,27 +95,27 @@ public class AppraisalapplyBiz {
 		dao.removepostt(cid);
 	}
 	//查看金币
-	public PageInfo<GoldsRecord> querygolds(Integer pageNum,Integer pageSize){
+	public PageInfo<GoldsRecord> querygolds(String userName, String userID,Integer pageNum,Integer pageSize){
 		PageHelper.startPage(pageNum,pageSize);
-		return new PageInfo<GoldsRecord>(dao.querygolds());
+		return new PageInfo<GoldsRecord>(dao.querygolds(userName,userID));
 	}
 	//查看金币详情
 	public PutforwardrecordVo querygoldsx(Integer userID) {
 		return dao.querygodlsx(userID);
 	}
 	//修改提现1
-	public void modifytixian(Integer auditStatus,Integer pfID) {
-		dao.modifytixian(auditStatus, pfID);
+	public int modifytixian(String pfID,String auditStatus,String adminOpinion) {
+		return dao.modifytixian(pfID,auditStatus,adminOpinion);
 	}
-	public PageInfo<RecordVo> queryRecharge(Integer pageNum, Integer pageSize,String userName){
+	public PageInfo<RecordVo> queryRecharge(String userName,String userID,String acquisitionMode,String auditStatus,Integer pageNum, Integer pageSize){
 		PageHelper.startPage(pageNum, pageSize);
-		return new PageInfo<RecordVo>(dao.queryRecharge(userName));
+		return new PageInfo<RecordVo>(dao.queryRecharge(userName,userID,acquisitionMode,auditStatus));
 	}
-	public boolean updateForward(ForwardVo vo,String Time) {
-		return dao.updateForward(vo,Time);
+	public boolean updateForward(String recordID,String auditStatus) {
+		return dao.updateForward( recordID, auditStatus);
 	}
-	public ForwardVo queryForward(int userID) {
-		return dao.queryForward(userID);
+	public Goldnotes queryForward(String recordID) {
+		return dao.queryForward(recordID);
 	}
 	
 }

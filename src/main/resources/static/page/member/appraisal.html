@@ -33,8 +33,8 @@
 								<select name="auditStatus" lay-verify="">
 									<option value="0" selected>所有</option>
 									<option value="1" >待审核</option>
-									<option value="2">审核通过</option>
-									<option value="3">不通过</option>
+									<option value="2">已通过</option>
+									<option value="3">已拒绝</option>
 								</select>
 							</div>
 						</div>
@@ -111,9 +111,9 @@
 								templet:function(list){
 									if(list.auditstatus){
 										if(list.auditstatus==1){
-											return '待审核';
+											return '<span style="color:red;">待审核</span>';
 										}else if(list.auditstatus==2){
-											return '已审核';
+											return '<span style="color:green;">已同意</span>';
 										}else if(list.auditstatus==3){
 											return '已拒绝';
 										}

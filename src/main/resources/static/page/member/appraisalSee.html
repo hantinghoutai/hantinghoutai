@@ -324,7 +324,6 @@
 					},
 					update:function(e){
 						var vm=this;
-						alert("userID:"+vm.user.userid+" stid:"+vm.user.stid+" adminOpinion:"+vm.user.adminopinion+" auditStatus:"+vm.user.auditstatus+" applyID:"+vm.user.applyid);
 						$.post("/c/ohl/user/updateJiandingSee",{"userID":vm.user.userid,"stid":vm.user.stid,"adminOpinion":vm.user.adminopinion,"auditStatus":vm.user.auditstatus,"applyID":vm.user.applyid},function(result){
 							if(result.code==200){
 								layer.open({title: '操作提示',content: '提交成功'}); 

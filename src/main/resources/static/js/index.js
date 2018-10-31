@@ -1,3 +1,15 @@
+var ADMINstr=window.sessionStorage.getItem("ADMIN");
+if(ADMINstr!=null){
+	var ADMIN=JSON.parse(ADMINstr);
+	$(".userName").text(ADMIN.name);
+	$(".signOut").on("click",function(){
+		$.post("/c/ohl/out",function(code){
+			window.sessionStorage.setItem("ADMIN",null);
+			window.location.href="page/login/login.html";
+		})
+	})
+
+
 var $, tab, skyconsWeather;
 layui.config({
 	base: "js/"
@@ -8,7 +20,7 @@ layui.config({
 	$ = layui.jquery;
 	tab = layui.bodyTab({
 		openTabNum: "50", //最大可打开窗口数量
-		url: "json/navs.json" //获取菜单json地址
+		url: "/c/ohl/leftNavs" //获取菜单json地址
 	});
 
 	//更换皮肤
@@ -250,7 +262,10 @@ layui.config({
 	})
 })
 
-//打开新窗口
-function addTab(_this) {
-	tab.tabAdd(_this);
+	//打开新窗口
+	function addTab(_this) {
+		tab.tabAdd(_this);
+	}
+}else{
+	window.location.href="page/login/login.html";
 }

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>充值查看详情</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+	</head>
+	<body>
+	
+		<br/>
+		<br/>
+		<form class="layui-form" id="form"> 
+			<div class="layui-form-item">
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label">会员</label>
+		  			<div class="layui-input-block">
+		  				<input v-model="user.username" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div class="layui-form-item">
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label">申请日期</label>
+		  			<div class="layui-input-block">
+		  				<input disabled="disabled" type="text" lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input" :value="user.recorddate">
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div class="layui-form-item">
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label" >操作记录</label>
+		  			<div class="layui-input-block">
+		  				<input  disabled="disabled" type="text" lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input" v-model="user.recordinandout">
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div class="layui-form-item">
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label">状态</label>
+		  			<div class="layui-input-block" id="shenpi" style="display:none;">
+		  				<input checked lay-filter="boolUpdate" type="radio" name="auditstatus" value="1" title="待审核"><input lay-filter="boolUpdate" type="radio" name="auditstatus" value="2" title="通过" ><input lay-filter="boolUpdate" type="radio" name="auditstatus" value="3" title="拒绝">
+	  				</div>
+	  				<div class="layui-input-block" id="tonyi"  style="display:none;">
+		  				<span style="color:green;line-height: 40px;">已同意</span>
+		  			</div>
+	  				<div class="layui-input-block" id="jujue"  style="display:none;">
+		  				<span style="color:red;line-height: 40px;">已拒绝</span>
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div class="layui-row">
+		  	<label class="layui-form-label"></label>
+			    <button style="display:none;" id="submit" type="button"  @click="update($event)" class="layui-btn layui-btn-normal" style="margin-left: 100px;">提交</button><button type="button"  class="layui-btn layui-btn-warm" onclick="window.history.go(-1);">返回</button>
+			 </div>
+		</form>
+		
+	</body>		
+	<script src="../../js/jquery-1.12.4.js"></script>
+	<script src="../../layui/layui.js"></script>
+	<script src="../../js/vue.js"></script>
+	<script>
+		layui.use('form' , function () {
+			var form=layui.form;
+			var auditstatus=null;
+			var vm=new Vue({
+				el:'#form',
+				data:{
+					user:{}
+				},
+				created:function(){
+					var path = window.location.search;//获取传递的参数
+					var recordID = path.substr(path.indexOf('=') + 1, path.length);	//传递过来的sid
+					this.getList(recordID);	
+				},
+				methods:{
+					getList:function(recordID){
+						var vm=this;
+						$.getJSON('/lfxapply/queryForward',{'recordID':recordID},function(result){   
+							vm.user=result;	//给VUE赋值
+							if(result.auditstatus==1){
+								$("#shenpi").show();
+								$("#submit").show();
+							}else if(result.auditstatus==2){
+								$("#tonyi").show();
+							}else if(result.auditstatus==3){
+								$("#jujue").show();
+							}
+							form.on('radio(boolUpdate)', function(data){
+								  var name=$(data.elem).attr("name");
+								  vm.user[name]=data.value;
+							});
+							form.render('radio');
+						})
+						$(".left10").css("margin-left","10px");
+						$(".left0").css("margin-left","0px");
+					},
+					update:function(e){
+						var vm=this;
+						$.post("/lfxapply/updateForward",{"recordID":vm.user.recordid,"auditStatus":vm.user.auditstatus},function(result){
+							if(result.code==200){
+								layer.open({title: '操作提示',content: '提交成功'}); 
+							}else{
+								layer.open({title: '操作提示',content: '提交失败'}); 
+							}
+						})
+					}
+				}
+			})
+			form.render();
+		});
+		
+	</script>
+</html>

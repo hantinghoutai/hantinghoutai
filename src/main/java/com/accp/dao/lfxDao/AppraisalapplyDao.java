@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.accp.pojo.Appraisalapply;
+import com.accp.pojo.Goldnotes;
 import com.accp.pojo.User;
 import com.accp.vo.lfx.*;
 
@@ -22,9 +23,9 @@ public List<User> queryShoppentry(@Param("userName")String userName,@Param("merc
 //查看入驻详情
 public User queryentryx(@Param("userid") Integer userid);
 //提现管理
-public List<PutforwardrecordVo> querytixian();
+public List<PutforwardrecordVo> querytixian(@Param("userName") String userName,@Param("auditStatus") String auditStatus);
 //查看提现管理详情
-public PutforwardrecordVo querytixianx(@Param("pfrID") Integer pfrID);
+public PutforwardrecordVo querytixianx(@Param("pfID")  String pfID);
 //查看帖子
 public List<PostVo> querypost(@Param("fName") String fName,@Param("title") String title);
 //查看帖子详情
@@ -45,13 +46,13 @@ public List<tizitousu> querytiezit();
 //删除帖子投诉
 public void removepostt(@Param("cid") Integer cid);
 //金币记录
-public List<GoldsRecord> querygolds();
+public List<GoldsRecord> querygolds(@Param("userName") String userName,@Param("userID") String userID);
 //查看金币详情
 public PutforwardrecordVo querygodlsx(@Param("userID") Integer userID);
 //修改提现
-public PutforwardrecordVo modifytixian(@Param("auditStatus") Integer  auditStatus,@Param("pfID") Integer  pfID);
+public int modifytixian(@Param("pfID")String pfID,@Param("auditStatus")String auditStatus,@Param("adminOpinion")String adminOpinion);
 //充值
-public List<RecordVo> queryRecharge(@Param("userName")String userName);
-public boolean updateForward(@Param("vo") ForwardVo vo,@Param("Time")String Time);
-public ForwardVo queryForward(@Param("userID")int userID);
+public List<RecordVo> queryRecharge(@Param("userName")String userName,@Param("userID")String userID,@Param("acquisitionMode")String acquisitionMode,@Param("auditStatus") String auditStatus);
+public boolean updateForward(@Param("recordID")String recordID,@Param("auditStatus")String auditStatus);
+public Goldnotes queryForward(@Param("recordID")String recordID);
 }

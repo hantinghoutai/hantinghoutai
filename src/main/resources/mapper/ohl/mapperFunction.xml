@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.ohl.IFunctionDao">
+
+	<resultMap id="qyeryFunctionList" type="com.accp.vo.ohl.VoFunctionList">
+		<result column="fName" property="title"/>
+		<result column="url" property="href"/>
+		<collection property="children" column="fID" select="qyeryFunction"/>
+	</resultMap>
+	
+	<select id="qyeryFunction" resultType="com.accp.vo.ohl.VoFunction">
+		SELECT fName AS title,url AS 'href' FROM `function`
+		WHERE `function`.`pid` = #{fID}
+	</select>
+	
+	<select id="leftNavs" resultMap="qyeryFunctionList">
+		SELECT * FROM `function`
+		WHERE function.`fID` IN (SELECT fID FROM `rolefunction` WHERE roleID=#{roleID})
+	</select>
+</mapper>
