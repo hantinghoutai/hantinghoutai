@@ -106,6 +106,19 @@ WHERE u.userID=#{userID}
 <update id="modifytixian">
 	UPDATE putforward SET auditStatus=#{auditStatus},adminOpinion=#{adminOpinion} WHERE pfID=#{pfID}
 </update>
+<update id="xiugaijinbi">
+	UPDATE `user`
+	SET userMoney=userMoney-(SELECT money FROM putforward WHERE pfID=#{pfID})
+	WHERE userID=(SELECT userID FROM putforward WHERE pfID=#{pfID})
+</update>
+<insert id="tixianjilu">
+	INSERT goldnotes(`userID`,`acquisitionMode`,`recordDate`,`recordDescribe`,`recordInAndOut`,`auditStatus`)
+	SELECT put.`userID`,8,now(),'金币提现',-put.money,2 from putforward  as put WHERE put.`pfID`=#{pfID}
+</insert>
+<insert id="zhanneixin">
+	INSERT news(`addRessee`,`content`,`sendingTime`,`readState`,`newsType`)
+	VALUES ((SELECT userID FROM putforward WHERE `pfID`=#{pfID}),#{text},NOW(),false,1)
+</insert>
 <select id="queryRecharge" resultType="com.accp.vo.lfx.RecordVo">
 		SELECT u.userID,g.`recordID`,u.`userName`,g.`acquisitionMode`,g.`recordDate`,
 		g.`recordDescribe`,g.`recordInAndOut`,g.`auditStatus` FROM Goldnotes AS g

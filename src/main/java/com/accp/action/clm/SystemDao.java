@@ -25,12 +25,12 @@ public class SystemDao {
 	
 	 
 	 @GetMapping("querySystemById")
-	 public System querySystemById(){
+	 public com.accp.pojo.System querySystemById(){
 		 return biz.querySystemById();
 	 }
 	 
 	 @PutMapping("updateSystem")
-	 public Map<String, String> updateSystem(@RequestBody System system) {
+	 public Map<String, String> updateSystem(@RequestBody com.accp.pojo.System system) {
 		 Map<String, String> map=new HashMap<String, String>();
 		 biz.updateSystem(system);
 		 map.put("code","200");

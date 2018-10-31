@@ -94,8 +94,8 @@
 				<label class="layui-form-label">推荐状态</label>
 				<div class="layui-input-block">
 					<div >
-						<input checked type="radio" name="tj" value="0" title="推荐">
-						<input type="radio" name="tj" value="1" title="不推荐">
+						<input  type="radio" name="tj" value="1" title="推荐">
+						<input type="radio" name="tj" value="0" title="不推荐">
 					</div>
 				</div>
 			</div>
@@ -134,8 +134,8 @@
 		<div class="layui-form-item">
 			<div class="layui-col-md5">
 			<label class="layui-form-label"></label>
-					<button type="button" id="hui" class="layui-btn layui-btn-normal">保存</button>
-					<button type="button"  class="layui-btn layui-btn-warm" onclick="window.history.go(-1);">返回</button>
+					<input type="button" id="hui" class="layui-btn layui-btn-normal" value="保存">
+					<input type="button"  class="layui-btn layui-btn-warm" onclick="window.history.go(-1);" value="返回">
 			</div>
 		</div>
 	</form>
@@ -145,7 +145,7 @@
 	<script>
 	layui.use('form', function() {
 		var form=layui.form;
-		form.render('radio');})
+		
 		var id = window.sessionStorage.getItem("names");
 		init();
 
@@ -170,13 +170,42 @@
 					$("[name=adminOpinion]").text(data.adminOpinion);
 					$("[name=stName]").val(data.stName);
 					$("[name=userRegistrationTime]").val(data.userRegistrationTime);
+					if(data.recommendBool==1){
+						$("input[name=tj]:eq(0)").attr("checked","checked");
+						form.render('radio');
+					}else if(data.recommendBool==0){
+						$("input[name=tj]:eq(1)").attr("checked","checked");
+						form.render('radio');
+					}
+
+					if(data.businessState==1){
+						$("input[name=yy]:eq(0)").attr("checked","checked");
+						form.render('radio');
+					}else if(data.businessState==2){
+						$("input[name=yy]:eq(1)").attr("checked","checked");
+						form.render('radio');
+					}
+					
+					if(data.auditStatus==1){
+						$("input[name=sh]:eq(0)").attr("checked","checked");
+						form.render('radio');
+					}else if(data.auditStatus==2){
+						$("input[name=sh]:eq(1)").attr("checked","checked");
+						form.render('radio');
+					}else if(data.auditStatus==3){
+						$("input[name=sh]:eq(2)").attr("checked","checked");
+						form.render('radio');
+					}
 
 				}
 			});
 		}
 		$("#hui").click(function(){
-			location.href="class_of_service.html"
+			var zt = $('input[name="tj"]:checked').val();
+			alert(zt)
 		})
+	})
+
 	</script>
 
 </html>

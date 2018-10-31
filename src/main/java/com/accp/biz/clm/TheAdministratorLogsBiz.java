@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.accp.dao.clm.TheAdministratorLogs;
 import com.accp.pojo.Administratorlog;
 import com.accp.vo.clm.AdminVo;
+import com.accp.vo.clm.TheAdminVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -21,8 +22,8 @@ public class TheAdministratorLogsBiz {
 	@Autowired
 	private TheAdministratorLogs dao;
 	
-	public PageInfo<AdminVo> selectInfo(Integer pageNum,Integer pageSize){
+	public PageInfo<TheAdminVo> selectInfo(Integer pageNum,Integer pageSize){
 		PageHelper.startPage(pageNum, pageSize);
-		return new PageInfo<AdminVo>(dao.selectInfo());
+		return new PageInfo<TheAdminVo>(dao.selectInfo());
 	}
 }

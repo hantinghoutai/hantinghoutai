@@ -60,6 +60,18 @@ public class VoOrders {
 	    private String servicetitle;
 	    
 	    private String username;
+	    
+	    private String shopname;
+	    
+	    
+	    
+		public String getShopname() {
+			return shopname;
+		}
+
+		public void setShopname(String shopname) {
+			this.shopname = shopname;
+		}
 
 		public String getOrderid() {
 			return orderid;

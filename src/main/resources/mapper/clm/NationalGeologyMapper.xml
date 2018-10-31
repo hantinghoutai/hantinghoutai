@@ -25,6 +25,7 @@
 			delete from sharea where pid=#{temp};
 			delete from sharea where areaID=#{temp};
 		</foreach>
+		
 	</delete>
 	
 	<update id="updateSharea">

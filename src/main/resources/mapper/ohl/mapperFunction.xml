@@ -14,11 +14,11 @@
 	
 	<select id="qyeryFunction" resultType="com.accp.vo.ohl.VoFunction">
 		SELECT fName AS title,url AS 'href' FROM `function`
-		WHERE `function`.`pid` = #{fID}
+		WHERE `function`.`pid` = #{fID} AND display=true;
 	</select>
 	
 	<select id="leftNavs" resultMap="qyeryFunctionList">
 		SELECT * FROM `function`
-		WHERE function.`fID` IN (SELECT fID FROM `rolefunction` WHERE roleID=#{roleID})
+		WHERE function.`fID` IN (SELECT fID FROM `rolefunction` WHERE roleID=#{roleID}) AND display=true;
 	</select>
 </mapper>

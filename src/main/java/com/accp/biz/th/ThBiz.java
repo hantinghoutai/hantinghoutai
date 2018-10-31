@@ -58,17 +58,59 @@ public class ThBiz {
 	};
 
 	//物流
-	public PageInfo<Logistics> SelectLogisticsAndorderID(String userName,String orderID,String orderStatus,String orderType,
+	public PageInfo<ServiceUserVo> SelectLogisticsAndorderID(String userName,String orderID,String auditStatus,String delivery,
 			Integer pageNum, Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
-		List<Logistics> data = dao.SelectLogisticsAndorderID(userName, orderID, orderStatus, orderType);
-		PageInfo<Logistics> pageInfo = new PageInfo<Logistics>(data);
+		List<ServiceUserVo> data = dao.SelectLogisticsAndorderID(userName, orderID, auditStatus, delivery);
+		PageInfo<ServiceUserVo> pageInfo = new PageInfo<ServiceUserVo>(data);
 		return pageInfo;
 	};
+	
+	//详情
+	public ServiceUserVo QueryLogisticsAndorderID(String orderid){
+		return dao.QueryLogisticsAndorderID(orderid);
+	}
 	
 	// 修改物流详情
 	public int updatewlqx(int auditstatus, int logisticsid, String logisticscompany, String logisticssinglenumber) {
 		return dao.updatewlqx(logisticsid, auditstatus, logisticscompany, logisticssinglenumber);
 	}
 
+	/**
+	 * 修改物流状态
+	 * @param orderID
+	 * @param auditOpinion
+	 * @param integer
+	 * @return
+	 */
+	public int wuliuzhuangtai(String orderID,String auditOpinion,Integer auditStatus) {
+		return dao.wuliuzhuangtai(orderID, auditOpinion, auditStatus);
+	};
+	/**
+	 * 物流订单拒绝后 将钱退还给用户
+	 * @param integer
+	 * @param money
+	 * @return
+	 */
+	public int yue(Integer userID,float money) {
+		return dao.yue(userID, money);
+	};
+	/**
+	 * 将余额退还记录记录
+	 * @param userID
+	 * @param money
+	 * @return
+	 */
+	public int jilu(Integer userID,float money) {
+		return dao.jilu(userID, money);
+	};
+	/**
+	 * 审批物流订单后 发送站内信
+	 * @param userID
+	 * @param text
+	 * @return
+	 */
+	public int news(Integer userID,String text) {
+		return dao.news(userID, text);
+	}
 }

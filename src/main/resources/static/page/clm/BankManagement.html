@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>托管设置</title>
-		<link rel="stylesheet" href="../../ss/bootstrap.css" />
+		<link rel="stylesheet" href="../../css/bootstrap.css" />
 		<link rel="stylesheet" href="../../layui/css/layui.css" />
 		<style type="text/css">
 			.tables tr th{
@@ -21,8 +21,8 @@
 				<tr><td colspan="5"><input type="button" class="btn btn-danger" value="添加银行" @click="add()">&nbsp;&nbsp;<input type="button" class="btn btn-danger" value="更新" @click="loads()"></td></tr>
 		</table>
 	</body>
-	<script type="text/javascript" src="../../js/jquery-1.12.4.js" ></script>
-	<script type="text/javascript" src="../../js/vue.js" ></script>
+	<script type="text/javascript" src="/js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="/js/vue.js" ></script>
 	<script src="../../layui/layui.js"></script>
 	<script>
 		var vm=new Vue({
@@ -38,7 +38,7 @@
 					})
 				},
 				add:function(){
-					location.href="page/clm/NewBank.html";
+					location.href="NewBank.html";
 				},
 				loads:function(){
 					vm.BankLoad();

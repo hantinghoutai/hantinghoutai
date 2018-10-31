@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.accp.biz.qtm.RefundBiz;
 import com.accp.vo.qtm.Refund;
+import com.github.pagehelper.PageInfo;
 
 @RestController
 @RequestMapping("/tuikuan")
@@ -22,10 +24,9 @@ public class RefundAction {
 			@Autowired
 			private RefundBiz biz;
 			
-			@RequestMapping(value = "/list",method = RequestMethod.GET)
-			@ResponseBody
-			public List<Refund> t4() {
-				return biz.select();
+			@GetMapping("select/list/{a}/{b}")
+			public PageInfo<Refund> t4(@PathVariable int a,@PathVariable int b) {
+				return biz.select(a, b);
 			}
 			@GetMapping("select/{refundID}")
 			public int t5(@PathVariable int refundID) {
@@ -47,4 +48,30 @@ public class RefundAction {
 			public int t9(@PathVariable String id) {
 				return biz.datele(id);
 			}
+			@GetMapping("select/userid/{userName}")
+			public int t8(@PathVariable String userName) {
+				return biz.userid(userName);
+			}
+			@GetMapping("select/sid/{orderID}")
+			public int t9(@PathVariable int orderID) {
+				return biz.sid(orderID);
+			}
+			@PutMapping("update/yonghu/{userid}/{userMoney}")
+			public int t10(@PathVariable int userid,@PathVariable int userMoney) {
+				return biz.uupdate(userid, userMoney);
+			}
+			@PutMapping("update/shanjia/{sid}/{userMoney}")
+			public int t11(@PathVariable int sid,@PathVariable int userMoney) {
+				return biz.supdate(sid, userMoney);
+			}
+			@PostMapping("add/goldnotes/{userid}/{userMoney}")
+			public int t12(@PathVariable int userid,@PathVariable float userMoney) {
+				
+				return biz.jiajilu(userid, userMoney);
+			}
+			@PostMapping("add/goldnotess/{sid}/{userMoney}")
+			public int t13(@PathVariable int sid,@PathVariable float userMoney) {
+				float qian=-userMoney;
+				return biz.jiajilu(sid, qian);
+			} 
 }

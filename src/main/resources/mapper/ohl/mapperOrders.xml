@@ -21,4 +21,15 @@
 		ORDER BY orders.orderTime DESC
 	</select>
 	
+	<select id="querySee" resultType="com.accp.vo.ohl.VoOrders">
+		SELECT orders.*,`user`.`userName`,user.`shopName` FROM orders
+		LEFT JOIN `user` ON `user`.`userID`=orders.`userID`
+		WHERE orders.`orderID`=#{orderID}
+	</select>
+	
+	<update id="updateSee">
+		UPDATE orders
+		SET orderStatus=#{orderStatus},provideServicesTime=NOW(),remarks=#{remarks}
+		WHERE orderID=#{orderID}
+	</update>
 </mapper>

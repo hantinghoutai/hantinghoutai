@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>广告位排版</title>
-		<link rel="stylesheet" href="../../css/bootstrap.min.css" />
-		<link rel="stylesheet" href="../../layui/css/layui.css" />
+		<link rel="stylesheet" href="/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/layui/css/layui.css" />
 		<style type="text/css">
 			.tables tr th{
 				text-align: center;
@@ -27,10 +27,10 @@
 		</div>
 		
 	</body>
-	<script type="text/javascript" src="../../js/jquery-1.12.4.js" ></script>
-	<script type="text/javascript" src="../../js/vue.js" ></script>
-	<script type="text/javascript" src="../../js/bootstrap.js" ></script>
-	<script src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="/js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="/js/vue.js" ></script>
+	<script type="text/javascript" src="/js/bootstrap.js" ></script>
+	<script src="/layui/layui.js"></script>
 	<script>
 	LoadViewCountry(0);
 	function LoadViewCountry(id){
@@ -77,17 +77,17 @@
 	})
 	
 	$("[name=tianjia]").click(function(){
-		location.href="page/clm/NewCountry.html";
+		location.href="NewCountry.html";
 	})
 	
 	function loads(id){
-		location.href="page/clm/UpdateNewCountry.html";
+		location.href="UpdateNewCountry.html";
 		window.sessionStorage.getItem("NewCountry");
 	}
 	
 	//查看城市
 	function View(id){
-		location.href="page/clm/ViewProvince.html";
+		location.href="ViewProvince.html";
 		window.sessionStorage.setItem("NewCountry",id);
 	}
 	

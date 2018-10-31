@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../css/bootstrap.css" />
+		<link rel="stylesheet" href="../../layui/css/layui.css" />
+		<style type="text/css">
+			.tables tr th{
+				text-align: center;
+			}	
+		</style>
+	</head>
+	<body>
+<div id="baoBiao">
+<ul class="layui-nav layui-bg-blue">
+  <li class="layui-nav-item"><a href="BaoBiaoJiaoYiYear.html">交易额统计</a></li>
+  <li class="layui-nav-item layui-this"><a href="BaoBiaoChongZhiYear.html">充值统计</a></li>
+  <li class="layui-nav-item"><a href="BaoBiaoTiXianYear.html">提现统计</a></li>
+</ul>
+<div class="layui-container" style="margin-left: 20px;">
+	<form class="layui-form" action="" style="width: 250px;margin-top: 20px;">
+	<div class="layui-row">
+	<div class="layui-col-md9">
+		<select name="city">
+		<option value="null">选择制定年份的月统计</option>
+  		<option v-for="(temp,index) in year" :value="temp.name" v-text="temp.name"></option>
+	</select> 
+		
+	</div>
+	<div class="layui-col-md3">
+		<input class="layui-btn" value="立即提交" style="width:100px;" @click="years()">
+	</div>
+
+
+</div>
+
+</form>
+	
+</div>
+<div id="main" style="width: 600px;height:400px;margin: auto;"></div>
+</div>
+	</body>
+	<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="../../js/vue.js" ></script>
+	<script type="text/javascript" src="../../js/bootstrap.js" ></script>
+	<script type="text/javascript" src="../../layui/layui.js" ></script>
+	<script type="text/javascript" src="../../js/echarts.min.js"></script>
+	<script>
+		
+		
+		//注意：导航 依赖 element 模块，否则无法进行功能性操作
+		var vm=new Vue({
+			el:"#baoBiao",
+			data:{
+				year:{}
+			},
+			methods:{
+				BaoBiaoLoad:function(){
+					$.getJSON("/clm/api/selectBaoBiaoYear",function(data){
+						console.info(data)
+						var json=[];
+						var jsons=[];
+						$.each(data,function(i,obj){
+							jsons.push(obj.data);
+							json.push(obj.name+"年");
+						})
+						vm.year=data;
+						options(json,jsons);
+					})
+				},
+				years:function(){
+					if($("[name=city]").attr("selected","selected").val()=="null"){
+						layer.msg('请选择年份!', {icon: 5});
+					}else{
+						window.sessionStorage.setItem("TiXianYear",$("[name=city]").attr("selected","selected").val());
+						location.href="BaoBiaoTiXianMonth.html";
+					}
+				}
+			},
+			created:function(){
+				var vm=this;
+				vm.BaoBiaoLoad();
+			}
+		})
+		
+		
+		 
+function options(data1,json){
+	 var myChart = echarts.init(document.getElementById('main'));
+	 var option = {
+			    title: {
+			        text: '按年统计总金额',
+			        subtext: '数据来自本地服务'
+			    },
+			    tooltip: {
+			        trigger: 'axis',
+			        axisPointer: {
+			            type: 'shadow'
+			        }
+			    },
+			    legend: {
+			    	data1
+			    },
+			    grid: {
+			        left: '3%',
+			        right: '4%',
+			        bottom: '3%',
+			        containLabel: true
+			    },
+			    xAxis: {
+			        type: 'value',
+			        boundaryGap: [0, 0.01]
+			    },
+			    yAxis: {
+			        type: 'category',
+			        data:data1
+			    },
+			    series:[
+			        {
+			            type: "bar",
+			            data:json
+			        }
+			    ]
+			};
+			  myChart.setOption(option);
+}
+
+  layui.use('form', function(){
+  var element = layui.element;
+  
+  //…
+});
+	
+	</script>
+</html>

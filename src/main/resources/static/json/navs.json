@@ -23,7 +23,7 @@
 		"children": [
 			{
 				"title": "物流订单详情",
-				"href": "",
+				"href": "page/member/Wlddxq.html",
 				"spread": false
 			}, {
 				"title": "物流区域管理",
@@ -60,8 +60,8 @@
 				"href": "page/qtm/Refund.html",
 				"spread": false
 			}, {
-				"title": "服务投诉",
-				"href": "",
+				"title": "订单管理",
+				"href": "page/member/orders.html",
 				"spread": false
 			}
 		]
@@ -99,7 +99,7 @@
 				"spread": false
 			}, {
 				"title": "金币记录",
-				"href": "/lfxapply/querygolds?pageNum=1&pageSize=10",
+				"href": "page/member/goldCoin.html",
 				"spread": false
 			}, {
 				"title": "积分记录",
@@ -107,11 +107,11 @@
 				"spread": false
 			}, {
 				"title": "充值记录",
-				"href": "/lfxapply/queryRecharge?p=1&s=10&userName=zhi",
+				"href": "page/member/recharge.html",
 				"spread": false
 			}, {
 				"title": "提现记录",
-				"href": "/lfxapply/querytixian?p=1&s=10",
+				"href": "page/member/putForward.html",
 				"spread": false
 			}, {
 				"title": "保证金详情",

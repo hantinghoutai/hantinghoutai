@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accp.dao.clm.IBaoBiao">
+	<select id="selectBaoBiaoInfo" resultType="com.accp.vo.clm.BaoBiaoVo">
+		SELECT SUM(totalPrice) data,YEAR(scheduledStartTime) name FROM `orders` WHERE `orderStatus`=6 GROUP BY YEAR(`scheduledStartTime`)
+	</select>
+	<select id="selectBaoBiaoInfoMonth" resultType="com.accp.vo.clm.BaoBiaoVo">
+		SELECT SUM(totalPrice) `data`,MONTH(scheduledStartTime) `name` FROM `orders` WHERE `orderStatus`=6 AND YEAR(`scheduledStartTime`)=#{year} GROUP BY MONTH(scheduledStartTime)
+	</select>
+	<select id="selectBaoBiaoYear" resultType="com.accp.vo.clm.BaoBiaoVo">
+		SELECT SUM(`recordInAndOut`*-1) `data`, YEAR(`recordDate`) `name` FROM `goldnotes` WHERE `acquisitionMode`=8 AND `auditStatus`=2 GROUP BY YEAR(recordDate)
+	</select>
+	<select id="selectBaoBiaoMonth" resultType="com.accp.vo.clm.BaoBiaoVo">
+		select sum(`recordInAndOut`*-1) `data`, month(`recordDate`) `name` from `goldnotes` where `acquisitionMode`=8 and `auditStatus`=2 and year(`recordDate`)=#{year} group by month(recordDate)
+	</select>
+	<select id="selectChongBaoBiaoYear" resultType="com.accp.vo.clm.BaoBiaoVo">
+		select SUM(`recordInAndOut`) `data`,year(`recordDate`) `name` from `goldnotes` where `acquisitionMode`=5 and `auditStatus`=2 GROUP BY YEAR(`recordDate`)
+	</select>
+	<select id="selectChongBaoBiaoYear1" resultType="com.accp.vo.clm.BaoBiaoVo">
+		select SUM(`recordInAndOut`) `data`,year(`recordDate`) `name` from `goldnotes` where `acquisitionMode`=6 and `auditStatus`=2 GROUP BY YEAR(`recordDate`)
+	</select>
+	
+	<select id="selectChongXianShangBaoBiaoMonth" resultType="com.accp.vo.clm.BaoBiaoVo">
+		SELECT SUM(`recordInAndOut`) `data`,MONTH(`recordDate`) `name` FROM `goldnotes` WHERE `acquisitionMode`=5 AND  YEAR(`recordDate`)=#{year}  and `auditStatus`=2 GROUP BY month(`recordDate`)
+	</select>
+	
+	<select id="selectChongXianXiaBaoBiaoMonth" resultType="com.accp.vo.clm.BaoBiaoVo">
+		SELECT SUM(`recordInAndOut`) `data`,MONTH(`recordDate`) `name` FROM `goldnotes` WHERE `acquisitionMode`=6 AND  YEAR(`recordDate`)=#{year}  and `auditStatus`=2 GROUP BY month(`recordDate`)
+	</select>
+	
+	<select id="ChongZhis" resultType="Double">
+		SELECT  sum(`recordInAndOut`) `data`  FROM `goldnotes` WHERE  `acquisitionMode`=#{0} and `auditStatus`=2  GROUP BY year(`recordDate`)  order by year(`recordDate`) desc
+	</select>
+	
+	<select id="selectChongBaoBiaoYearInfo" resultType="int">
+		select year(`recordDate`) from `goldnotes` where `acquisitionMode` in(5,6) and `auditStatus`=2 group by year(`recordDate`)  order by year(`recordDate`) desc
+	</select>
+</mapper>

@@ -10,6 +10,7 @@ import com.accp.biz.clm.TheAdministratorLogsBiz;
 import com.accp.dao.clm.TheAdministratorLogs;
 import com.accp.pojo.Administratorlog;
 import com.accp.vo.clm.AdminVo;
+import com.accp.vo.clm.TheAdminVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -23,7 +24,7 @@ public class TheAdministratorLogsAction {
 	
 	
 	@GetMapping("/selectInfoAdmin/{pageNum}/{pageSize}")
-	public PageInfo<AdminVo> selectInfo(@PathVariable Integer pageNum,@PathVariable Integer pageSize){
+	public PageInfo<TheAdminVo> selectInfo(@PathVariable Integer pageNum,@PathVariable Integer pageSize){
 		return biz.selectInfo(pageNum, pageSize);
 	}
 

@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<link rel="stylesheet" href="../../css/bootstrap.min.css" />
-		<link rel="stylesheet" href="../../layui/css/layui.css" />
+		<link rel="stylesheet" href="/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/layui/css/layui.css" />
 		<style type="text/css">
 			.tables tr th{
 				text-align: center;
@@ -21,9 +21,9 @@
 				<tr><td colspan="5"><input type="button" class="btn btn-danger" value="增加" @click="add()">&nbsp;&nbsp;<input type="button" class="btn btn-danger" value="更新" @click="loads()"></td></tr>
 		</table>
 	</body>
-	<script type="text/javascript" src="../../js/jquery-1.12.4.js" ></script>
-	<script type="text/javascript" src="../../js/vue.js" ></script>
-	<script src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="/js/jquery-1.12.4.js" ></script>
+	<script type="text/javascript" src="/js/vue.js" ></script>
+	<script src="/layui/layui.js"></script>
 		<script>
 			var vm=new Vue({
 				el:"#bodys",
@@ -39,10 +39,10 @@
 					},
 					update:function(id){
 						window.sessionStorage.setItem("ProId",id);
-						location.href="page/clm/UpdateManagementOfProfessionalLearningMaterials.html";
+						location.href="UpdateManagementOfProfessionalLearningMaterials.html";
 					},
 					add:function(){
-						location.href="page/clm/ManagementOfProfessionalLearningMaterials.html";
+						location.href="ManagementOfProfessionalLearningMaterials.html";
 					},
 					loads:function(){
 						vm.load();

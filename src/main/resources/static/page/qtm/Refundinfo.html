@@ -81,7 +81,7 @@
 				<input type="text" readonly="readonly" name="tuijine" required lay-verify="required" class="layui-input">
 			</div>
 		</div>
-			<div class="layui-col-md5">
+			<div class="layui-col-md5" name="shiji">
 			<label class="layui-form-label">实际退款</label>
 			<div class="layui-input-block">
 				<input type="text"  name="shi" required lay-verify="required" class="layui-input">
@@ -89,7 +89,7 @@
 		</div>
 	</div>
 	<div class="layui-form-item">
-		<div class="layui-col-md5">
+		<div class="layui-col-md5" name="shanbeizhu">
 			<label class="layui-form-label">审批备注</label>
 			<div class="layui-input-block">
 				<textarea name="adminOpinion" placeholder="如果拒绝请输入原因" class="layui-textarea"></textarea>
@@ -97,7 +97,7 @@
 		</div>
 		</div>
 	<div class="layui-form-item">
-		<div class="layui-col-md5">
+		<div class="layui-col-md5" name="guanli">
 			<label class="layui-form-label">管理员操作</label>
 			<div>
 				<input type="radio" name="sex" value="2" title="同意退款" checked>
@@ -110,7 +110,7 @@
 		<div class=" layui-col-md5">
 			<label class="layui-form-label"></label>
 				<div >
-					<button type="button" id="hui" class="layui-btn layui-btn-normal">保存</button>
+					<button type="button" id="hui" class="layui-btn layui-btn-normal" name="b">保存</button>
 					<button type="button"  class="layui-btn layui-btn-warm" onclick="window.history.go(-1);">返回</button>
 				</div>
 		</div>
@@ -122,14 +122,100 @@
 <script>
 layui.use('form', function() {})
 var refundID = window.sessionStorage.getItem("refundID");
+var userName=window.sessionStorage.getItem("userName");
+var orderID=window.sessionStorage.getItem("orderID");
+var sid;
+var userid;
+
+function userT(){
+	$.ajax({
+		type: "get",
+		url: "/tuikuan/select/userid/"+userName,
+		dataType: "json",
+		success: function(data) {
+			userid=data;
+			
+			}
+		
+	});
+}
+
+function shanjiaT(){
+	$.ajax({
+		type: "get",
+		url: "/tuikuan/select/sid/"+orderID,
+		dataType: "json",
+		success: function(date) {
+			sid=date;
+			}
+		
+	});
+}
+userT();
+shanjiaT();
+
+
+
+function shan(userMoney){
+	$.ajax({
+		type: "put",
+		url: "/tuikuan/update/shanjia/"+sid+"/"+userMoney,
+		dataType: "json",
+		success: function(data) {
+			
+
+		}
+	});
+}
+function yong(userMoney){
+	$.ajax({
+		type: "put",
+		url: "/tuikuan/update/yonghu/"+userid+"/"+userMoney,
+		dataType: "json",
+		success: function(data) {
+			
+
+		}
+	});
+}
+
+function jiay(userMoney){
+	$.ajax({
+		type: "post",
+		url: "/tuikuan/add/goldnotes/"+userid+"/"+userMoney,
+		dataType: "json",
+		success: function(data) {
+	
+
+		}
+	});
+}
+function jias(userMoney){
+	$.ajax({
+		type: "post",
+		url: "/tuikuan/add/goldnotess/"+sid+"/"+userMoney,
+		dataType: "json",
+		success: function(data) {
+		
+
+		}
+	});
+}
+
+
+
+
+
 	$.ajax({
 		type: "get",
 		url: "/tuikuan/select/" + refundID,
 		dataType: "json",
 		success: function(data) {
 			if(data==1){
-				$("#guan").hide();
-				$("[name=shi]").hide();
+				$("[name=shanbeizhu]").hide();
+				$("[name=shiji]").hide();
+				$("[name=guanli]").hide();
+				$("[name=b]").hide();
 				tianjian1();
 			}else if(data==2){
 				tianjian2();
@@ -204,7 +290,8 @@ var refundID = window.sessionStorage.getItem("refundID");
 		});
 	}
 	$("#hui").click(function(){
-		var adminStatus = $('input[name="sex"]:checked').val();
+		
+		 var adminStatus = $('input[name="sex"]:checked').val();
 		var adminRemarks=$("[name=adminOpinion]").val();
 		var ActualRefundMoney=$("[name=shi]").val();
 		if(adminStatus==3){
@@ -235,15 +322,27 @@ var refundID = window.sessionStorage.getItem("refundID");
 					success: function(data) {
 						if(data>0){
 							layer.open({title: '操作提示',content: '保存成功！'}); 
-							location.href="Refund.html"
+							 setTimeout(function(){
+									var userMoney=$("[name=shi]").val();
+									
+									alert(userMoney);
+									shan(userMoney);
+									yong(userMoney);
+									jiay(parseFloat(userMoney));
+									jias(parseFloat(userMoney));
+								},1000) 
+							/*  location.href="Refund.html"  */
 						
 						}
 					}
 				});
 			}
-		}
+		}  
 		
 	})
+	
+
+		
 		
 
 

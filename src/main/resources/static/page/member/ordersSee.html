@@ -23,53 +23,98 @@
 		  				<input v-model="user.username" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
 		  			</div>
 		  		</div>
-		  		<div class=" layui-col-md5">
-		  			<label class="layui-form-label" >联系电话</label>
-		  			<div class="layui-input-block">
-		  				<input v-model="user.merchantphone" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
-		  			</div>
-		  		</div>
 		  	</div>
-		  	
 		  	<div class="layui-form-item">
 		  		<div class=" layui-col-md5">
-		  			<label class="layui-form-label" >免费体验</label>
+		  			<label class="layui-form-label">商品名称</label>
 		  			<div class="layui-input-block">
-		  				<input v-model="user.experiencestatus==true?'开启':'关闭'" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
+		  				<input v-model="user.servicetitle" disabled="disabled" type="text"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
 		  			</div>
 		  		</div>
-		  		<div class="layui-col-md5">
-		  			<label class="layui-form-label" >免费月数</label>
-		  			<div class="layui-input-block layui-col-md2">
-		  				<select name="experience" lay-verify="" lay-filter="experience">
-		  					<option value="1" >1</option>
-		  					<option value="2">2</option>
-		  					<option value="3">3</option>
-		  					<option value="4">4</option>
-		  					<option value="5">5</option>
-		  					<option value="6">6</option>
-		  					<option value="7">7</option>
-		  					<option value="8">8</option>
-		  					<option value="9">9</option>
-		  					<option value="10">10</option>
-		  					<option value="11">11</option>
-		  					<option value="12">12</option>
-		  				</select>
-					</div>
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label" >店铺名称</label>
+		  			<div class="layui-input-block">
+		  				<input v-model="user.shopname" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
+		  			</div>
 		  		</div>
 		  	</div>
+		  	<div class="layui-form-item">
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label">下单时间</label>
+		  			<div class="layui-input-block">
+		  				<input v-model="user.ordertime" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
+		  			</div>
+		  		</div>
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label" >付款时间</label>
+		  			<div class="layui-input-block">
+		  				<input v-model="user.paymenttime" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div class="layui-form-item">
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label">订单单价</label>
+		  			<div class="layui-input-block">
+		  				<input v-model="user.smallplan" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
+		  			</div>
+		  		</div>
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label" >订单份数</label>
+		  			<div class="layui-input-block">
+		  				<input v-model="user.number" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div class="layui-form-item">
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label">订单总价</label>
+		  			<div class="layui-input-block">
+		  				<input v-model="user.username" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
+		  			</div>
+		  		</div>
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label" >订单积分</label>
+		  			<div class="layui-input-block">
+		  				<input v-model="user.integral" disabled="disabled" type="text" name="username"   lay-verify="" placeholder="待完善" autocomplete="off" class="layui-input">
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div class="layui-form-item">
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label">评论状态</label>
+		  			<div class="layui-input-block">
+		  				<span style="line-height: 40px;" id="commentstatus"></span>
+		  			</div>
+		  		</div>
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label" >退款状态</label>
+		  			<div class="layui-input-block">
+		  				<span style="line-height: 40px;" id="refundstatus"></span>
+		  			</div>
+		  		</div>
+		  		</div>
 		  	<div class="layui-form-item">
 		  		<div class=" layui-col-md5">
 		  			<label class="layui-form-label" >审核备注</label>
 		  			<div class="layui-input-block">
-		  			<textarea id="reason" v-model="user.reason" required lay-verify="required" placeholder="请输入" class="layui-textarea">
+		  			<textarea disabled="disabled" id="reason" v-model="user.remarks" required lay-verify="required" placeholder="请输入" class="layui-textarea">
 		  			
 		  			</textarea>
 		  			</div>
 		  		</div>
 		  	</div>
+		  	<div class="layui-form-item">
+		  		<div class=" layui-col-md5">
+		  			<label class="layui-form-label">订单状态</label>
+		  			<div class="layui-input-block" id="auditstatus">
+		  				<span style="line-height: 40px;" id="autext"></span>
+	  				</div>
+		  		</div>
+		  	</div>
 		  <div class="layui-row">
-		    <button id="submit" type="button"  @click="update($event)" class="layui-btn layui-btn-normal" style="margin-left: 100px;">提交</button><button type="button"  class="layui-btn layui-btn-warm" onclick="window.history.go(-1);">返回</button>
+		  <label class="layui-form-label"></label>
+		   	<button type="button"  class="layui-btn layui-btn-warm" onclick="window.history.go(-1);">返回</button>
 		  </div>
 		</form>
 		
@@ -88,42 +133,48 @@
 				},
 				created:function(){
 					var path = window.location.search;//获取传递的参数
-					var userID = path.substr(path.indexOf('=') + 1, path.length);	//传递过来的sid
-					this.getList(userID);	
+					var orderID = path.substr(path.indexOf('=') + 1, path.length);	//传递过来的sid
+					this.getList(orderID);	
 				},
 				methods:{
-					getList:function(userID){
+					getList:function(orderID){
 						var vm=this;
-						$.getJSON('/c/ohl/user/queryRuzhuSee',{'userID':userID},function(result){   
-							vm.user=result;	//给VUE赋值
-							auditstatus=result.auditstatus;
-							if(result.auditstatus==1){
-								$("[name=auditstatus]:eq(0)").attr('checked','checked');
-							}else{
-								$("#selfintroduction").attr("readonly","readonly");//禁用管理员审核备注
-								$("#auditstatus").remove();
+						$.getJSON('/c/ohl/orders/querySee',{'orderID':orderID},function(result){   
+							vm.user=result;		//给VUE赋值
+							//订单状态
+							switch(result.orderstatus){
+								//1待付款2待接单3待提供服务4已提供服务6服务完成6服务取消7未接单8已退款
+								case 1:$("#autext").html('待付款');break;
+								case 2:$("#autext").html('待接单');break;
+								case 3:$("#autext").html('待提供服务');break;
+								case 4:$("#autext").html('已提供服务');break;
+								case 5:$("#autext").html('服务完成');break;
+								case 6:$("#autext").html('服务取消');break;
+								case 7:$("#autext").html('未接单');break;
+								case 8:$("#autext").html('已退款');break;
 							}
-							form.on('radio(boolUpdate)', function(data){
-								  var name=$(data.elem).attr("name");
-								  vm.user[name]=data.value;
-							});
+							//评论状态
+							switch(result.commentstatus){
+							//1待评价2用户已评3双方已评
+							case 1:$("#commentstatus").html('待评价');break;
+							case 2:$("#commentstatus").html('用户已评');break;
+							case 3:$("#commentstatus").html('双方已评');break;
+							default:$("#commentstatus").html('未评价');break;
+							}
+							//退款状态
+							switch(result.refundstatus){
+							//1退款申请中2不同意3申请管理员介入4管理员拒绝5退款完成6退款取消
+							case 1:$("#refundstatus").html('退款申请中');break;
+							case 2:$("#refundstatus").html('不同意');break;
+							case 3:$("#refundstatus").html('申请管理员介入');break;
+							case 1:$("#refundstatus").html('管理员拒绝');break;
+							case 2:$("#refundstatus").html('退款完成');break;
+							case 3:$("#refundstatus").html('退款取消');break;
+							default:$("#refundstatus").html('未申请');break;
+							}
 						})
 						$(".left10").css("margin-left","10px");
 						$(".left0").css("margin-left","0px");
-					},
-					update:function(e){
-						var vm=this;
-						if(auditstatus==1){
-							$.post("/c/ohl/user/updateShangjiaSee",{"auditStatus":vm.user.auditstatus,"merchantType":vm.user.merchanttype,"reason":vm.user.reason,"userID":vm.user.userid},function(result){
-								if(result.code==200){
-									layer.open({title: '操作提示',content: '提交成功'}); 
-								}else{
-									layer.open({title: '操作提示',content: '提交失败'}); 
-								}
-							})
-						}else{
-							layer.open({title: '操作提示',content: '该请求已受理'});
-						}
 					}
 				}
 			})

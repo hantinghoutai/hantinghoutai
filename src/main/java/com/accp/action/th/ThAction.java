@@ -9,12 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.accp.biz.th.ThBiz;
 import com.accp.pojo.Logistics;
 import com.accp.pojo.User;
+import com.accp.vo.ohl.VoUserJianding;
 import com.accp.vo.th.MerchantCollectionUserVo;
 import com.accp.vo.th.PostCollectionPostCommentVo;
 import com.accp.vo.th.ServiceUserVo;
@@ -68,9 +70,9 @@ public class ThAction {
 	
 	@PostMapping("/SelectLogisticsAndorderID")
 	@ResponseBody
-	public HashMap<Object, Object> SelectLogisticsAndorderID(String userName,String orderID,String orderStatus,String orderType, Integer pageNum, Integer pageSize) {
+	public HashMap<Object, Object> SelectLogisticsAndorderID(String userName,String orderID,String auditStatus,String delivery, Integer pageNum, Integer pageSize) {
 		HashMap<Object, Object> map = new HashMap<Object, Object>();
-		PageInfo<Logistics> pageInfo = Biz.SelectLogisticsAndorderID(userName, orderID, orderStatus, orderType, pageNum,
+		PageInfo<ServiceUserVo> pageInfo = Biz.SelectLogisticsAndorderID(userName, orderID, auditStatus, delivery, pageNum,
 				pageSize);
 		map.put("code", 0);
 		map.put("msg", "");
@@ -78,42 +80,26 @@ public class ThAction {
 		map.put("count", pageInfo.getTotal());
 		return map;
 	};
-
-//	// 查看物流详情
-//	@GetMapping("querywlxq")
-//	public String querywlxq(int logisticsID, Model model, HttpSession session) {
-//		Logistics put = Biz.querywlqx(logisticsID);
-//		model.addAttribute("PAGE_INFO", put);
-//		return "lfxApplay/WlddxqCk";
-//	}
-//
-//	// 修改物流详情
-//	@GetMapping("updatewlxq")
-//	public String updatewlxq(int auditstatus, int logisticsid, String logisticscompany, String logisticssinglenumber) {
-//		Biz.updatewlqx(auditstatus, logisticsid, logisticscompany, logisticssinglenumber);
-//		return "redirect:/lfxapply/querywlxq?logisticsID=" + logisticsid;
-//	}
-//
-//	// 查看物流详情
-//	@GetMapping("querywu")
-//	public String querywu(Integer page, Integer size, String collectgoods, String orderid, Integer auditstatus,
-//			Integer delivery, Model model) {
-//		if (page == null)
-//			page = 1;
-//		if (size == null)
-//			size = 2;
-//		if (collectgoods == null && orderid == null && auditstatus == null && delivery == null) {
-//			PageInfo<Logistics> l = Biz.querywu(page, size);
-//			model.addAttribute("wu", l);
-//		} else if (collectgoods != null || orderid != null || auditstatus != null || delivery != null) {
-//			PageInfo<Logistics> l = Biz.querywul(page, size, collectgoods, orderid, auditstatus, delivery);
-//			model.addAttribute("wu", l);
-//		}
-//		model.addAttribute("collectgoods", collectgoods);
-//		model.addAttribute("orderid", orderid);
-//		model.addAttribute("auditstatus", auditstatus);
-//		model.addAttribute("delivery", delivery);
-//		return "lfxApplay/Wlddxq";
-//	}
-
+	
+	@GetMapping("/QueryLogisticsAndorderID")
+	@ResponseBody
+	public ServiceUserVo QueryLogisticsAndorderID(String orderid) {
+		return Biz.QueryLogisticsAndorderID(orderid);
+	};
+	
+	@PostMapping("/UpdateLogistics")
+	@ResponseBody
+	public HashMap<Object, Object> UpdateLogistics(@RequestBody ServiceUserVo order) {
+		HashMap<Object, Object> map = new HashMap<Object, Object>();
+		Biz.wuliuzhuangtai(order.getOrderid(), order.getAuditopinion(), order.getAuditstatus());
+		if(order.getAuditstatus()==2) {
+			Biz.news(order.getUserid(), "您的物流订单【"+order.getOrderid()+"】已被管理员受理！！");
+		}else if(order.getAuditstatus()==3) {
+			Biz.yue(order.getUserid(), -order.getPrice());
+			Biz.jilu(order.getUserid(), -order.getPrice());
+			Biz.news(order.getUserid(), "您的物流订单【"+order.getOrderid()+"】已被管理员拒绝！订单金额【"+order.getPrice()+"】已返回您的账户，请注意查收！");
+		}
+		map.put("code", 200);
+		return map;
+	}
 }

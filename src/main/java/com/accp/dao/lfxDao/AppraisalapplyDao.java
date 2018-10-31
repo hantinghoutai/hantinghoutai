@@ -51,6 +51,13 @@ public List<GoldsRecord> querygolds(@Param("userName") String userName,@Param("u
 public PutforwardrecordVo querygodlsx(@Param("userID") Integer userID);
 //修改提现
 public int modifytixian(@Param("pfID")String pfID,@Param("auditStatus")String auditStatus,@Param("adminOpinion")String adminOpinion);
+//修改提现成功后 修改用户金币余额
+public int xiugaijinbi(@Param("pfID")String pfID);
+//修改提现成功后 新增金币记录
+ public int tixianjilu(@Param("pfID")String pfID);
+ //审批提现后发送站内信给用户
+ public int zhanneixin(@Param("pfID") String pfID,@Param("text") String text);
+ 
 //充值
 public List<RecordVo> queryRecharge(@Param("userName")String userName,@Param("userID")String userID,@Param("acquisitionMode")String acquisitionMode,@Param("auditStatus") String auditStatus);
 public boolean updateForward(@Param("recordID")String recordID,@Param("auditStatus")String auditStatus);

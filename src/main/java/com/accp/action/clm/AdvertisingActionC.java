@@ -28,7 +28,7 @@ public class AdvertisingActionC {
 		String img=Upload.saveFile(file);
 		advertisement.setAimgpath(img);
 		biz.addAdvertisementtype(advertisement);
-		return "redirect:/Advertisementlayout.html";
+		return "redirect:/page/clm/Advertisementlayout.html";
 	}
 	
 	@RequestMapping(value="/updateAdvertisementtype",method=RequestMethod.POST)
@@ -36,7 +36,7 @@ public class AdvertisingActionC {
 		String img=Upload.saveFile(file);
 		advertisement.setAimgpath(img);
 		biz.updateAdvertisementtype(advertisement);
-		return "redirect:/Advertisementlayout.html";
+		return "redirect:/page/clm/Advertisementlayout.html";
 	}
 
 	

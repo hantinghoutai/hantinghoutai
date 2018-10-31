@@ -20,7 +20,7 @@ public class SystemBiz {
 	 * 查询当前系统配置
 	 * @return
 	 */
-	 public System querySystemById(){
+	 public com.accp.pojo.System querySystemById(){
 		 	return dao.querySystemById();
 		}
 	 /**
@@ -30,7 +30,7 @@ public class SystemBiz {
 	  */
 	 
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = false)
-	 public void updateSystem(System system) {
+	 public void updateSystem(com.accp.pojo.System system) {
 		 dao.updateSystem(system);
 	 }
 

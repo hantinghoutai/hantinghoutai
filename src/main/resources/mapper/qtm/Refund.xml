@@ -6,37 +6,28 @@
 
 <mapper namespace="com.accp.dao.qtm.IRefundDao">
 	<select id="list" resultType="com.accp.vo.qtm.Refund">
-			SELECT a.refundID AS refundID,b.orderID AS orderID,a.applicationTime AS
-		applicationTime,c.userName AS userName,d.serviceTitle AS
-		serviceTitle,d.servicePrice AS servicePrice,a.applicationTime
-		asapplicationTime,a.refundImg AS refundImg,a.auditStatus AS
-		auditStatus, a.`businessRemarks` AS businessRemarks,
-		a.`adminStatus` AS adminStatus ,a.`point` AS `point`,a.`adminRemarks` AS adminRemarks,a.`adminTime`AS adminTime,a.`ActualRefundMoney` AS actualRefundMoney
- 	 	FROM refund a
+		SELECT * FROM refund a
 		INNER JOIN orders b ON (a.orderID=b.orderID)
-		INNER JOIN `user` c ON (a.userID=c.userID)
-		INNER JOIN services d ON (c.userID=d.userID)
+		INNER JOIN services d ON (b.serviceID=d.serviceID)
+		LEFT JOIN `user` c ON (a.userID=c.userID)
 	</select>
 	
 	<select id="pan" resultType="int">
-		SELECT a.`point`
- 	 	FROM refund a
-		INNER JOIN orders b ON (a.orderID=b.orderID)
-		INNER JOIN `user` c ON (a.userID=c.userID)
-		INNER JOIN services d ON (c.userID=d.userID)
-		where refundID=#{refundID}
+		SELECT a.`point` 
+FROM refund a
+where refundID=#{refundID}
 	</select>
 	<select id="listinfo" resultType="com.accp.vo.qtm.Refund">
-			SELECT a.refundID AS refundID,b.orderID AS orderID,a.applicationTime AS
+		SELECT a.refundID AS refundID,b.orderID AS orderID,a.applicationTime AS
 		applicationTime,c.userName AS userName,d.serviceTitle AS
 		serviceTitle,d.servicePrice AS servicePrice,a.applicationTime
 		asapplicationTime,a.refundImg AS refundImg,a.auditStatus AS
 		auditStatus, a.`businessRemarks` AS businessRemarks,
-		a.`adminStatus` AS adminStatus ,a.`point` AS `point`,a.`adminRemarks` AS adminRemarks,a.`adminTime`AS adminTime,a.`ActualRefundMoney` AS actualRefundMoney
+		a.`adminStatus` AS adminStatus ,a.`point` AS `point`,a.`adminRemarks` AS adminRemarks,a.`adminTime`AS adminTime,a.`ActualRefundMoney` AS actualRefundMoney,a.refundReason as refundReason,a.refundExplain as refundExplain
  	 	FROM refund a
-		INNER JOIN orders b ON (a.orderID=b.orderID)
-		INNER JOIN `user` c ON (a.userID=c.userID)
-		INNER JOIN services d ON (c.userID=d.userID)
+		LEFT JOIN orders b ON (a.orderID=b.orderID)
+		LEFT JOIN `user` c ON (a.userID=c.userID)
+		LEFT JOIN services d ON (c.userID=d.userID)
 		WHERE refundID=#{refundID}
 	</select>
 	<update id="updates">
@@ -53,6 +44,29 @@
 		DELETE FROM `refund`
 		WHERE refundID IN(${id})
 	</delete>
+	<update id="supdate">
+		UPDATE `user`
+		SET userMoney=userMoney-#{usermoney}
+		WHERE userID=#{userid}
+	</update>
+	<update id="yupdate">
+		UPDATE `user`
+		SET userMoney=userMoney+#{usermoney}
+		WHERE userID=#{userid}
+	</update>
+	<select id="userID" resultType="int">
+		select userID from `user`
+		where userName=#{username}
+	</select>
+	<select id="sid" resultType="int">
+		SELECT b.userID FROM orders a
+		INNER JOIN `services` b ON (a.serviceID=b.serviceID)
+		WHERE orderID=#{orderid}
+	</select>
+	<insert id="jilu">
+		INSERT INTO `goldnotes`(`userID`,`acquisitionMode`,`recordDate`,`recordInAndOut`,`auditStatus`)
+		VALUE(#{userid},7,NOW(),#{usermoney},2)
+	</insert>
 
 
 

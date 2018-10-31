@@ -18,4 +18,14 @@ public interface IRefundDao {
 			public int updatess(@Param("adminStatus")int adminStatus,@Param("refundID")int refundID,@Param("adminRemarks")String adminRemarks);
 			
 			public int deletes(@Param("id")String id);
+			
+			public int supdate(@Param("userid")int userid,@Param("usermoney")int userMoney);
+			
+			public int userID(@Param("username")String userName);
+			
+			public int sid(@Param("orderid")int orderID);
+			
+			public int yupdate(@Param("userid")int userid,@Param("usermoney")int userMoney);
+			
+			public int jilu(@Param("userid")int userid,@Param("usermoney")float userMoney);
 }

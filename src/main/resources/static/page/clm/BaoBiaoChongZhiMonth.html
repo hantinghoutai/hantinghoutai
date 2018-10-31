@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../css/bootstrap.css" />
+		<link rel="stylesheet" href="../../layui/css/layui.css" />
+		<style type="text/css">
+			.tables tr th{
+				text-align: center;
+			}	
+		</style>
+	</head>
+	<body>
+<div id="baoBiao">
+<ul class="layui-nav layui-bg-blue">
+  <li class="layui-nav-item"><a href="javascript:void(0)">充值月统计</a></li>
+  <li class="layui-nav-item"><a href="BaoBiaoChongZhiYear.html">返回</a></li>
+</ul>
+<div>
+	<div class="layui-container" style="margin-left: 20px;">
+	<div class="layui-row">
+	<div class="layui-col-md6">
+		<div id="main1" style="width: 500px;height:300px;margin-left: 100px;margin-top: 50px;"></div>
+	</div>
+	<div class="layui-col-md6">
+		<div id="main2" style="width: 500px;height:300px;margin-top: 50px;margin-left: 80px"></div>
+	</div>
+	</div>
+
+</div>
+	
+	
+</div>
+
+</div>
+	</body>
+	<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="../../js/vue.js" ></script>
+	<script type="text/javascript" src="../../js/bootstrap.js" ></script>
+	<script type="text/javascript" src="../../layui/layui.js" ></script>
+	<script type="text/javascript" src="../../js/echarts.min.js"></script>
+	<script>
+
+	
+	//注意：导航 依赖 element 模块，否则无法进行功能性操作
+	var vm=new Vue({
+		el:"#baoBiao",
+		data:{
+			year:{}
+		},
+		methods:{
+			BaoBiaoLoad:function(year){
+				$.getJSON("/clm/api/selectChongXianShangBaoBiaoMonth/"+year,function(datas){
+					if(datas.length>0){
+						var json=[];
+						var yearName=[];
+						$.each(datas,function(i,obj){
+							json.push(obj.data);
+							yearName.push(obj.name+"月份");
+						})
+						options(yearName,json);
+					}else{
+						$("#main1").html("");
+					}
+					
+				})
+			},
+			LoadXianXiaLoad:function(year){
+				$.getJSON("/clm/api/selectChongXianXiaBaoBiaoMonth/"+year,function(datas){
+					if(datas.length>0){
+						var json=[];
+						var yearName=[];
+						$.each(datas,function(i,obj){
+							json.push(obj.data);
+							yearName.push(obj.name+"月份");
+						})
+						options1(yearName,json);
+					}else{
+						$("#main2").html("");
+					}
+					
+				})
+			}
+		},
+		created:function(){
+			var vm=this;
+			var year=window.sessionStorage.getItem("ChongZhiYear");
+			vm.BaoBiaoLoad(year);
+			vm.LoadXianXiaLoad(year);
+		}
+	})
+	
+	
+	 
+function options(yearName,json){
+ var myChart = echarts.init(document.getElementById('main1'));
+ var option = {
+		    title: {
+		        text: '按年统计总金额',
+		        subtext: '数据来自本地服务'
+		    },
+		    tooltip: {
+		        trigger: 'axis',
+		        axisPointer: {
+		            type: 'shadow'
+		        }
+		    },
+		    legend: {
+		    	data:["线上充值"]
+		    },
+		    grid: {
+		        left: '3%',
+		        right: '4%',
+		        bottom: '3%',
+		        containLabel: true
+		    },
+		    xAxis: {
+		        type: 'value',
+		        boundaryGap: [0, 0.01]
+		    },
+		    yAxis: {
+		        type: 'category',
+		        data:yearName
+		    },
+		    series:[
+		        {
+		            name: '线上充值',
+		            type: "bar",
+		            data:json
+		        }
+		    ]
+		};
+		  myChart.setOption(option);
+}
+	
+	function options1(yearName1,json1){
+		console.info(json1)
+		 var myChart1 = echarts.init(document.getElementById('main2'));
+		 var option = {
+				    title: {
+				        text: '按年统计总金额',
+				        subtext: '数据来自本地服务'
+				    },
+				    tooltip: {
+				        trigger: 'axis',
+				        axisPointer: {
+				            type: 'shadow'
+				        }
+				    },
+				    legend: {
+				    	data:["线下充值"]
+				    },
+				    grid: {
+				        left: '3%',
+				        right: '4%',
+				        bottom: '3%',
+				        containLabel: true
+				    },
+				    xAxis: {
+				        type: 'value',
+				        boundaryGap: [0, 0.01]
+				    },
+				    yAxis: {
+				        type: 'category',
+				        data:yearName1
+				    },
+				    series:[
+				        {
+				            name: '线下充值',
+				            type: "bar",
+				            color: ['#759aa0','#759aa0','#e69d87','#8dc1a9','#ea7e53','#eedd78','#73a373','#73b9bc','#7289ab', '#91ca8c','#f49f42'],
+				            data:json1
+				        }
+				    ]
+				};
+		 myChart1.setOption(option);
+	}
+
+layui.use('form', function(){
+var element = layui.element;
+
+//…
+});
+
+	</script>
+</html>

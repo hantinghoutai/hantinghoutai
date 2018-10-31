@@ -86,6 +86,7 @@
 		<script src="js/jquery-1.8.3.js"></script>
 		<script src="layui/layui.js"></script>
 		<script>
+		
 		layui.use('laydate', function(){
   			var laydate = layui.laydate;
 		  laydate.render({elem: '#data1' });//激活时间控件1
@@ -95,13 +96,13 @@
 			var form=layui.form;
 			form.render('select');
 			
-			function cha(){
-				jQuery.getJSON("/tuikuan/list", function(data) {
+			function cha(a,b){
+				jQuery.getJSON("http://127.0.0.1:8080/tuikuan/select/list/"+a+"/"+b, function(data) {
 					var shenghe;
 					var shijian;
 					var zt;
 					var sj;
-					$.each(data, function(i, obj) {
+					$.each(data.list, function(i, obj) {
 						if(obj.point==1){
 							
 							if(obj.auditStatus==1){
@@ -111,13 +112,13 @@
 							}else if(obj.auditStatus==3){
 								shenghe="商家不同意"
 							}
-							if(obj.auditTime==""||obj.auditTime==null){
+							if(obj.auditTime==null){
 								shijian="未处理"
 							}else{
 								shijian=obj.auditTime;
 							}
 							var tr = $("<tr></tr>");
-							tr.append("<td><input type='checkbox'  name='pi' value='" + obj.refundID + "'></td>")
+							tr.append("<td><input type='checkbox' name='like[write]' value='" + obj.refundID + "'></td>")
 							tr.append("<td>" + obj.refundID + "</td>")
 							tr.append("<td>" + obj.orderID + "</td>")
 							tr.append("<td>" + obj.applicationTime + "</td>")
@@ -158,10 +159,14 @@
 					})
 				})
 			}
-			cha();
+			cha(1,10);
 			$("[name=rr]").live("click",function(){
 				var refundID=$(this).parents("tr").find("td:eq(1)").html();
+				var userName=$(this).parents("tr").find("td:eq(4)").html();
+				var orderID=$(this).parents("tr").find("td:eq(2)").html();
 				window.sessionStorage.setItem("refundID",refundID);
+				window.sessionStorage.setItem("orderID",orderID);
+				window.sessionStorage.setItem("userName",userName);
 				location.href="Refundinfo.html"
 			})
 			$("#jia").click(function() {
@@ -177,7 +182,7 @@
 						success: function(res) {
 							if(res>0){
 								alert("删除成功！")
-								fenye(a, b);
+								
 							}
 
 						}

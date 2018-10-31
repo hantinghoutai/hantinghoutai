@@ -116,7 +116,6 @@
 					getList:function(pfID){
 						var vm=this;
 						$.getJSON('/lfxapply/querytix',{'pfID':pfID},function(result){ 
-							alert(JSON.stringify(result))
 							vm.user=result;	//给VUE赋值
 							if(result.auditStatus==1){
 								$("#shenpi").show();

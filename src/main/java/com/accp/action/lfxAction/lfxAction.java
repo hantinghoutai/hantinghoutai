@@ -167,20 +167,28 @@ public class lfxAction {
 		model.addAttribute("goldsx", put);
 		return "lfxApplay/goldsx";
 	}
-	//修改提现
-	@PostMapping("/xiutixian")
+	//修改提现 标记:审批成功需要新增到金币流向记录表 需要给用户减金币
+ 	@PostMapping("/xiutixian")
 	@ResponseBody
 	public HashMap<Object, Object> xiugaitixian( String pfID,String auditStatus,String adminOpinion) {
-		System.out.println("auditStatus:"+auditStatus);
 		HashMap<Object, Object> map=new HashMap<Object, Object>();
 		int count=biz.modifytixian(pfID, auditStatus,adminOpinion);
 		if(count>0) {
+			switch(adminOpinion) {
+			case "2":
+				biz.xiugaijinbi(pfID);							//修改用户金币
+				biz.tixianjilu(pfID);							//新增提现记录
+				biz.zhanneixin(pfID, "您的提现申请已受理！请注意查收！！！");//发送站内信
+				break;
+			case "3":
+				biz.zhanneixin(pfID, "您的提现申请已被管理员拒绝！！！");//发送站内信
+				break;
+			}
 			map.put("code", 200);
 		}else {
 			map.put("code", 400);
 		}
 		return map;
-		
 	}
 	//查看充值
 	@PostMapping("/queryRecharge")

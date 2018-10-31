@@ -66,11 +66,9 @@
 
 
 	<!-- 物流 -->
-	<select id="SelectLogisticsAndorderID" resultType="logistics">
-		SELECT logistics.orderID,user.`userName`,services.serviceTitle,services.weight,orders.orderType,orders.totalPrice,orders.orderStatus,orders.commentstatus,orders.refundstatus,orders.paymentTime,orders.orderTime FROM logistics
-		LEFT JOIN orders ON orders.orderID = logistics.orderID
-		LEFT JOIN `user` ON user.`userID`=orders.`userID`
-		LEFT JOIN services ON services.`serviceID`=orders.`serviceID`
+	<select id="SelectLogisticsAndorderID" resultType="com.accp.vo.th.ServiceUserVo">
+		SELECT logistics.`orderID`,logistics.`orderTime`,user.`userName`,logistics.`title`,logistics.`kg`,logistics.`delivery`,logistics.`price`,logistics.`auditStatus`,logistics.`completeTime` FROM logistics
+		LEFT JOIN `user` ON user.`userID` = logistics.`userID`
 		<where>
 			<if test="userName!=null and userName!=''">
 				user.userName LIKE '%${userName}%'
@@ -78,22 +76,38 @@
 			<if test="orderID!=null and orderID!=''">
 				AND logistics.orderID LIKE '%${orderID}%'
 			</if>
-			<if test="orderStatus!='0'.toString() and orderStatus!=''">
-				AND orders.orderStatus=#{orderStatus}
+			<if test="auditStatus!='' and auditStatus!='null' and auditStatus!=null">
+				AND logistics.auditStatus=#{auditStatus}
 			</if>
-			<if test="orderType!='0'.toString() and orderType!=''">
-				AND orders.orderType=#{orderType}
+			<if test="delivery!='0'.toString() and delivery!=''">
+				AND logistics.delivery=#{delivery}
 			</if>
 		</where>
+		ORDER BY completeTime DESC
 	</select>
-
-	<update id="updatewlqx">
+	
+	<select id="QueryLogisticsAndorderID" resultType="com.accp.vo.th.ServiceUserVo">
+		SELECT user.`userName`,logistics.* FROM `logistics`
+		LEFT JOIN `user` ON user.`userID` = logistics.`userID`
+		WHERE logistics.`orderID`=#{orderid}
+	</select>
+	
+	<update id="wuliuzhuangtai">
 		UPDATE `logistics`
-		SET `auditStatus`=#{auditstatus},
-			`auditTime` =NOW(),
-			`submitTime` =NOW(),
-			`logisticsCompany`=#{logisticscompany},
-			`logisticsSingleNumber`=#{logisticssinglenumber}
-		WHERE `logisticsID` = #{logisticsid};
+		SET auditOpinion=#{auditOpinion},auditTime=NOW(),auditStatus=#{auditStatus}
+		WHERE orderID=#{orderID}
 	</update>
+	<update id="yue">
+		UPDATE `user`
+		SET userMoney=userMoney+#{money}
+		WHERE userID=#{userID}
+	</update>
+	<insert id="jilu">
+		INSERT goldnotes(`userID`,`acquisitionMode`,`recordDate`,`recordDescribe`,`recordInAndOut`,`auditStatus`)
+		VALUES (#{userID},3,now(),'管理员拒绝',#{money},3);
+	</insert>
+	<insert id="news">
+		INSERT news(`addRessee`,`content`,`sendingTime`,`readState`,`newsType`)
+		values (#{userID},#{text},NOW(),false,1)
+	</insert>
 </mapper>

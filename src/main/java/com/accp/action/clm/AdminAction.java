@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.accp.biz.clm.AdminBiz;
 import com.accp.pojo.Admin;
 import com.accp.vo.clm.AdminVo;
+import com.alibaba.fastjson.JSON;
 
 
 @RestController
@@ -36,10 +38,13 @@ public class AdminAction {
 	
 	
 	@PostMapping("/insertUser")
-	public Map<String, String> insertUser(@RequestBody Admin admin) throws UnknownHostException {
+	public Map<String, String> insertUser(@RequestBody Admin admin,HttpSession session) throws UnknownHostException {
 		Map<String, String> map=new HashMap<String, String>();
 		InetAddress address = InetAddress.getLocalHost();
 		String hostAddress = address.getHostAddress();
+		String adminOne=(String)session.getAttribute("ADMIN");
+		Admin admins=JSON.parseObject(adminOne, Admin.class);
+		admin.setFounder(admins.getAdminid());
 		admin.setCreationip(hostAddress);
 		biz.insertUser(admin);
 		map.put("code","200");
@@ -64,6 +69,7 @@ public class AdminAction {
 	
 	@GetMapping("selectAdminInfo/{id}")
 	public AdminVo selectAdminInfo(@PathVariable Integer id) {
+		AdminVo admin=biz.selectAdminInfo(id);
 		return biz.selectAdminInfo(id);
 	}
 	

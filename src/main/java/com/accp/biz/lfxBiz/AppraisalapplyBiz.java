@@ -2,6 +2,7 @@ package com.accp.biz.lfxBiz;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -103,10 +104,26 @@ public class AppraisalapplyBiz {
 	public PutforwardrecordVo querygoldsx(Integer userID) {
 		return dao.querygodlsx(userID);
 	}
-	//修改提现1
+	//修改提现
+
+	@Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, readOnly = false)
 	public int modifytixian(String pfID,String auditStatus,String adminOpinion) {
 		return dao.modifytixian(pfID,auditStatus,adminOpinion);
 	}
+	//提现成功后 修改用户金币余额
+	@Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, readOnly = false)
+	public int xiugaijinbi(String pfID) {
+		return dao.xiugaijinbi(pfID);
+	}
+	//提现成功后新增金币提现记录
+	@Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, readOnly = false)
+	public int tixianjilu(String pfID) {
+		return dao.tixianjilu(pfID);
+	}
+	@Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, readOnly = false)
+	 public int zhanneixin( String pfID,String text) {
+		return dao.zhanneixin(pfID, text);
+	};
 	public PageInfo<RecordVo> queryRecharge(String userName,String userID,String acquisitionMode,String auditStatus,Integer pageNum, Integer pageSize){
 		PageHelper.startPage(pageNum, pageSize);
 		return new PageInfo<RecordVo>(dao.queryRecharge(userName,userID,acquisitionMode,auditStatus));
