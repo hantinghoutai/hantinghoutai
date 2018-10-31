@@ -14,7 +14,7 @@ public class Upload {
 	// 文件访问前缀
 	public final static String VISIT_SUFFIX = "/api/img/";
 	// 公开网址及端口号
-	public final static String WEBSITE_SUFFIX = "http://localhost";
+	//public final static String WEBSITE_SUFFIX = "http://localhost";
 
 	/**
 	 * 保存文件
@@ -27,7 +27,8 @@ public class Upload {
 	 */
 	public static String saveFile(MultipartFile file) throws IllegalStateException, IOException {
 		String route = createFileRoute(file);
-		String url = WEBSITE_SUFFIX + VISIT_SUFFIX + route;
+		//String url = WEBSITE_SUFFIX + VISIT_SUFFIX + route;
+		String url = VISIT_SUFFIX + route;
 		String path = UPLOADED_FOLDER + route;
 		File dest = new File(path);
 		if (!dest.getParentFile().exists()) {

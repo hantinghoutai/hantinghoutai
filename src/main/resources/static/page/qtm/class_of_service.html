@@ -191,7 +191,7 @@
 						tr.append("<td>" + obj.userName + "</td>")
 						tr.append("<td>" + shenghe + "</td>")
 						tr.append("<td>" + yingye + "</td>")
-						tr.append("<td>" + obj.userRegistrationTime + "</td>")
+						tr.append("<td>" + obj.userRegistrationTime=='null'?'&nbsp;---':obj.userRegistrationTime + "</td>")
 						tr.append("<td>" + tuijian + "</td>")
 						tr.append("<td><button type='button' class='layui-btn layui-btn-primary layui-btn-xs' name='rr'>查看</button></td>")
 						$("#tad").append(tr);
